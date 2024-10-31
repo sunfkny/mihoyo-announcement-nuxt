@@ -1,21 +1,20 @@
 <template>
   <div>
-    <div
-      class="games-nav-bar flex justify-center items-center"
-      :style="{ gap: `8px` }"
-    >
+    <div class="games-nav-bar flex justify-center items-center gap-2">
       <NuxtLink
         v-for="game in games"
+        class="games-nav-bar-item rounded-md border-2 border-solid border-transparent p-1 transition-all duration-300 hover:border-gray-300"
+        :style="{ 'view-transition-name': `games-nav-bar-item-${game.key}` }"
         :key="game.key"
         :to="`/announcement/${game.key}`"
       >
         <img
+          class="rounded-sm"
           :src="game.icon"
           :alt="game.name"
           :title="game.name"
           :width="props.size"
           :height="props.size"
-          :style="{ 'view-transition-name': `games-nav-bar-item-${game.key}` }"
         />
       </NuxtLink>
     </div>
@@ -32,3 +31,9 @@ const props = defineProps({
   },
 });
 </script>
+
+<style scoped>
+.router-link-active {
+  border-color: #3778e5;
+}
+</style>
