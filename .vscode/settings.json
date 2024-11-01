@@ -8,6 +8,18 @@
   "tailwindCSS.experimental.classRegex": [
     "tw`(.*?)`",
     "tw\\('(.*?)'\\)",
-    "tw\\(\\s*('(.*?)'|\"(.*?)\")\\s*\\)"
-  ]
+    "tw\\(\\s*('(.*?)'|\"(.*?)\")\\s*\\)",
+    "\\/\\*\\s?tw:\\s?\\*\\/\\s?`(.*)`", // https://github.com/tailwindlabs/tailwindcss/discussions/7554#discussioncomment-3368655
+  ],
+  "[vue]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "editor.formatOnType": true,
+  "editor.formatOnSave": true,
 }

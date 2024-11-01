@@ -3,10 +3,7 @@ export type Game = (typeof gameKeys)[number];
 export function isGame(game: string): game is Game {
   return gameKeys.includes(game as Game);
 }
-const gamesMap: Record<
-  Game,
-  { name: string; icon: string }
-> = {
+const gamesMap: Record<Game, { name: string; icon: string }> = {
   bh3: {
     name: "崩坏3",
     icon: "https://webstatic.mihoyo.com/upload/op-public/2021/10/03/4080f2eb748823d8c38507c3d7b69b36_936817768851375073.png",
