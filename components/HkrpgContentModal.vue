@@ -2,14 +2,14 @@
   <UModal
     :title="title"
     :ui="{
-      width: 'max-w-[1024px] sm:max-w-screen',
-      container: 'sm:p-4 items-center',
+      width: /*tw:*/ `max-w-[1024px] sm:max-w-screen`,
+      container: /*tw:*/ `sm:p-4 items-center`,
     }"
   >
     <UCard
       :ui="{
         ring: '',
-        body: { background: 'bg-[#D9DEEA] rounded-lg' },
+        body: { background: /*tw:*/ `bg-[#D9DEEA] rounded-lg` },
       }"
     >
       <template #header>
@@ -29,7 +29,7 @@
 
       <div
         v-html="content"
-        class="content useWebFont max-h-[600px] min-h-[512px] overflow-y-auto"
+        class="content useWebFont scroll-hack max-h-[calc(100vh-14rem)] min-h-4 overflow-y-auto"
       ></div>
     </UCard>
   </UModal>
@@ -50,8 +50,36 @@ const modal = useModal();
   src: url("https://webstatic.mihoyo.com/common/clgm-static/sr/fonts/zh-cn.ttf");
 }
 
+.scroll-hack--light::-webkit-scrollbar,
+.scroll-hack::-webkit-scrollbar {
+  width: 7px;
+}
+
+.scroll-hack--light::-webkit-scrollbar-thumb,
+.scroll-hack::-webkit-scrollbar-thumb {
+  background: #9a9da4;
+  border-radius: 2.5px;
+}
+
+.scroll-hack--light::-webkit-scrollbar-track,
+.scroll-hack::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.14);
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+}
+
+.scroll-hack--light::-webkit-scrollbar-track {
+  border-left-color: #dcdcdc !important;
+  border-right-color: #dfdfdf !important;
+}
+
 .useWebFont {
-  font-family: rpgWebFont, Microsoft YaHei, "微软雅黑", Arial, sans-serif;
+  font-family:
+    rpgWebFont,
+    Microsoft YaHei,
+    "微软雅黑",
+    Arial,
+    sans-serif;
 }
 
 .content {
@@ -60,6 +88,7 @@ const modal = useModal();
   word-break: break-word;
   line-height: 22.4px;
 }
+
 .content ::v-deep(table tbody:first-of-type tr:first-child td),
 .content ::v-deep(table tbody:first-of-type tr:first-child th),
 .content ::v-deep(table thead tr:first-child td),
@@ -72,6 +101,7 @@ const modal = useModal();
 .content ::v-deep(table tbody:not(:first-child) td) {
   color: #767676;
 }
+
 .content ::v-deep(.table-cell),
 .content ::v-deep(table tbody:first-of-type tr:first-child td),
 .content ::v-deep(table tbody:first-of-type tr:first-child th),
@@ -97,11 +127,13 @@ const modal = useModal();
   height: unset !important;
   margin: 22.4px auto;
 }
+
 .content ::v-deep(em),
 .content ::v-deep(strong) {
   color: #ee970c;
   font-weight: 400;
 }
+
 .content ::v-deep(ul > li:before) {
   flex-shrink: 0;
   display: block;
@@ -113,12 +145,14 @@ const modal = useModal();
   margin-right: 11.2px;
   margin-top: 8px;
 }
+
 .content ::v-deep(ul > li) {
   position: relative;
   display: flex !important;
   width: 100%;
   word-break: break-all;
 }
+
 .content ::v-deep(details > summary),
 .content ::v-deep(h1) {
   position: relative;

@@ -2,14 +2,14 @@
   <UModal
     :title="title"
     :ui="{
-      width: 'max-w-[768px] sm:max-w-screen',
-      container: 'sm:p-4 items-center',
+      width: /*tw:*/ `max-w-[768px] sm:max-w-screen`,
+      container: /*tw:*/ `sm:p-4 items-center`,
     }"
   >
     <UCard
       :ui="{
         ring: '',
-        body: { background: 'bg-[#050505] rounded-lg text-white' },
+        body: { background: /*tw:*/ `bg-[#050505] rounded-lg text-white` },
       }"
     >
       <template #header>
@@ -29,7 +29,7 @@
 
       <div
         v-html="content"
-        class="content nap-zh-cn max-h-[600px] min-h-[512px] overflow-y-auto"
+        class="content nap-zh-cn scroll-hack max-h-[calc(100vh-14rem)] min-h-4 overflow-y-auto"
       ></div>
     </UCard>
   </UModal>
@@ -51,8 +51,33 @@ const modal = useModal();
   src: url("https://sdk.mihoyo.com/nap/announcement/fonts/zh-cn.7f7b01ec.ttf")
     format("truetype");
 }
+
 .nap-zh-cn {
-  font-family: nap-zh-cn, Microsoft YaHei, "微软雅黑", Arial, sans-serif;
+  font-family:
+    nap-zh-cn,
+    Microsoft YaHei,
+    "微软雅黑",
+    Arial,
+    sans-serif;
+}
+
+.scroll-hack {
+  width: 100%;
+  padding-right: 0.13rem;
+}
+
+.scroll-hack::-webkit-scrollbar {
+  width: 0.07rem;
+}
+
+.scroll-hack::-webkit-scrollbar-thumb {
+  background: #232323;
+  border-radius: 0.03rem;
+}
+
+.scroll-hack::-webkit-scrollbar-track {
+  background: #131313;
+  border-radius: 0.03rem;
 }
 
 .content {
@@ -162,6 +187,7 @@ const modal = useModal();
   height: unset !important;
   margin: auto;
 }
+
 .content ::v-deep(.table-cell),
 .content ::v-deep(table tbody:first-of-type tr:first-child td),
 .content ::v-deep(table tbody:first-of-type tr:first-child th),

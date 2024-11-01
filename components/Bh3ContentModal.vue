@@ -2,14 +2,16 @@
   <UModal
     :title="title"
     :ui="{
-      width: 'max-w-[768px] sm:max-w-screen',
-      container: 'sm:p-4 items-center',
+      width: /*tw:*/ `max-w-[768px] sm:max-w-screen`,
+      container: /*tw:*/ `sm:p-4 items-center`,
     }"
   >
     <UCard
       :ui="{
         ring: '',
-        body: { background: 'bg-[#003366] rounded-lg text-white' },
+        body: {
+          background: /*tw:*/ `bg-[#003366] rounded-lg text-white`,
+        },
       }"
     >
       <template #header>
@@ -26,10 +28,9 @@
           />
         </div>
       </template>
-
       <div
         v-html="content"
-        class="content useWebFont max-h-[600px] min-h-[512px] overflow-y-auto"
+        class="content useWebFont scrollHack max-h-[calc(100vh-14rem)] min-h-4 pr-2 overflow-y-scroll"
       ></div>
     </UCard>
   </UModal>
@@ -45,13 +46,43 @@ const modal = useModal();
 
 <style scoped>
 .useWebFont {
-  font-family: bh3WebFont, Microsoft YaHei, "微软雅黑", Arial, sans-serif;
+  font-family:
+    bh3WebFont,
+    Microsoft YaHei,
+    "微软雅黑",
+    Arial,
+    sans-serif;
 }
+
 @font-face {
   font-family: bh3WebFont;
   font-display: swap;
   src: url("https://webstatic.mihoyo.com/bh3/upload/announcement/font/zh-cn.ttf");
 }
+
+.scrollHack::-webkit-scrollbar {
+  width: 4.8px;
+}
+
+.scrollHack::-webkit-scrollbar-thumb {
+  background: #00c3ff;
+  border-radius: 0.15rem;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+.scrollHack::-webkit-scrollbar-track {
+  padding: 0 4.8px;
+  background-color: rgba(1, 188, 246, 0.2);
+  border-radius: 0.15rem;
+}
+
+.scrollHack::-webkit-scrollbar-button {
+  pointer-events: none;
+  width: 4.8px;
+  height: 0;
+}
+
 .content ::v-deep(strong) {
   color: #ffe146;
 }
@@ -70,12 +101,14 @@ const modal = useModal();
   font-size: 1.33rem;
   border-bottom: 0.01rem solid #c5d8e3;
 }
+
 .content ::v-deep(h2) {
   display: flex;
   color: #00c3ff;
   align-items: center;
   position: relative;
 }
+
 .content ::v-deep(h2:before) {
   display: block;
   content: "";

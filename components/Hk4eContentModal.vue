@@ -2,14 +2,14 @@
   <UModal
     :title="title"
     :ui="{
-      width: 'max-w-[768px] sm:max-w-screen',
-      container: 'sm:p-4 items-center',
+      width: /*tw:*/ `max-w-[768px] sm:max-w-screen`,
+      container: /*tw:*/ `sm:p-4 items-center`,
     }"
   >
     <UCard
       :ui="{
         ring: '',
-        body: { background: 'bg-[#F9F6F2] rounded-lg' },
+        body: { background: /*tw:*/ `bg-[#F9F6F2] rounded-lg` },
       }"
     >
       <template #header>
@@ -29,7 +29,7 @@
 
       <div
         v-html="content"
-        class="content useCloudFont max-h-[600px] min-h-[512px] overflow-y-auto"
+        class="content useCloudFont scrollHack max-h-[calc(100vh-14rem)] min-h-4 overflow-y-auto"
       ></div>
     </UCard>
   </UModal>
@@ -45,17 +45,45 @@ const modal = useModal();
 
 <style scoped>
 .useCloudFont {
-  font-family: ysCloudFont, Microsoft YaHei, "微软雅黑", Arial, sans-serif;
+  font-family:
+    ysCloudFont,
+    Microsoft YaHei,
+    "微软雅黑",
+    Arial,
+    sans-serif;
 }
+
 @font-face {
   font-family: ysCloudFont;
   font-display: swap;
   src: url("https://webstatic.mihoyo.com/common/clgm-static/ys/fonts/zh-cn.ttf");
 }
 
+.scrollHack::-webkit-scrollbar {
+  width: 4.8px;
+}
+
+.scrollHack::-webkit-scrollbar-thumb {
+  background: #fff;
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+  border-left: 0.8px solid #f1eeea;
+  border-right: 0.8px solid #f1eeea;
+}
+
+.scrollHack::-webkit-scrollbar-track {
+  padding: 0 4.8px;
+  background-color: rgba(63, 71, 87, 0.2);
+  border: 0.8px solid #f1eeea;
+  border-radius: 0.008rem;
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
+}
+
 .content ::v-deep(p) {
   line-height: 2;
 }
+
 .content ::v-deep(table) {
   width: 100% !important;
   border-color: hsla(39, 13%, 75%, 0.15) !important;
