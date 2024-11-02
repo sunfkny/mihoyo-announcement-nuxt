@@ -29,7 +29,7 @@
 
       <div
         v-html="content"
-        class="content nap-zh-cn scroll-hack max-h-[calc(100vh-14rem)] min-h-4 overflow-y-auto"
+        class="content nap-zh-cn-light scroll-hack max-h-[calc(100vh-14rem)] min-h-4 overflow-y-auto"
       ></div>
     </UCard>
   </UModal>
@@ -45,16 +45,16 @@ const modal = useModal();
 
 <style scoped>
 @font-face {
-  font-family: nap-zh-cn;
+  font-family: nap-zh-cn-light;
   font-display: swap;
   font-weight: 400;
-  src: url("https://sdk.mihoyo.com/nap/announcement/fonts/zh-cn.7f7b01ec.ttf")
+  src: url("https://sdk.mihoyo.com/nap/announcement/fonts/zh-cn-light.e490414b.ttf")
     format("truetype");
 }
 
-.nap-zh-cn {
+.nap-zh-cn-light {
   font-family:
-    nap-zh-cn,
+    nap-zh-cn-light,
     Microsoft YaHei,
     "微软雅黑",
     Arial,
@@ -63,186 +63,208 @@ const modal = useModal();
 
 .scroll-hack {
   width: 100%;
-  padding-right: 0.13rem;
+  padding-right: 6.5px;
 }
 
 .scroll-hack::-webkit-scrollbar {
-  width: 0.07rem;
+  width: 3.5px;
 }
 
 .scroll-hack::-webkit-scrollbar-thumb {
   background: #232323;
-  border-radius: 0.03rem;
+  border-radius: 1.5px;
 }
 
 .scroll-hack::-webkit-scrollbar-track {
   background: #131313;
-  border-radius: 0.03rem;
+  border-radius: 1.5px;
 }
 
-.content {
-  font-size: 16px;
-  line-height: 0.38rem;
-  padding: 0 0.15rem 0.16rem;
+.content::v-deep() {
+  font-size: 14px;
+  line-height: 19px;
+  padding: 0 7.5px 8px;
   color: #ccc;
 }
 
-.content ::v-deep(*) {
+.content::v-deep(*) {
   margin: 0;
   word-break: break-word;
   color: inherit;
 }
 
-.content ::v-deep(ol),
-.content ::v-deep(ul) {
-  padding-left: 0.13rem;
+.content::v-deep(ol),
+.content::v-deep(ul) {
+  padding-left: 6.5px;
 }
 
-.content ::v-deep(li) {
+.content::v-deep(li) {
   width: 100%;
   word-break: break-all;
 }
 
-.content ::v-deep(sub),
-.content ::v-deep(sup),
-.content ::v-deep(u) {
+.content::v-deep(sub),
+.content::v-deep(sup),
+.content::v-deep(u) {
   color: inherit !important;
 }
 
-.content ::v-deep(em),
-.content ::v-deep(strong) {
+.content::v-deep(em),
+.content::v-deep(strong) {
   color: #ffc300;
   font-weight: 400;
 }
 
-.content ::v-deep(a) {
+.content::v-deep(a) {
   display: block;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
   width: fit-content;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
   height: fit-content;
   min-width: 100%;
-  min-height: 0.32rem;
-  line-height: 0.32rem;
-  border-radius: 0.16rem;
-  padding: 0.05rem 0.1rem 0.05rem 0;
-  font-size: 0.28rem;
+  min-height: 16px;
+  line-height: 16px;
+  border-radius: 8px;
+  padding: 2.5px 5px 2.5px 0;
+  font-size: 14px;
   color: #00b2ff;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   overflow: hidden;
   cursor: pointer;
 }
 
-.content ::v-deep(hr) {
-  background: hsla(0, 0%, 100%, 0.1);
-  height: 0.01rem;
+.content::v-deep(a[href=""]) {
+  pointer-events: none;
 }
 
-.content ::v-deep(h1),
-.content ::v-deep(h2) {
+.content::v-deep(hr) {
+  background: hsla(0, 0%, 100%, 0.1);
+  height: 0.5px;
+}
+
+.content::v-deep(h1),
+.content::v-deep(h2) {
   position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
   justify-content: space-between;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
   font-weight: 400;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
   width: fit-content;
-  padding: 0 0.03rem;
+  padding: 0 1.5px;
 }
 
-.content ::v-deep(h1) {
-  font-size: 0.28rem !important;
+.content::v-deep(h1) {
+  font-size: 14px !important;
   color: #fff !important;
-  margin-bottom: 0.1rem;
-  line-height: 0.32rem;
+  margin-bottom: 5px;
+  line-height: 16px;
 }
 
-.content ::v-deep(h2) {
-  font-size: 0.24rem;
+.content::v-deep(h2) {
+  font-size: 12px;
   color: #fff !important;
+  -webkit-box-align: start;
+  -ms-flex-align: start;
   align-items: flex-start;
-  line-height: 0.28rem;
-  margin-bottom: 0.16rem;
+  line-height: 14px;
+  margin-bottom: 8px;
 }
 
-.content ::v-deep(h2:before) {
+.content::v-deep(h2:before) {
   background: #fff;
-  margin-top: 0.08rem;
+  margin-top: 4px;
 }
 
-.content ::v-deep(h2:after) {
+.content::v-deep(h2:after) {
   display: none;
 }
 
-.content ::v-deep(code) {
+.content::v-deep(code) {
   white-space: pre-wrap;
 }
 
-.content ::v-deep(.table-wrapper a) {
+.content::v-deep(.table-wrapper a) {
   border-radius: 0;
 }
 
-.content ::v-deep(iframe),
-.content ::v-deep(img),
-.content ::v-deep(table),
-.content ::v-deep(video) {
+.content::v-deep(iframe),
+.content::v-deep(img),
+.content::v-deep(table),
+.content::v-deep(video) {
   max-width: 100% !important;
   height: unset !important;
   margin: auto;
 }
 
-.content ::v-deep(.table-cell),
-.content ::v-deep(table tbody:first-of-type tr:first-child td),
-.content ::v-deep(table tbody:first-of-type tr:first-child th),
-.content ::v-deep(table tbody:first-of-type tr:not(:first-child) td),
-.content ::v-deep(table tbody:not(:first-child) td),
-.content ::v-deep(table thead tr:first-child td),
-.content ::v-deep(table thead tr:first-child th) {
-  height: 0.18rem !important;
+.content::v-deep(.table-cell),
+.content::v-deep(table tbody:first-of-type tr:first-child td),
+.content::v-deep(table tbody:first-of-type tr:first-child th),
+.content::v-deep(table tbody:first-of-type tr:not(:first-child) td),
+.content::v-deep(table tbody:not(:first-child) td),
+.content::v-deep(table thead tr:first-child td),
+.content::v-deep(table thead tr:first-child th) {
+  height: 9px !important;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
-  border-bottom: 0.06rem solid #232323;
-  border-right: 0.06rem solid #232323;
+  border-bottom: 3px solid #232323;
+  border-right: 3px solid #232323;
   text-align: center;
 }
 
-.content ::v-deep(table) {
-  font-size: 0.26rem;
+.content::v-deep(table) {
+  font-size: 13px;
   width: 100% !important;
   word-break: break-all;
-  border-radius: 0.1rem;
+  border-radius: 5px;
   border-collapse: separate;
   border-spacing: 0;
-  border: 0.06rem solid #232323 !important;
+  border: 3px solid #232323 !important;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   overflow: hidden;
   background-color: #1a1a1a;
 }
 
-.content ::v-deep(table p),
-.content ::v-deep(table span) {
+.content::v-deep(table p),
+.content::v-deep(table span) {
   color: inherit;
 }
 
-.content ::v-deep(table td) {
-  padding: 0.37rem;
+.content::v-deep(table td) {
+  padding: 18.5px;
 }
 
-.content ::v-deep(table tr td:last-child) {
+.content::v-deep(table tr td:last-child) {
   border-right: none !important;
 }
 
-.content ::v-deep(table tr:last-child td) {
+.content::v-deep(table tr:last-child td) {
   border-bottom: none !important;
 }
 
-.content ::v-deep(table tbody:first-of-type tr:first-child td),
-.content ::v-deep(table tbody:first-of-type tr:first-child th) {
+.content::v-deep(table tbody:first-of-type tr:first-child td),
+.content::v-deep(table tbody:first-of-type tr:first-child th) {
   background-color: #1a1a1a !important;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
 
-.content ::v-deep(table tbody:not(:first-child) td) {
+.content::v-deep(table tbody:not(:first-child) td) {
   background-color: #000;
 }
 
-.content ::v-deep(summary) {
+.content::v-deep(summary) {
   position: relative;
 }
 </style>
