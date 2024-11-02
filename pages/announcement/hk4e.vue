@@ -55,6 +55,9 @@ const progressValue = computed(() => {
 const modal = useModal();
 
 function openModal(item: { title?: string | null; content?: string | null }) {
+  if (document.getSelection()?.isCollapsed === false) {
+    return;
+  }
   modal.open(Hk4eContentModal, {
     title: item.title,
     content: item.content?.replaceAll(

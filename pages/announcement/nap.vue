@@ -59,6 +59,12 @@ const progressValue = computed(() => {
 const modal = useModal();
 
 function openModal(item: { title?: string | null; content?: string | null }) {
+  if (document.getSelection()?.isCollapsed === false) {
+    return;
+  }
+  if (document.getSelection()?.isCollapsed === false) {
+    return;
+  }
   modal.open(NapContentModal, {
     title: item.title,
     content: item.content?.replaceAll(/font-size:0.\d+rem/g, "font-size:1rem"),
