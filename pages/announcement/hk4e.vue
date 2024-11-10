@@ -45,7 +45,7 @@ import { Hk4eContentModal } from "#components";
 definePageMeta({
   layout: "announcement",
 });
-const { data, status, error } = useLazyFetch("/api/announcement/hk4e");
+const { data, status, error } = await useLazyFetch("/api/announcement/hk4e");
 const progressValue = computed(() => {
   if (!data.value?.progress.percent) {
     return 0;

@@ -49,7 +49,7 @@ import { NapContentModal } from "#components";
 definePageMeta({
   layout: "announcement",
 });
-const { data, status, error } = useLazyFetch("/api/announcement/nap");
+const { data, status, error } = await useLazyFetch("/api/announcement/nap");
 const progressValue = computed(() => {
   if (!data.value?.progress.percent) {
     return 0;

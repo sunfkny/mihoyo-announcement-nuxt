@@ -49,7 +49,7 @@ import { HkrpgContentModal } from "#components";
 definePageMeta({
   layout: "announcement",
 });
-const { data, status, error } = useLazyFetch("/api/announcement/hkrpg");
+const { data, status, error } = await useLazyFetch("/api/announcement/hkrpg");
 const progressValue = computed(() => {
   if (!data.value?.progress.percent) {
     return 0;
