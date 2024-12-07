@@ -147,12 +147,11 @@ function getVersionInfoFromAnnList(
 
 async function getAnnContent(): Promise<AnnContentResponse> {
   const response = await fetch(
-    "https://hk4e-ann-api.mihoyo.com/common/hk4e_cn/announcement/api/getAnnContent?" +
+    "https://hk4e-ann-static.mihoyo.com/common/hk4e_cn/announcement/api/getAnnContent?" +
       new URLSearchParams({
         game: "hk4e",
         game_biz: "hk4e_cn",
         lang: "zh-cn",
-        from_cloud_web: "1",
         bundle_id: "hk4e_cn",
         channel_id: "1",
         level: "60",

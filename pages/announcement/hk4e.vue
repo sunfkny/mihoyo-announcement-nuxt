@@ -60,12 +60,14 @@ function openModal(item: { title?: string | null; content?: string | null }) {
   }
   modal.open(Hk4eContentModal, {
     title: item.title,
-    content: item.content?.replaceAll(
-      /(&lt;t class="t_.*?&gt;)(.*?)(&lt;\/t&gt;)/gi,
-      (match, p1, p2) => {
-        return `<span>${p2}</span>`;
-      }
-    ),
+    content: item.content
+      ?.replaceAll(
+        /(&lt;t class="t_.*?&gt;)(.*?)(&lt;\/t&gt;)/gi,
+        (match, p1, p2) => {
+          return `<span>${p2}</span>`;
+        }
+      )
+      ?.replaceAll(/font-size:0.\d+rem/g, "font-size:1rem"),
   });
 }
 </script>
