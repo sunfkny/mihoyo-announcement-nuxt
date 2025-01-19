@@ -198,7 +198,7 @@ export async function getBh3Info(): Promise<Bh3Response> {
   ]);
 
   const versionInfo = getVersionInfoFromAnnList(annList);
-  let progress: Bh3Progress = {};
+  const progress: Bh3Progress = {};
 
   if (versionInfo) {
     const startTime = getTime(versionInfo.start_time);
@@ -229,14 +229,14 @@ export async function getBh3Info(): Promise<Bh3Response> {
       const gacha_info_header = nodes.find(
         (node) => node.textContent === "补给信息"
       );
-      let gacha_info_header_next = gacha_info_header?.nextSibling;
-      let gacha_info_header_next_text =
+      const gacha_info_header_next = gacha_info_header?.nextSibling;
+      const gacha_info_header_next_text =
         gacha_info_header_next?.textContent || "";
-      let is_as_follows =
+      const is_as_follows =
         gacha_info_header_next_text.includes("如下") ||
         gacha_info_header_next_text.includes("以下");
 
-      let elements = [gacha_info_header_next];
+      const elements = [gacha_info_header_next];
       if (is_as_follows) {
         elements.push(gacha_info_header_next?.nextSibling);
       }

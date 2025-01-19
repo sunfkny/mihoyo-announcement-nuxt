@@ -200,7 +200,7 @@ export async function getHk4eInfo(): Promise<Hk4eResponse> {
   ]);
 
   const versionInfo = getVersionInfoFromAnnList(annList);
-  let progress: Hk4eProgress = {};
+  const progress: Hk4eProgress = {};
 
   if (versionInfo) {
     const startTime = getTime(versionInfo.start_time);

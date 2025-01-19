@@ -8,6 +8,7 @@
     <UModals />
   </div>
 </template>
+
 <style>
 ::-webkit-scrollbar {
   width: 0px;

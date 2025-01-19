@@ -3,9 +3,9 @@
     <div class="games-nav-bar flex justify-center items-center gap-2">
       <NuxtLink
         v-for="game in games"
+        :key="game.key"
         class="games-nav-bar-item rounded-md border-2 border-solid border-transparent p-1 transition-all duration-300 hover:border-gray-300"
         :style="{ 'view-transition-name': `games-nav-bar-item-${game.key}` }"
-        :key="game.key"
         :to="`/announcement/${game.key}`"
       >
         <img

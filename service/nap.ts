@@ -195,7 +195,7 @@ export async function getNapInfo(): Promise<NapResponse> {
   ]);
 
   const versionInfo = getVersionInfoFromAnnList(annList);
-  let progress: NapProgress = {};
+  const progress: NapProgress = {};
 
   if (versionInfo) {
     const startTime = getTime(versionInfo.start_time);

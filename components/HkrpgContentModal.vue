@@ -28,15 +28,15 @@
       </template>
 
       <div
-        v-html="content"
         class="content useWebFont scroll-hack max-h-[calc(100vh-14rem)] min-h-4 overflow-y-auto"
+        v-html="content"
       ></div>
     </UCard>
   </UModal>
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   title?: string | null;
   content?: string | null;
 }>();

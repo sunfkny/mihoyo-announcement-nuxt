@@ -3,4 +3,5 @@
     <NavBar></NavBar>
   </div>
 </template>
+
 <script setup lang="ts"></script>

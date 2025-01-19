@@ -3,6 +3,6 @@
     <div class="m-4">
       <NavBar :size="64"></NavBar>
     </div>
-    <slot />
+    <slot></slot>
   </main>
 </template>

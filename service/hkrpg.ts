@@ -214,7 +214,7 @@ export async function getHkrpgInfo(): Promise<HkrpgResponse> {
   ]);
 
   const versionInfo = getVersionInfoFromAnnList(annList);
-  let progress: HkrpgProgress = {};
+  const progress: HkrpgProgress = {};
 
   if (versionInfo) {
     const startTime = getTime(versionInfo.start_time);
