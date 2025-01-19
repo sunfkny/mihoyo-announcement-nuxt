@@ -8,8 +8,8 @@
           :ui="{ progress: { color: 'text-[#454D5C]' } }"
         ></UProgress>
         <span
-          >{{ data?.progress.start_time }} ~ {{ data?.progress.end_time }} ({{
-            data?.progress.end_time_humaize
+          >{{ data.progress.start_time }} ~ {{ data.progress.end_time }} ({{
+            data.progress.end_time_humaize
           }})</span
         >
       </div>
@@ -50,7 +50,7 @@ const progressValue = computed(() => {
   if (!data.value?.progress.percent) {
     return 0;
   }
-  return data.value?.progress.percent * 100;
+  return data.value.progress.percent * 100;
 });
 const modal = useModal();
 

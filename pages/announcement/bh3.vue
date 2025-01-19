@@ -8,8 +8,8 @@
           :ui="{ progress: { color: 'text-[#003366]' } }"
         ></UProgress>
         <span>
-          {{ data?.progress.start_time }} ~ {{ data?.progress.end_time }} ({{
-            data?.progress.end_time_humaize
+          {{ data.progress.start_time }} ~ {{ data.progress.end_time }} ({{
+            data.progress.end_time_humaize
           }})</span
         >
       </div>
@@ -20,7 +20,7 @@
       >
         <img :src="item.image" :alt="item.title" />
         <p>{{ item.title }}</p>
-        <div v-if="item?.info" v-html="item?.info"></div>
+        <div v-if="item.info" v-html="item.info"></div>
       </div>
     </div>
     <div v-if="status == 'error'" class="my-4">
@@ -48,7 +48,7 @@ const progressValue = computed(() => {
   if (!data.value?.progress.percent) {
     return 0;
   }
-  return data.value?.progress.percent * 100;
+  return data.value.progress.percent * 100;
 });
 const modal = useModal();
 
