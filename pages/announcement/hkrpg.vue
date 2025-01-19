@@ -65,9 +65,9 @@ function openModal(item: { title?: string | null; content?: string | null }) {
   modal.open(HkrpgContentModal, {
     title: item.title,
     content: item.content?.replaceAll(
-      /(&lt;t class="t_.*?&gt;)(.*?)(&lt;\/t&gt;)/gi,
-      (match, p1, p2) => {
-        return `<span>${p2}</span>`;
+      /(?:&lt;t class="t_.*?&gt;)(.*?)(?:&lt;\/t&gt;)/gi,
+      (match, p1) => {
+        return `<span>${p1}</span>`;
       }
     ),
   });
