@@ -1,4 +1,5 @@
 import { getTime, getTimeHumaize } from "../utils/time";
+import { JSDOM } from "jsdom";
 
 interface NapGachaInfo {
   ann_id: number;
@@ -94,7 +95,7 @@ interface AnnListResponse {
 
 async function getAnnList(): Promise<AnnListResponse> {
   const response = await fetch(
-    "https://announcement-api.mihoyo.com/common/nap_cn/announcement/api/getAnnList?" +
+    "https://announcement-static.mihoyo.com/common/nap_cn/announcement/api/getAnnList?" +
       new URLSearchParams({
         game: "nap",
         game_biz: "nap_cn",
@@ -102,9 +103,8 @@ async function getAnnList(): Promise<AnnListResponse> {
         bundle_id: "nap_cn",
         platform: "pc",
         region: "prod_gf_cn",
-        level: "40",
+        level: "60",
         channel_id: "1",
-        uid: "10000000",
       }).toString()
   );
   if (response.status !== 200) {
@@ -142,7 +142,7 @@ function getVersionInfoFromAnnList(
 
 async function getAnnContent(): Promise<AnnContentResponse> {
   const response = await fetch(
-    "https://announcement-api.mihoyo.com/common/nap_cn/announcement/api/getAnnContent?" +
+    "https://announcement-static.mihoyo.com/common/nap_cn/announcement/api/getAnnContent?" +
       new URLSearchParams({
         game: "nap",
         game_biz: "nap_cn",
@@ -150,9 +150,8 @@ async function getAnnContent(): Promise<AnnContentResponse> {
         bundle_id: "nap_cn",
         platform: "pc",
         region: "prod_gf_cn",
-        level: "40",
+        level: "60",
         channel_id: "1",
-        uid: "10000000",
       }).toString()
   );
   if (response.status !== 200) {
@@ -166,6 +165,18 @@ async function getAnnContent(): Promise<AnnContentResponse> {
     );
   }
   return await response.json();
+}
+
+function domParse(s: string): string {
+  const d = new JSDOM(s);
+  const nl = d.window.document.body.querySelector(
+    "table tbody tr:nth-child(2) td"
+  );
+  const textContent = [...(nl?.children || [])]
+    .map((i) => i.textContent)
+    .join(" ");
+  console.log(textContent);
+  return textContent;
 }
 
 function getGachaInfoFromAnnContent(
@@ -216,7 +227,7 @@ export async function getNapInfo(): Promise<NapResponse> {
     let end_time_humaize = null;
     const t =
       /(?:([0-9]+\.[0-9]版本更新后)|(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)).*?(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)/.exec(
-        i.content
+        domParse(i.content)
       );
     const groups = Array.from(t || []).slice(1) || [];
     if (groups[0] && groups[2]) {
