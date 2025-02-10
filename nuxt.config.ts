@@ -7,4 +7,9 @@ export default defineNuxtConfig({
     viewTransition: true,
     renderJsonPayloads: false,
   },
+  icon: {
+    clientBundle: {
+      icons: ["heroicons:x-mark-20-solid"],
+    },
+  },
 });
