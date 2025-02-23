@@ -175,7 +175,6 @@ function domParse(s: string): string {
   const textContent = [...(nl?.children || [])]
     .map((i) => i.textContent)
     .join(" ");
-  console.log(textContent);
   return textContent;
 }
 
