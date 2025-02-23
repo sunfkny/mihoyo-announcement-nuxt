@@ -5,7 +5,7 @@
         <UProgress
           class="h-2"
           :value="progressValue"
-          :ui="{ progress: { color: 'text-[#050505]' } }"
+          :ui="{ progress: { color: 'dark:text-[#d9a600] text-[#050505]' } }"
         ></UProgress>
         <span
           >{{ data.progress.start_time }} ~ {{ data.progress.end_time }} ({{
