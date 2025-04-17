@@ -1,16 +1,6 @@
 <template>
-  <div>
-    <UContainer>
-      <NuxtLayout>
-        <NuxtPage />
-      </NuxtLayout>
-    </UContainer>
-    <UModals />
-  </div>
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
+  <UModals />
 </template>
-
-<style>
-::-webkit-scrollbar {
-  width: 0px;
-}
-</style>
