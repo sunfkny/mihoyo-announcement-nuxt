@@ -7,5 +7,6 @@ export default defineCachedEventHandler(
   {
     maxAge: import.meta.dev ? 5 : 60,
     name: "api-announcement-hk4e",
+    staleMaxAge: -1,
   }
 );
