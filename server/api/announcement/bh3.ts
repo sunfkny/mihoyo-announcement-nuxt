@@ -1,12 +1,16 @@
 import { getBh3Info } from "~/service/bh3";
 
 export default defineCachedEventHandler(
-  async () => {
+  async (event) => {
+    event.node.res.setHeader(
+      "CDN-Cache-Control",
+      "public, max-age=60, stale-while-revalidate=600"
+    );
     return await getBh3Info();
   },
   {
-    maxAge: import.meta.dev ? 5 : 60,
+    maxAge: 60,
     name: "api-announcement-bh3",
-    staleMaxAge: -1,
+    staleMaxAge: 600,
   }
 );
