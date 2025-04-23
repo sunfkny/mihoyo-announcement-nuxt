@@ -1,7 +1,6 @@
 import { getTime, getTimeHumaize } from "../utils/time";
-import { JSDOM } from "jsdom";
 
-interface NapGachaInfo {
+type NapGachaInfo = {
   ann_id: number;
   title: string;
   image: string;
@@ -10,45 +9,64 @@ interface NapGachaInfo {
   end_time?: string | null;
   start_time_humaize?: string | null;
   end_time_humaize?: string | null;
-}
+};
 
-interface NapProgress {
+type NapProgress = {
   start_time?: string | null;
   end_time?: string | null;
   start_time_humaize?: string | null;
   end_time_humaize?: string | null;
   percent?: number | null;
-}
+};
 
-interface NapResponse {
+type NapResponse = {
   progress: NapProgress;
   gacha_info: NapGachaInfo[];
-}
+};
 
-interface AnnContentResponse {
+type AnnContentResponse = {
   retcode: number;
   message: string;
   data: {
-    list: {
+    list: Array<{
       ann_id: number;
       title: string;
       subtitle: string;
       banner: string;
       content: string;
       lang: string;
-    }[];
-    pic_list: unknown[];
+      remind_text: string;
+    }>;
     total: number;
+    pic_list: Array<{
+      ann_id: number;
+      content_type: number;
+      title: string;
+      subtitle: string;
+      banner: string;
+      content: string;
+      lang: string;
+      img: string;
+      href_type: number;
+      href: string;
+      pic_list: Array<{
+        title: string;
+        img: string;
+        href_type: number;
+        href: string;
+      }>;
+      remind_text: string;
+    }>;
     pic_total: number;
   };
-}
+};
 
-interface AnnListResponse {
+type AnnListResponse = {
   retcode: number;
   message: string;
   data: {
-    list: {
-      list: {
+    list: Array<{
+      list: Array<{
         ann_id: number;
         title: string;
         subtitle: string;
@@ -70,32 +88,87 @@ interface AnnListResponse {
         has_content: boolean;
         extra_remind: number;
         tag_icon_hover: string;
-      }[];
+        logout_remind: number;
+        logout_remind_ver: number;
+        country: string;
+        need_remind_text: number;
+        remind_text: string;
+        weak_remind: number;
+        remind_consumption_type: number;
+      }>;
       type_id: number;
       type_label: string;
-    }[];
+    }>;
     total: number;
-    type_list: {
+    type_list: Array<{
       id: number;
       name: string;
       mi18n_name: string;
-    }[];
+    }>;
     alert: boolean;
     alert_id: number;
     timezone: number;
     t: string;
-    pic_list: unknown[];
+    pic_list: Array<{
+      type_list: Array<{
+        list: Array<{
+          ann_id: number;
+          title: string;
+          subtitle: string;
+          banner: string;
+          content: string;
+          type_label: string;
+          tag_label: string;
+          tag_icon: string;
+          login_alert: number;
+          lang: string;
+          start_time: string;
+          end_time: string;
+          type: number;
+          remind: number;
+          alert: number;
+          tag_start_time: string;
+          tag_end_time: string;
+          remind_ver: number;
+          has_content: boolean;
+          pic_type: number;
+          content_type: number;
+          img: string;
+          href_type: number;
+          href: string;
+          pic_list: Array<unknown>;
+          extra_remind: number;
+          need_remind_text: number;
+          remind_text: string;
+          weak_remind: number;
+          remind_consumption_type: number;
+        }>;
+        pic_type: number;
+      }>;
+      type_id: number;
+      type_label: string;
+    }>;
     pic_total: number;
-    pic_type_list: unknown[];
+    pic_type_list: Array<{
+      id: number;
+      name: string;
+      mi18n_name: string;
+    }>;
     pic_alert: boolean;
     pic_alert_id: number;
     static_sign: string;
+    banner: string;
+    calendar_type: {
+      mi18n_name: string;
+      enabled: boolean;
+      remind: boolean;
+    };
   };
-}
+};
 
 async function getAnnList(): Promise<AnnListResponse> {
   const response = await fetch(
-    "https://announcement-static.mihoyo.com/common/nap_cn/announcement/api/getAnnList?" +
+    "https://announcement-api.mihoyo.com/common/nap_cn/announcement/api/getAnnList?" +
       new URLSearchParams({
         game: "nap",
         game_biz: "nap_cn",
@@ -167,17 +240,6 @@ async function getAnnContent(): Promise<AnnContentResponse> {
   return await response.json();
 }
 
-function domParse(s: string): string {
-  const d = new JSDOM(s);
-  const nl = d.window.document.body.querySelector(
-    "table tbody tr:nth-child(2) td"
-  );
-  const textContent = [...(nl?.children || [])]
-    .map((i) => i.textContent)
-    .join(" ");
-  return textContent;
-}
-
 function getGachaInfoFromAnnContent(
   annContent: Awaited<ReturnType<typeof getAnnContent>>
 ): {
@@ -186,14 +248,14 @@ function getGachaInfoFromAnnContent(
   title: string;
   image: string;
 }[] {
-  return annContent.data.list
-    .filter((i) => i.subtitle.includes("调频"))
+  return annContent.data.pic_list
+    .filter((i) => i.subtitle.includes("调频") || i.subtitle.includes("频段"))
     .map((i) => {
       return {
         content: i.content,
         ann_id: i.ann_id,
         title: i.subtitle,
-        image: i.banner,
+        image: i.img,
       };
     });
 }
@@ -225,8 +287,8 @@ export async function getNapInfo(): Promise<NapResponse> {
     let start_time_humaize = null;
     let end_time_humaize = null;
     const t =
-      /(?:([0-9]+\.[0-9]版本更新后)|(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)).*?(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)/.exec(
-        domParse(i.content)
+      /(?:([0-9]+\.[0-9]版本更新后)|(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)).*?(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)/gm.exec(
+        i.content
       );
     const groups = Array.from(t || []).slice(1) || [];
     if (groups[0] && groups[2]) {
