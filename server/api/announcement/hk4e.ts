@@ -9,7 +9,7 @@ export default defineCachedEventHandler(
     return await getHk4eInfo();
   },
   {
-    maxAge: 60,
+    maxAge: import.meta.dev ? 1 : 60,
     name: "api-announcement-hk4e",
     staleMaxAge: 600,
   }

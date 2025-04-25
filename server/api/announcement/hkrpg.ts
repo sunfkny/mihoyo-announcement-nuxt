@@ -9,7 +9,7 @@ export default defineCachedEventHandler(
     return await getHkrpgInfo();
   },
   {
-    maxAge: 60,
+    maxAge: import.meta.dev ? 1 : 60,
     name: "api-announcement-hkrpg",
     staleMaxAge: 600,
   }

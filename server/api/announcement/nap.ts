@@ -9,7 +9,7 @@ export default defineCachedEventHandler(
     return await getNapInfo();
   },
   {
-    maxAge: 60,
+    maxAge: import.meta.dev ? 1 : 60,
     name: "api-announcement-nap",
     staleMaxAge: 600,
   }
