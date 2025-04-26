@@ -4,6 +4,7 @@ type NapGachaInfo = {
   ann_id: number;
   title: string;
   image: string;
+  images: string[];
   content: string;
   start_time?: string | null;
   end_time?: string | null;
@@ -306,11 +307,15 @@ export async function getNapInfo(): Promise<NapResponse> {
       start_time_humaize = getTimeHumaize(startTime);
       end_time_humaize = getTimeHumaize(endTime);
     }
+    const images = Array.from(
+      i.content.matchAll(/<img[^>]+src="([^"]+)"[^>]*>/g).map((m) => m[1])
+    );
 
     const result: NapGachaInfo = {
       ann_id: i.ann_id,
       title: i.title,
       image: i.image,
+      images,
       content: i.content,
       start_time,
       end_time,
