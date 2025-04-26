@@ -308,8 +308,8 @@ export async function getNapInfo(): Promise<NapResponse> {
       end_time_humaize = getTimeHumaize(endTime);
     }
     const images = Array.from(
-      i.content.matchAll(/<img[^>]+src="([^"]+)"[^>]*>/g).map((m) => m[1])
-    );
+      i.content.matchAll(/<img[^>]+src="([^"]+)"[^>]*>/g)
+    ).map((m) => m[1]);
 
     const result: NapGachaInfo = {
       ann_id: i.ann_id,
