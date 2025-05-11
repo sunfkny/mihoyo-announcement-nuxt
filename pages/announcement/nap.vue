@@ -23,19 +23,7 @@
         :key="item.ann_id"
         @click="openModal(item)"
       >
-        <img
-          v-if="(data?.gacha_info.length || 0) > 1"
-          :src="item.image"
-          :alt="item.title"
-        />
-        <template v-else>
-          <img
-            v-for="(i, index) in item.images"
-            :key="index"
-            :src="i"
-            :alt="i"
-          />
-        </template>
+        <img v-for="(i, index) in item.images" :key="index" :src="i" :alt="i" />
         <p>{{ item.title }}</p>
         <p>开始时间: {{ item.start_time }} ({{ item.start_time_humaize }})</p>
         <p>结束时间: {{ item.end_time }} ({{ item.end_time_humaize }})</p>
