@@ -288,7 +288,7 @@ export async function getNapInfo(): Promise<NapResponse> {
     let start_time_humaize = null;
     let end_time_humaize = null;
     const t =
-      /(?:([0-9]+\.[0-9]版本更新后)|(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)).*?(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)/gm.exec(
+      /(?:([0-9]+\.[0-9]版本更新后)|(\d{4}\/\d{2}\/\d{2} +\d{2}:\d{2}(?::\d{2})?)).*?(\d{4}\/\d{2}\/\d{2} +\d{2}:\d{2}(?::\d{2})?)/gm.exec(
         i.content
       );
     const groups = Array.from(t || []).slice(1) || [];
