@@ -14,7 +14,7 @@
     </div>
     <template #body>
       <div
-        class="content useCloudFont scrollHack max-h-[calc(100vh-14rem)] min-h-4 overflow-y-auto"
+        class="content useCloudFont scrollHack max-h-[calc(100vh-14rem)] min-h-4 pr-2 overflow-y-auto"
         v-html="resolveTimeAndResetFontSize(item.content)"
       ></div>
     </template>
