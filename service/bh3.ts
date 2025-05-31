@@ -1,4 +1,3 @@
-import { JSDOM } from "jsdom";
 import { getTime, getTimeHumaize } from "../utils/time";
 
 interface Bh3GachaInfo {
@@ -214,48 +213,21 @@ export async function getBh3Info(): Promise<Bh3Response> {
 
   const gacha_info: Bh3GachaInfo[] = getGachaInfoFromAnnContent(annContent).map(
     (i) => {
-      let infoHtml = null;
-      const dom = new JSDOM(i.content);
-      const nodes = Array.from(dom.window.document.body.childNodes);
-
-      const info_dom = new JSDOM();
-      const open_time_header = nodes.find(
-        (node) => node.textContent === "开放时间"
-      );
-      if (open_time_header && open_time_header.nextSibling) {
-        info_dom.window.document.body.appendChild(open_time_header.nextSibling);
-      }
-
-      const gacha_info_header = nodes.find(
-        (node) => node.textContent === "补给信息"
-      );
-      const gacha_info_header_next = gacha_info_header?.nextSibling;
-      const gacha_info_header_next_text =
-        gacha_info_header_next?.textContent || "";
-      const is_as_follows =
-        gacha_info_header_next_text.includes("如下") ||
-        gacha_info_header_next_text.includes("以下");
-
-      const elements = [gacha_info_header_next];
-      if (is_as_follows) {
-        elements.push(gacha_info_header_next?.nextSibling);
-      }
-      elements.forEach((element) => {
-        if (element) {
-          info_dom.window.document.body.appendChild(element);
-        }
-      });
-
-      if (info_dom.window.document.body.innerHTML) {
-        infoHtml = info_dom.window.document.body.innerHTML;
-      }
+      const info =
+        /<h2[^>]+>补给信息<\/h2>(.*?)<h2[^>]+>补给规则<\/h2>/s.exec(
+          i.content
+        )?.[1] ??
+        /<h2[^>]+>开放时间<\/h2>(.*?)<h2[^>]+>具体内容<\/h2>/s.exec(
+          i.content
+        )?.[1] ??
+        "";
 
       return {
         ann_id: i.ann_id,
         title: i.title,
         image: i.image,
         content: i.content,
-        info: infoHtml,
+        info,
       };
     }
   );
