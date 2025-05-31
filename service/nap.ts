@@ -1,4 +1,4 @@
-import { getTime, getTimeHumaize } from "../utils/time";
+import { getTime, getTimeHumaize } from "~/utils/time";
 
 type NapGachaInfo = {
   ann_id: number;

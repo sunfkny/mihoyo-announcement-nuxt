@@ -1,4 +1,4 @@
-import { getTime, getTimeHumaize } from "../utils/time";
+import { getTime, getTimeHumaize } from "~/utils/time";
 
 interface Hk4eGachaInfo {
   ann_id: number;

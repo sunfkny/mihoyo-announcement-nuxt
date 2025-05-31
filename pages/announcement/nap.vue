@@ -2,7 +2,7 @@
   <div>
     <div v-if="status === 'success'">
       <div v-if="data?.progress.percent" class="my-4">
-        <UProgress v-model="progressValue" class="h-2" color="info"></UProgress>
+        <UProgress v-model="progressValue" class="h-2" color="info" />
         <span
           >{{ data.progress.start_time }} ~ {{ data.progress.end_time }} ({{
             data.progress.end_time_humaize
@@ -10,25 +10,21 @@
         >
       </div>
       <div v-else class="my-4">
-        <UProgress v-model="progressValue" class="h-2" color="info"></UProgress>
+        <UProgress v-model="progressValue" class="h-2" color="info" />
         <span>获取版本信息失败</span>
       </div>
 
       <div v-for="item in data?.gacha_info" :key="item.ann_id">
         <NapContentModal :item="item">
-          <div>
-            <img
-              v-for="(i, index) in item.images"
-              :key="index"
-              :src="i"
-              :alt="i"
-            />
-            <p>{{ item.title }}</p>
-            <p>
-              开始时间: {{ item.start_time }} ({{ item.start_time_humaize }})
-            </p>
-            <p>结束时间: {{ item.end_time }} ({{ item.end_time_humaize }})</p>
-          </div>
+          <img
+            v-for="(i, index) in item.images"
+            :key="index"
+            :src="i"
+            :alt="i"
+          />
+          <p>{{ item.title }}</p>
+          <p>开始时间: {{ item.start_time }} ({{ item.start_time_humaize }})</p>
+          <p>结束时间: {{ item.end_time }} ({{ item.end_time_humaize }})</p>
         </NapContentModal>
       </div>
     </div>

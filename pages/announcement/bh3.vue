@@ -2,20 +2,18 @@
   <div>
     <div v-if="status === 'success'">
       <div v-if="data?.progress.percent" class="my-4">
-        <UProgress v-model="progressValue" class="h-2" color="info"></UProgress>
+        <UProgress v-model="progressValue" class="h-2" color="info" />
         <span>
           {{ data.progress.start_time }} ~ {{ data.progress.end_time }} ({{
             data.progress.end_time_humaize
-          }})</span
-        >
+          }})
+        </span>
       </div>
       <div v-for="item in data?.gacha_info" :key="item.ann_id">
         <Bh3ContentModal :item="item">
-          <div>
-            <img :src="item.image" :alt="item.title" />
-            <p>{{ item.title }}</p>
-            <div v-if="item.info" v-html="item.info"></div>
-          </div>
+          <img :src="item.image" :alt="item.title" />
+          <p>{{ item.title }}</p>
+          <div v-if="item.info" v-html="item.info"></div>
         </Bh3ContentModal>
       </div>
     </div>

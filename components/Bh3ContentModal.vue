@@ -1,5 +1,6 @@
 <template>
   <UModal
+    v-model:open="open"
     :title="item.title"
     :ui="{
       body: 'bg-[#003366] rounded-lg text-white',
@@ -8,7 +9,9 @@
       header: 'justify-between',
     }"
   >
-    <slot></slot>
+    <div @click="click()">
+      <slot></slot>
+    </div>
     <template #body>
       <div
         class="content useWebFont scrollHack max-h-[calc(100vh-14rem)] min-h-4 pr-2 overflow-y-scroll"
@@ -33,6 +36,8 @@ useFontFace(
     display: "swap",
   }
 );
+
+const { open, click } = useClickToggleIgnoreSelection();
 </script>
 
 <style scoped>
