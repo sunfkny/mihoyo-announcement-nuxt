@@ -1,46 +1,38 @@
 <template>
   <UModal
-    :title="title"
+    :title="item.title"
     :ui="{
-      width: /*tw:*/ `max-w-[768px] sm:max-w-screen`,
-      container: /*tw:*/ `sm:p-4 items-center`,
+      body: 'bg-[#F9F6F2] rounded-lg text-white',
+      content: 'max-w-[768px]',
+      close: 'static',
+      header: 'justify-between',
     }"
   >
-    <UCard
-      :ui="{
-        ring: '',
-        body: { background: /*tw:*/ `bg-[#F9F6F2] rounded-lg` },
-      }"
-    >
-      <template #header>
-        <div class="flex items-center justify-between">
-          <h3 class="text-base font-semibold leading-6">
-            {{ title }}
-          </h3>
-          <UButton
-            color="gray"
-            variant="ghost"
-            icon="i-heroicons-x-mark-20-solid"
-            class="-my-1"
-            @click="modal.close()"
-          />
-        </div>
-      </template>
-
+    <slot></slot>
+    <template #body>
       <div
         class="content useCloudFont scrollHack max-h-[calc(100vh-14rem)] min-h-4 overflow-y-auto"
-        v-html="content"
+        v-html="resolveTimeAndResetFontSize(item.content)"
       ></div>
-    </UCard>
+    </template>
   </UModal>
 </template>
 
 <script setup lang="ts">
 defineProps<{
-  title?: string | null;
-  content?: string | null;
+  item: {
+    title: string;
+    content: string;
+  };
 }>();
-const modal = useModal();
+
+useFontFace(
+  "ysCloudFont",
+  "https://webstatic.mihoyo.com/common/clgm-static/ys/fonts/zh-cn.ttf",
+  {
+    display: "swap",
+  }
+);
 </script>
 
 <style scoped>
@@ -51,12 +43,6 @@ const modal = useModal();
     "微软雅黑",
     Arial,
     sans-serif;
-}
-
-@font-face {
-  font-family: ysCloudFont;
-  font-display: swap;
-  src: url("https://webstatic.mihoyo.com/common/clgm-static/ys/fonts/zh-cn.ttf");
 }
 
 .scrollHack::-webkit-scrollbar {

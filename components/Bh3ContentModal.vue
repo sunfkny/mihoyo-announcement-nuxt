@@ -1,47 +1,38 @@
 <template>
   <UModal
-    :title="title"
+    :title="item.title"
     :ui="{
-      width: /*tw:*/ `max-w-[768px] sm:max-w-screen`,
-      container: /*tw:*/ `sm:p-4 items-center`,
+      body: 'bg-[#003366] rounded-lg text-white',
+      content: 'max-w-[768px]',
+      close: 'static',
+      header: 'justify-between',
     }"
   >
-    <UCard
-      :ui="{
-        ring: '',
-        body: {
-          background: /*tw:*/ `bg-[#003366] rounded-lg text-white`,
-        },
-      }"
-    >
-      <template #header>
-        <div class="flex items-center justify-between">
-          <h3 class="text-base font-semibold leading-6">
-            {{ title }}
-          </h3>
-          <UButton
-            color="gray"
-            variant="ghost"
-            icon="i-heroicons-x-mark-20-solid"
-            class="-my-1"
-            @click="modal.close()"
-          />
-        </div>
-      </template>
+    <slot></slot>
+    <template #body>
       <div
         class="content useWebFont scrollHack max-h-[calc(100vh-14rem)] min-h-4 pr-2 overflow-y-scroll"
-        v-html="content"
+        v-html="item.content"
       ></div>
-    </UCard>
+    </template>
   </UModal>
 </template>
 
 <script setup lang="ts">
 defineProps<{
-  title?: string | null;
-  content?: string | null;
+  item: {
+    title: string;
+    content: string;
+  };
 }>();
-const modal = useModal();
+
+useFontFace(
+  "bh3WebFont",
+  "https://webstatic.mihoyo.com/bh3/upload/announcement/font/zh-cn.ttf",
+  {
+    display: "swap",
+  }
+);
 </script>
 
 <style scoped>
@@ -52,12 +43,6 @@ const modal = useModal();
     "微软雅黑",
     Arial,
     sans-serif;
-}
-
-@font-face {
-  font-family: bh3WebFont;
-  font-display: swap;
-  src: url("https://webstatic.mihoyo.com/bh3/upload/announcement/font/zh-cn.ttf");
 }
 
 .scrollHack::-webkit-scrollbar {

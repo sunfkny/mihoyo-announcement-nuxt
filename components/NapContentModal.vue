@@ -1,57 +1,42 @@
 <template>
   <UModal
-    :title="title"
+    :title="item.title"
     :ui="{
-      width: /*tw:*/ `max-w-[768px] sm:max-w-screen`,
-      container: /*tw:*/ `sm:p-4 items-center`,
+      body: 'bg-[#050505] rounded-lg text-white',
+      content: 'max-w-[768px]',
+      close: 'static',
+      header: 'justify-between',
     }"
   >
-    <UCard
-      :ui="{
-        ring: '',
-        body: { background: /*tw:*/ `bg-[#050505] rounded-lg text-white` },
-      }"
-    >
-      <template #header>
-        <div class="flex items-center justify-between">
-          <h3 class="text-base font-semibold leading-6">
-            {{ title }}
-          </h3>
-          <UButton
-            color="gray"
-            variant="ghost"
-            icon="i-heroicons-x-mark-20-solid"
-            class="-my-1"
-            @click="modal.close()"
-          />
-        </div>
-      </template>
-
+    <slot></slot>
+    <template #body>
       <div
         class="content nap-zh-cn-light scroll-hack max-h-[calc(100vh-14rem)] min-h-4 overflow-y-auto"
-        v-html="content"
+        v-html="resetFontSize(item.content)"
       ></div>
-    </UCard>
+    </template>
   </UModal>
 </template>
 
 <script setup lang="ts">
 defineProps<{
-  title?: string | null;
-  content?: string | null;
+  item: {
+    title: string;
+    content: string;
+  };
 }>();
-const modal = useModal();
+
+useFontFace(
+  "nap-zh-cn-light",
+  "https://sdk.mihoyo.com/nap/announcement/fonts/zh-cn-light.e490414b.ttf",
+  {
+    display: "swap",
+    weight: "400",
+  }
+);
 </script>
 
 <style scoped>
-@font-face {
-  font-family: nap-zh-cn-light;
-  font-display: swap;
-  font-weight: 400;
-  src: url("https://sdk.mihoyo.com/nap/announcement/fonts/zh-cn-light.e490414b.ttf")
-    format("truetype");
-}
-
 .nap-zh-cn-light {
   font-family:
     nap-zh-cn-light,
