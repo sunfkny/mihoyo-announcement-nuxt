@@ -6,19 +6,19 @@ export function isGame(game: string): game is Game {
 const gamesMap: Record<Game, { name: string; icon: string }> = {
   bh3: {
     name: "崩坏3",
-    icon: "https://webstatic.mihoyo.com/upload/op-public/2021/10/03/4080f2eb748823d8c38507c3d7b69b36_936817768851375073.png",
+    icon: "https://bbs-static.miyoushe.com/upload/op_manual_upload/fe/game_list/game_icons/1715415439042m-bh3-logo-gz.png",
   },
   hk4e: {
     name: "原神",
-    icon: "https://webstatic.mihoyo.com/upload/op-public/2021/10/09/def1f2abcfc2af0bbe2e5900a60a5ee1_5699547505742166353.png",
+    icon: "https://bbs-static.miyoushe.com/upload/op_manual_upload/fe/game_list/game_icons/1715415491378m-ys-logo-gz.png",
   },
   hkrpg: {
     name: "崩坏：星穹铁道",
-    icon: "https://webstatic.mihoyo.com/upload/op-public/2021/10/09/870472d6104dbbe7ea18b27c13763ccb_5300916022261002498.png",
+    icon: "https://fastcdn.mihoyo.com/static-resource-v2/2025/05/20/815082f20e9198f092b6d3fcdd1afb17_2296503047981096792.png",
   },
   nap: {
     name: "绝区零",
-    icon: "https://webstatic.mihoyo.com/upload/op-public/2022/05/27/3896559583929f643fbe39ec1d6ca1c9_1026345827445617861.png",
+    icon: "https://bbs-static.miyoushe.com/upload/op_manual_upload/fe/game_list/game_icons/1715415500410m-zzz-logo-gz.png",
   },
 };
 export const games = gameKeys.map((key) => {

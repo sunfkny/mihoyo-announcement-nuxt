@@ -4,12 +4,11 @@
       <NuxtLink
         v-for="game in games"
         :key="game.key"
-        class="games-nav-bar-item rounded-md border-2 border-solid border-transparent p-1 transition-all duration-300 hover:border-gray-300"
+        class="games-nav-bar-item rounded-2xl border-2 border-solid border-transparent p-1 transition-all duration-300 hover:border-gray-300"
         :style="{ 'view-transition-name': `games-nav-bar-item-${game.key}` }"
         :to="`/announcement/${game.key}`"
       >
         <img
-          class="rounded-xs"
           :src="game.icon"
           :alt="game.name"
           :title="game.name"
