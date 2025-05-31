@@ -9,7 +9,7 @@
         :to="`/announcement/${game.key}`"
       >
         <img
-          class="rounded-sm"
+          class="rounded-xs"
           :src="game.icon"
           :alt="game.name"
           :title="game.name"
