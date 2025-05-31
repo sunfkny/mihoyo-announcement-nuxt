@@ -32,7 +32,7 @@
       <div class="size-[32px]"></div>
     </div>
 
-    <main class="max-w-[768px] mx-auto p-4 lg:p-0">
+    <main class="w-full max-w-[768px] mx-auto p-4 lg:p-0">
       <slot></slot>
     </main>
 
@@ -45,8 +45,6 @@ import { getGame } from "~/constants/game";
 
 const route = useRoute();
 
-const gameKey = computed(() => {
-  return route.path.replaceAll(/^(\/announcement\/)/g, "");
-});
-const game = computed(() => getGame(gameKey.value));
+const gameKey = route.path.replaceAll(/^(\/announcement\/)/g, "");
+const game = getGame(gameKey);
 </script>
