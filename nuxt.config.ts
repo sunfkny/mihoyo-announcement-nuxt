@@ -13,7 +13,7 @@ export default defineNuxtConfig({
   },
   icon: {
     clientBundle: {
-      icons: ["lucide:x"],
+      icons: ["lucide:x", "lucide:house", "lucide:arrow-left"],
     },
   },
 });
