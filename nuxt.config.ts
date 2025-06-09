@@ -12,8 +12,10 @@ export default defineNuxtConfig({
     fonts: false,
   },
   icon: {
+    provider: "none",
     clientBundle: {
-      icons: ["lucide:x", "lucide:house", "lucide:arrow-left"],
+      scan: true,
+      icons: ["lucide:x"], // Modal close icon
     },
   },
 });
