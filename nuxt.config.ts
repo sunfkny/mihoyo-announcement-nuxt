@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   modules: ["@nuxt/ui", "@nuxt/eslint"],
   css: ["~/assets/css/main.css"],
-  compatibilityDate: "2024-04-03",
+  compatibilityDate: "2025-03-01",
   devtools: { enabled: true },
   experimental: {
     viewTransition: true,
