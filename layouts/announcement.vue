@@ -1,7 +1,7 @@
 <template>
   <div class="relative flex flex-col sm:flex-row">
     <div class="h-dvh sticky top-0 hidden sm:flex flex-col items-center shadow">
-      <NavBar :size="64" vertical home></NavBar>
+      <NavBar vertical></NavBar>
     </div>
 
     <div
