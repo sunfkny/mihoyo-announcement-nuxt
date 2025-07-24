@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { games } from "~/constants/game";
+import { games } from "#shared/constants/game";
 
 withDefaults(
   defineProps<{

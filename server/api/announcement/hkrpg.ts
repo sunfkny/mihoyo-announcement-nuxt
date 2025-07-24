@@ -1,4 +1,4 @@
-import { getHkrpgInfo } from "~/service/hkrpg";
+import { getHkrpgInfo } from "~~/server/service/hkrpg";
 
 export default defineCachedEventHandler(
   async (event) => {

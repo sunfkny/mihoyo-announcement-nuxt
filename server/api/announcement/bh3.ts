@@ -1,4 +1,4 @@
-import { getBh3Info } from "~/service/bh3";
+import { getBh3Info } from "~~/server/service/bh3";
 
 export default defineCachedEventHandler(
   async (event) => {

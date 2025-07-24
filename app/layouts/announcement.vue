@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { getGame } from "~/constants/game";
+import { getGame } from "#shared/constants/game";
 
 const route = useRoute();
 

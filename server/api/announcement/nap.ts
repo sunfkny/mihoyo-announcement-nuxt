@@ -1,4 +1,4 @@
-import { getNapInfo } from "~/service/nap";
+import { getNapInfo } from "~~/server/service/nap";
 
 export default defineCachedEventHandler(
   async (event) => {

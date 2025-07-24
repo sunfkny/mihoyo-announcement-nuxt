@@ -1,4 +1,4 @@
-import { getHk4eInfo } from "~/service/hk4e";
+import { getHk4eInfo } from "~~/server/service/hk4e";
 
 export default defineCachedEventHandler(
   async (event) => {
