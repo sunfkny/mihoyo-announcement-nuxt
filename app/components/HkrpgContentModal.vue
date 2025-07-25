@@ -3,10 +3,10 @@
     v-model:open="open"
     :title="item.title"
     :ui="{
-      body: 'bg-[#D9DEEA] rounded-lg text-white',
-      content: 'max-w-[1024px]',
-      close: 'static',
-      header: 'justify-between',
+      body: /*tw:*/ `bg-[#D9DEEA] rounded-lg text-white`,
+      content: /*tw:*/ `max-w-[1024px]`,
+      close: /*tw:*/ `static`,
+      header: /*tw:*/ `justify-between`,
     }"
   >
     <div @click="click()">
