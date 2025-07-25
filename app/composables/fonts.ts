@@ -1,6 +1,6 @@
 function guessFontMimeType(url: string): string {
-  const cleanUrl = url.split("?")[0];
-  const ext = cleanUrl.split(".").pop()?.toLowerCase();
+  const pathname = new URL(url).pathname;
+  const ext = pathname.match(/\.([a-zA-Z0-9]+)$/)?.[1]?.toLowerCase();
   switch (ext) {
     case "ttf":
       return "font/ttf";
