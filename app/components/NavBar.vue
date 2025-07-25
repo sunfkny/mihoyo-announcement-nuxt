@@ -11,15 +11,11 @@
       >
         <div
           class="p-1 transition-all duration-300 flex justify-center items-center"
-          :style="{
-            width: '64px',
-            height: '64px',
-          }"
         >
           <div
-            class="w-full h-full bg-gray-100 rounded-lg flex justify-center items-center"
+            class="size-[64px] bg-gray-100 rounded-lg flex justify-center items-center"
           >
-            <UIcon name="i-lucide-house" class="size-[32px]" />
+            <UIcon name="i-lucide-house" class="size-[40px]" />
           </div>
         </div>
       </NuxtLink>
