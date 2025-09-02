@@ -13,7 +13,7 @@
         variant="outline"
         color="neutral"
       >
-        <UIcon class="size-[24px]" name="i-lucide-arrow-left" />
+        <ArrowLeft class="size-[24px]" />
       </NuxtLink>
       <div class="flex gap-2 justify-center items-center">
         <img
@@ -42,6 +42,7 @@
 
 <script setup lang="ts">
 import { getGame } from "#shared/constants/game";
+import { ArrowLeft } from "lucide-vue-next";
 
 const route = useRoute();
 

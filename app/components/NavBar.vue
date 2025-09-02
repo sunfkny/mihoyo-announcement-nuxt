@@ -13,9 +13,9 @@
           class="p-1 transition-all duration-300 flex justify-center items-center"
         >
           <div
-            class="size-[64px] bg-gray-100 rounded-lg flex justify-center items-center"
+            class="size-[64px] bg-gray-100 dark:bg-gray-700 rounded-lg flex justify-center items-center"
           >
-            <UIcon name="i-lucide-house" class="size-[40px]" />
+            <House class="size-[40px]" />
           </div>
         </div>
       </NuxtLink>
@@ -44,6 +44,7 @@
 
 <script setup lang="ts">
 import { games } from "#shared/constants/game";
+import { House } from "lucide-vue-next";
 
 withDefaults(
   defineProps<{

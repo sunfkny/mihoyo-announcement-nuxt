@@ -1,27 +1,32 @@
 <template>
-  <UModal
-    v-model:open="open"
-    :title="item.title"
-    :ui="{
-      body: /*tw:*/ `bg-[#050505] rounded-lg text-white`,
-      content: /*tw:*/ `max-w-[768px]`,
-      close: /*tw:*/ `static`,
-      header: /*tw:*/ `justify-between`,
-    }"
-  >
-    <div @click="click()">
-      <slot></slot>
-    </div>
-    <template #body>
-      <div
-        class="content nap-zh-cn-light scroll-hack max-h-[calc(100vh-14rem)] min-h-4 pr-2 overflow-y-auto"
-        v-html="resetFontSize(item.content)"
-      ></div>
-    </template>
-  </UModal>
+  <div @click="click()">
+    <slot></slot>
+  </div>
+  <Dialog v-model:open="open">
+    <DialogContent
+      class="bg-[#050505] border-2 border-[#929292] shadow text-white max-w-screen sm:max-w-[768px]"
+    >
+      <DialogHeader>
+        <DialogTitle>{{ item.title }}</DialogTitle>
+      </DialogHeader>
+      <div>
+        <div
+          class="content nap-zh-cn-light scroll-hack max-h-[calc(100vh-14rem)] min-h-4 pr-2 overflow-y-auto"
+          v-html="resetFontSize(item.content)"
+        ></div>
+      </div>
+    </DialogContent>
+  </Dialog>
 </template>
 
 <script setup lang="ts">
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+
 defineProps<{
   item: {
     title: string;

@@ -2,7 +2,7 @@
   <div>
     <div v-if="status === 'success'">
       <div v-if="data?.progress.percent" class="my-4">
-        <UProgress v-model="progressValue" class="h-2" color="info" />
+        <Progress v-model="progressValue" class="h-2" />
         <span>
           {{ data.progress.start_time }} ~ {{ data.progress.end_time }} ({{
             data.progress.end_time_humaize
@@ -34,6 +34,8 @@
 </template>
 
 <script setup lang="ts">
+import { Progress } from "@/components/ui/progress";
+
 definePageMeta({
   layout: "announcement",
 });
