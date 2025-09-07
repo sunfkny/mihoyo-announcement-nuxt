@@ -219,13 +219,13 @@ export async function getBh3Info(): Promise<Bh3Response> {
   const gacha_info: Bh3GachaInfo[] = getGachaInfoFromAnnContent(annContent).map(
     (i) => {
       const info
-        = /<h2[^>]+>补给信息<\/h2>(.*?)<h2[^>]+>补给规则<\/h2>/s.exec(
+        = /<h2[^>]+>.*?补给信息.*?<\/h2>(.*?)<h2[^>]+>.*?补给规则.*?<\/h2>/s.exec(
           i.content,
         )?.[1]
-        ?? /<h2[^>]+>开放时间<\/h2>(.*?)<h2[^>]+>具体内容<\/h2>/s.exec(
+        ?? /<h2[^>]+>.*?开放时间.*?<\/h2>(.*?)<h2[^>]+>.*?具体内容.*?<\/h2>/s.exec(
           i.content,
         )?.[1]
-        ?? "";
+        ?? null;
 
       return {
         ann_id: i.ann_id,

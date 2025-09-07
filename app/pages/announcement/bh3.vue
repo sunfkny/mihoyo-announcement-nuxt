@@ -26,9 +26,9 @@ const progressValue = computed(() => {
       </div>
       <div v-for="item in data?.gacha_info" :key="item.ann_id">
         <Bh3ContentModal :item="item">
-          <img :src="item.image" :alt="item.title">
+          <img class="rounded" :src="item.image" :alt="item.title">
           <p>{{ item.title }}</p>
-          <div v-if="item.info" v-html="item.info" />
+          <div v-if="item.info" class="[&_img]:bg-[#003366] [&_img]:rounded" v-html="item.info" />
         </Bh3ContentModal>
       </div>
     </div>
