@@ -9,7 +9,7 @@ const props = withDefaults(
   defineProps<ProgressRootProps & { class?: HTMLAttributes["class"] }>(),
   {
     modelValue: 0,
-  }
+  },
 );
 
 const delegatedProps = reactiveOmit(props, "class");
@@ -22,7 +22,7 @@ const delegatedProps = reactiveOmit(props, "class");
     :class="
       cn(
         'bg-primary/20 relative h-2 w-full overflow-hidden rounded-full',
-        props.class
+        props.class,
       )
     "
   >

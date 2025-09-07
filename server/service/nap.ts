@@ -169,7 +169,7 @@ type AnnListResponse = {
 
 async function getAnnList(): Promise<AnnListResponse> {
   const response = await fetch(
-    "https://announcement-api.mihoyo.com/common/nap_cn/announcement/api/getAnnList?" +
+    `https://announcement-api.mihoyo.com/common/nap_cn/announcement/api/getAnnList?${
       new URLSearchParams({
         game: "nap",
         game_biz: "nap_cn",
@@ -179,7 +179,7 @@ async function getAnnList(): Promise<AnnListResponse> {
         region: "prod_gf_cn",
         level: "60",
         channel_id: "1",
-      }).toString()
+      }).toString()}`,
   );
   if (response.status !== 200) {
     throw new Error(`Fail to get ann list ${response.status}`);
@@ -188,25 +188,25 @@ async function getAnnList(): Promise<AnnListResponse> {
     response.headers.get("Content-Type")?.includes("application/json") === false
   ) {
     throw new Error(
-      `Fail to get ann list ${response.headers.get("Content-Type")}`
+      `Fail to get ann list ${response.headers.get("Content-Type")}`,
     );
   }
   return await response.json();
 }
 
 function getVersionInfoFromAnnList(
-  annList: Awaited<ReturnType<typeof getAnnList>>
+  annList: Awaited<ReturnType<typeof getAnnList>>,
 ):
   | {
-      start_time: string;
-      end_time: string;
-    }
+    start_time: string;
+    end_time: string;
+  }
   | undefined {
   for (const lst of annList.data.list) {
     for (const i of lst.list) {
       if (
-        i.title.includes("已知问题及游戏优化说明") ||
-        i.subtitle.includes("版本更新说明")
+        i.title.includes("已知问题及游戏优化说明")
+        || i.subtitle.includes("版本更新说明")
       ) {
         return i;
       }
@@ -216,7 +216,7 @@ function getVersionInfoFromAnnList(
 
 async function getAnnContent(): Promise<AnnContentResponse> {
   const response = await fetch(
-    "https://announcement-static.mihoyo.com/common/nap_cn/announcement/api/getAnnContent?" +
+    `https://announcement-static.mihoyo.com/common/nap_cn/announcement/api/getAnnContent?${
       new URLSearchParams({
         game: "nap",
         game_biz: "nap_cn",
@@ -226,7 +226,7 @@ async function getAnnContent(): Promise<AnnContentResponse> {
         region: "prod_gf_cn",
         level: "60",
         channel_id: "1",
-      }).toString()
+      }).toString()}`,
   );
   if (response.status !== 200) {
     throw new Error(`Fail to get ann content ${response.status}`);
@@ -235,14 +235,14 @@ async function getAnnContent(): Promise<AnnContentResponse> {
     response.headers.get("Content-Type")?.includes("application/json") === false
   ) {
     throw new Error(
-      `Fail to get ann list ${response.headers.get("Content-Type")}`
+      `Fail to get ann list ${response.headers.get("Content-Type")}`,
     );
   }
   return await response.json();
 }
 
 function getGachaInfoFromAnnContent(
-  annContent: Awaited<ReturnType<typeof getAnnContent>>
+  annContent: Awaited<ReturnType<typeof getAnnContent>>,
 ): {
   content: string;
   ann_id: number;
@@ -250,7 +250,7 @@ function getGachaInfoFromAnnContent(
   image: string;
 }[] {
   return annContent.data.pic_list
-    .filter((i) => i.subtitle.includes("调频") || i.subtitle.includes("频段"))
+    .filter(i => i.subtitle.includes("调频") || i.subtitle.includes("频段"))
     .map((i) => {
       return {
         content: i.content,
@@ -287,9 +287,9 @@ export async function getNapInfo(): Promise<NapResponse> {
     let end_time = null;
     let start_time_humaize = null;
     let end_time_humaize = null;
-    const t =
-      /(?:([0-9]+\.[0-9]版本更新后)|(\d{4}\/\d{2}\/\d{2} +\d{2}:\d{2}(?::\d{2})?)).*?(\d{4}\/\d{2}\/\d{2} +\d{2}:\d{2}(?::\d{2})?)/gm.exec(
-        i.content
+    const t
+      = /(?:(\d+\.\d版本更新后)|(\d{4}\/\d{2}\/\d{2} +\d{2}:\d{2}(?::\d{2})?)).*?(\d{4}\/\d{2}\/\d{2} +\d{2}:\d{2}(?::\d{2})?)/.exec(
+        i.content,
       );
     const groups = Array.from(t || []).slice(1) || [];
     if (groups[0] && groups[2]) {
@@ -308,8 +308,8 @@ export async function getNapInfo(): Promise<NapResponse> {
       end_time_humaize = getTimeHumaize(endTime);
     }
     const images = Array.from(
-      i.content.matchAll(/<img[^>]+src="([^"]+)"[^>]*>/g)
-    ).map((m) => m[1]);
+      i.content.matchAll(/<img[^>]+src="([^"]+)"[^>]*>/g),
+    ).map(m => m[1]);
 
     const result: NapGachaInfo = {
       ann_id: i.ann_id,

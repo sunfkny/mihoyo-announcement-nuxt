@@ -1,6 +1,0 @@
-dist
-coverage
-.vscode
-.output
-.nuxt
-pnpm-lock.yaml

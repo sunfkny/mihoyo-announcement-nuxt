@@ -7,7 +7,7 @@ type AnnotationOptions = {
 export function appendAnnotation<T>(
   main: string | null | undefined,
   extra: T,
-  options: AnnotationOptions = {}
+  options: AnnotationOptions = {},
 ): string | T {
   const { prefix = "(", suffix = ")", separator = " " } = options;
 

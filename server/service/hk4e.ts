@@ -94,7 +94,7 @@ interface AnnListResponse {
 
 async function getAnnList(): Promise<AnnListResponse> {
   const response = await fetch(
-    "https://hk4e-ann-api.mihoyo.com/common/hk4e_cn/announcement/api/getAnnList?" +
+    `https://hk4e-ann-api.mihoyo.com/common/hk4e_cn/announcement/api/getAnnList?${
       new URLSearchParams({
         game: "hk4e",
         game_biz: "hk4e_cn",
@@ -106,7 +106,7 @@ async function getAnnList(): Promise<AnnListResponse> {
         platform: "pc",
         region: "cn_gf01",
         uid: "100000000",
-      }).toString()
+      }).toString()}`,
   );
   if (response.status !== 200) {
     throw new Error(`Fail to get ann list ${response.status}`);
@@ -115,19 +115,19 @@ async function getAnnList(): Promise<AnnListResponse> {
     response.headers.get("Content-Type")?.includes("application/json") === false
   ) {
     throw new Error(
-      `Fail to get ann list ${response.headers.get("Content-Type")}`
+      `Fail to get ann list ${response.headers.get("Content-Type")}`,
     );
   }
   return await response.json();
 }
 
 function getVersionInfoFromAnnList(
-  annList: Awaited<ReturnType<typeof getAnnList>>
+  annList: Awaited<ReturnType<typeof getAnnList>>,
 ):
   | {
-      start_time: string;
-      end_time: string;
-    }
+    start_time: string;
+    end_time: string;
+  }
   | undefined {
   for (const lst of annList.data.list) {
     for (const i of lst.list) {
@@ -147,7 +147,7 @@ function getVersionInfoFromAnnList(
 
 async function getAnnContent(): Promise<AnnContentResponse> {
   const response = await fetch(
-    "https://hk4e-ann-static.mihoyo.com/common/hk4e_cn/announcement/api/getAnnContent?" +
+    `https://hk4e-ann-static.mihoyo.com/common/hk4e_cn/announcement/api/getAnnContent?${
       new URLSearchParams({
         game: "hk4e",
         game_biz: "hk4e_cn",
@@ -158,7 +158,7 @@ async function getAnnContent(): Promise<AnnContentResponse> {
         platform: "pc",
         region: "cn_gf01",
         uid: "100000000",
-      }).toString()
+      }).toString()}`,
   );
   if (response.status !== 200) {
     throw new Error(`Fail to get ann content ${response.status}`);
@@ -167,14 +167,14 @@ async function getAnnContent(): Promise<AnnContentResponse> {
     response.headers.get("Content-Type")?.includes("application/json") === false
   ) {
     throw new Error(
-      `Fail to get ann list ${response.headers.get("Content-Type")}`
+      `Fail to get ann list ${response.headers.get("Content-Type")}`,
     );
   }
   return await response.json();
 }
 
 function getGachaInfoFromAnnContent(
-  annContent: Awaited<ReturnType<typeof getAnnContent>>
+  annContent: Awaited<ReturnType<typeof getAnnContent>>,
 ): {
   content: string;
   ann_id: number;
@@ -182,7 +182,7 @@ function getGachaInfoFromAnnContent(
   image: string;
 }[] {
   return annContent.data.list
-    .filter((i) => i.subtitle.endsWith("祈愿"))
+    .filter(i => i.subtitle.endsWith("祈愿"))
     .map((i) => {
       return {
         content: i.content,
@@ -219,9 +219,9 @@ export async function getHk4eInfo(): Promise<Hk4eResponse> {
     let end_time = null;
     let start_time_humaize = null;
     let end_time_humaize = null;
-    const t =
-      /(?:([0-9]+\.[0-9]版本更新后)|(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)).*?(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)/.exec(
-        i.content
+    const t
+      = /(?:(\d+\.\d版本更新后)|(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)).*?(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)/.exec(
+        i.content,
       );
     const groups = Array.from(t || []).slice(1) || [];
     if (groups[0] && groups[2]) {

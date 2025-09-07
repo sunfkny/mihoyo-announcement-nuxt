@@ -1,3 +1,17 @@
+<script setup lang="ts">
+import { games } from "#shared/constants/game";
+import { House } from "lucide-vue-next";
+
+withDefaults(
+  defineProps<{
+    vertical?: boolean;
+  }>(),
+  {
+    vertical: false,
+  },
+);
+</script>
+
 <template>
   <div>
     <div
@@ -35,26 +49,12 @@
               'view-transition-name': `games-icon-${game.key}`,
             }"
             :class="{ 'sm:w-[128px]': !vertical }"
-          />
+          >
         </div>
       </NuxtLink>
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { games } from "#shared/constants/game";
-import { House } from "lucide-vue-next";
-
-withDefaults(
-  defineProps<{
-    vertical?: boolean;
-  }>(),
-  {
-    vertical: false,
-  }
-);
-</script>
 
 <style scoped>
 .router-link-active {

@@ -1,24 +1,3 @@
-<template>
-  <div @click="click()">
-    <slot></slot>
-  </div>
-  <Dialog v-model:open="open">
-    <DialogContent
-      class="bg-[#F9F6F2] border-none shadow text-gray-800 max-w-screen sm:max-w-[768px]"
-    >
-      <DialogHeader>
-        <DialogTitle>{{ item.title }}</DialogTitle>
-      </DialogHeader>
-      <div>
-        <div
-          class="content useCloudFont scrollHack max-h-[calc(100vh-14rem)] min-h-4 pr-2 overflow-y-auto"
-          v-html="resolveTimeAndResetFontSize(item.content)"
-        ></div>
-      </div>
-    </DialogContent>
-  </Dialog>
-</template>
-
 <script setup lang="ts">
 import {
   Dialog,
@@ -39,11 +18,32 @@ useFontFace(
   "https://webstatic.mihoyo.com/common/clgm-static/ys/fonts/zh-cn.ttf",
   {
     display: "swap",
-  }
+  },
 );
 
 const { open, click } = useClickToggleIgnoreSelection();
 </script>
+
+<template>
+  <div @click="click()">
+    <slot />
+  </div>
+  <Dialog v-model:open="open">
+    <DialogContent
+      class="bg-[#F9F6F2] border-none shadow text-gray-800 max-w-screen sm:max-w-[768px]"
+    >
+      <DialogHeader>
+        <DialogTitle>{{ item.title }}</DialogTitle>
+      </DialogHeader>
+      <div>
+        <div
+          class="content useCloudFont scrollHack max-h-[calc(100vh-14rem)] min-h-4 pr-2 overflow-y-auto"
+          v-html="resolveTimeAndResetFontSize(item.content)"
+        />
+      </div>
+    </DialogContent>
+  </Dialog>
+</template>
 
 <style scoped>
 .useCloudFont {

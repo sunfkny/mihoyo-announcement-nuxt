@@ -1,6 +1,6 @@
 function guessFontMimeType(url: string): string {
   const pathname = new URL(url).pathname;
-  const ext = pathname.match(/\.([a-zA-Z0-9]+)$/)?.[1]?.toLowerCase();
+  const ext = pathname.match(/\.([a-z0-9]+)$/i)?.[1]?.toLowerCase();
   switch (ext) {
     case "ttf":
       return "font/ttf";
@@ -23,7 +23,7 @@ export function useFontFace(
     preload?: boolean;
     type?: string;
     crossorigin?: "" | "anonymous" | "use-credentials";
-  } = {}
+  } = {},
 ) {
   const {
     preload = true,
@@ -48,7 +48,7 @@ export function useFontFace(
 
   if (import.meta.client) {
     const alreadyLoaded = [...document.fonts].some(
-      (font) => font.family === family
+      font => font.family === family,
     );
 
     if (!alreadyLoaded) {

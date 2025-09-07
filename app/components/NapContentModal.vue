@@ -1,24 +1,3 @@
-<template>
-  <div @click="click()">
-    <slot></slot>
-  </div>
-  <Dialog v-model:open="open">
-    <DialogContent
-      class="bg-[#050505] border-2 border-[#929292] shadow text-white max-w-screen sm:max-w-[768px]"
-    >
-      <DialogHeader>
-        <DialogTitle>{{ item.title }}</DialogTitle>
-      </DialogHeader>
-      <div>
-        <div
-          class="content nap-zh-cn-light scroll-hack max-h-[calc(100vh-14rem)] min-h-4 pr-2 overflow-y-auto"
-          v-html="resetFontSize(item.content)"
-        ></div>
-      </div>
-    </DialogContent>
-  </Dialog>
-</template>
-
 <script setup lang="ts">
 import {
   Dialog,
@@ -40,11 +19,32 @@ useFontFace(
   {
     display: "swap",
     weight: "400",
-  }
+  },
 );
 
 const { open, click } = useClickToggleIgnoreSelection();
 </script>
+
+<template>
+  <div @click="click()">
+    <slot />
+  </div>
+  <Dialog v-model:open="open">
+    <DialogContent
+      class="bg-[#050505] border-2 border-[#929292] shadow text-white max-w-screen sm:max-w-[768px]"
+    >
+      <DialogHeader>
+        <DialogTitle>{{ item.title }}</DialogTitle>
+      </DialogHeader>
+      <div>
+        <div
+          class="content nap-zh-cn-light scroll-hack max-h-[calc(100vh-14rem)] min-h-4 pr-2 overflow-y-auto"
+          v-html="resetFontSize(item.content)"
+        />
+      </div>
+    </DialogContent>
+  </Dialog>
+</template>
 
 <style scoped>
 .nap-zh-cn-light {

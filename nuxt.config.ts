@@ -1,15 +1,23 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: ["@nuxt/ui", "@nuxt/eslint", "shadcn-nuxt"],
-  css: ["~/assets/css/main.css"],
-  compatibilityDate: "2025-03-01",
   devtools: { enabled: true },
+  css: ["~/assets/css/main.css"],
+  ui: {
+    fonts: false,
+  },
   experimental: {
     viewTransition: true,
     renderJsonPayloads: false,
   },
-  ui: {
-    fonts: false,
+  compatibilityDate: "2025-03-01",
+  eslint: {
+    checker: {
+      configType: "flat",
+    },
+    config: {
+      standalone: false,
+    },
   },
   icon: {
     provider: "none",

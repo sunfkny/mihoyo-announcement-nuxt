@@ -91,7 +91,7 @@ interface AnnListResponse {
 
 async function getAnnList(): Promise<AnnListResponse> {
   const response = await fetch(
-    "https://ann-api.mihoyo.com/common/bh3_cn/announcement/api/getAnnList?" +
+    `https://ann-api.mihoyo.com/common/bh3_cn/announcement/api/getAnnList?${
       new URLSearchParams({
         game: "bh3",
         game_biz: "bh3_cn",
@@ -102,7 +102,7 @@ async function getAnnList(): Promise<AnnListResponse> {
         platform: "pc",
         region: "bb01",
         uid: "100000000",
-      }).toString()
+      }).toString()}`,
   );
   if (response.status !== 200) {
     throw new Error(`Fail to get ann list ${response.status}`);
@@ -111,26 +111,26 @@ async function getAnnList(): Promise<AnnListResponse> {
     response.headers.get("Content-Type")?.includes("application/json") === false
   ) {
     throw new Error(
-      `Fail to get ann list ${response.headers.get("Content-Type")}`
+      `Fail to get ann list ${response.headers.get("Content-Type")}`,
     );
   }
   return await response.json();
 }
 
 function getVersionInfoFromAnnList(
-  annList: Awaited<ReturnType<typeof getAnnList>>
+  annList: Awaited<ReturnType<typeof getAnnList>>,
 ):
   | {
-      start_time: string;
-      end_time: string;
-    }
+    start_time: string;
+    end_time: string;
+  }
   | undefined {
   for (const lst of annList.data.list) {
     for (const i of lst.list) {
       if (
-        i.title.includes("游戏更新内容问题修复及优化说明") ||
-        i.subtitle.includes("游戏更新内容公告") ||
-        i.subtitle.includes("版本更新公告")
+        i.title.includes("游戏更新内容问题修复及优化说明")
+        || i.subtitle.includes("游戏更新内容公告")
+        || i.subtitle.includes("版本更新公告")
       ) {
         return i;
       }
@@ -140,7 +140,7 @@ function getVersionInfoFromAnnList(
 
 async function getAnnContent(): Promise<AnnContentResponse> {
   const response = await fetch(
-    "https://ann-api.mihoyo.com/common/bh3_cn/announcement/api/getAnnContent?" +
+    `https://ann-api.mihoyo.com/common/bh3_cn/announcement/api/getAnnContent?${
       new URLSearchParams({
         game: "bh3",
         game_biz: "bh3_cn",
@@ -151,7 +151,7 @@ async function getAnnContent(): Promise<AnnContentResponse> {
         platform: "pc",
         region: "bb01",
         uid: "100000000",
-      }).toString()
+      }).toString()}`,
   );
   if (response.status !== 200) {
     throw new Error(`Fail to get ann content ${response.status}`);
@@ -160,14 +160,14 @@ async function getAnnContent(): Promise<AnnContentResponse> {
     response.headers.get("Content-Type")?.includes("application/json") === false
   ) {
     throw new Error(
-      `Fail to get ann list ${response.headers.get("Content-Type")}`
+      `Fail to get ann list ${response.headers.get("Content-Type")}`,
     );
   }
   return await response.json();
 }
 
 function getGachaInfoFromAnnContent(
-  annContent: Awaited<ReturnType<typeof getAnnContent>>
+  annContent: Awaited<ReturnType<typeof getAnnContent>>,
 ): {
   content: string;
   ann_id: number;
@@ -176,9 +176,9 @@ function getGachaInfoFromAnnContent(
 }[] {
   return annContent.data.list
     .filter(
-      (i) =>
-        i.subtitle.includes("补给") &&
-        ["补给信息", "补给规则"].some((j) => i.content.includes(j))
+      i =>
+        i.subtitle.includes("补给")
+        && ["补给信息", "补给规则"].some(j => i.content.includes(j)),
     )
     .map((i) => {
       return {
@@ -213,14 +213,14 @@ export async function getBh3Info(): Promise<Bh3Response> {
 
   const gacha_info: Bh3GachaInfo[] = getGachaInfoFromAnnContent(annContent).map(
     (i) => {
-      const info =
-        /<h2[^>]+>补给信息<\/h2>(.*?)<h2[^>]+>补给规则<\/h2>/s.exec(
-          i.content
-        )?.[1] ??
-        /<h2[^>]+>开放时间<\/h2>(.*?)<h2[^>]+>具体内容<\/h2>/s.exec(
-          i.content
-        )?.[1] ??
-        "";
+      const info
+        = /<h2[^>]+>补给信息<\/h2>(.*?)<h2[^>]+>补给规则<\/h2>/s.exec(
+          i.content,
+        )?.[1]
+        ?? /<h2[^>]+>开放时间<\/h2>(.*?)<h2[^>]+>具体内容<\/h2>/s.exec(
+          i.content,
+        )?.[1]
+        ?? "";
 
       return {
         ann_id: i.ann_id,
@@ -229,7 +229,7 @@ export async function getBh3Info(): Promise<Bh3Response> {
         content: i.content,
         info,
       };
-    }
+    },
   );
 
   return {

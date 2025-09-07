@@ -1,3 +1,4 @@
+import process from "node:process";
 import moment from "moment";
 
 const TZ = "Asia/Shanghai";
