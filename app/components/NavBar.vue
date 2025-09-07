@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { games } from "#shared/constants/game";
 import { House } from "lucide-vue-next";
+import { cn } from "~/lib/utils";
 
 withDefaults(
   defineProps<{
@@ -21,13 +22,13 @@ withDefaults(
       <NuxtLink
         v-if="vertical"
         to="/"
-        class="border-2 border-solid border-transparent hover:border-gray-300 rounded-2xl"
+        class="border-2 border-solid border-transparent hover:border-gray-300 rounded-icon"
       >
         <div
           class="p-1 transition-all duration-300 flex justify-center items-center"
         >
           <div
-            class="size-[64px] bg-gray-100 dark:bg-gray-700 rounded-lg flex justify-center items-center"
+            class="rounded-icon size-[64px] bg-gray-100 dark:bg-gray-700 flex justify-center items-center"
           >
             <House class="size-[40px]" />
           </div>
@@ -37,18 +38,17 @@ withDefaults(
         v-for="game in games"
         :key="game.key"
         :to="`/announcement/${game.key}`"
-        class="border-2 border-solid border-transparent hover:border-gray-300 rounded-2xl"
+        :class="cn('border-2 border-solid border-transparent hover:border-gray-300 rounded-icon')"
       >
         <div class="p-1 transition-all duration-300">
           <img
             :src="game.icon"
             :alt="game.name"
             :title="game.name"
-            class="games-icon rounded-lg w-[64px] transition-all duration-300"
+            :class="cn('games-icon rounded-icon w-[64px] transition-all duration-300', { 'sm:w-[128px]': !vertical })"
             :style="{
               'view-transition-name': `games-icon-${game.key}`,
             }"
-            :class="{ 'sm:w-[128px]': !vertical }"
           >
         </div>
       </NuxtLink>
