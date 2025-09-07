@@ -234,7 +234,7 @@ export async function getHkrpgInfo(): Promise<HkrpgResponse> {
     let start_time_humaize = null;
     let end_time_humaize = null;
     const t =
-      /(?:([0-9]+\.[0-9]版本更新后)|(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)).*?(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)/.exec(
+      /(?:([0-9]+\.[0-9]版本更新后)|(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?))[^<]*?(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?|长期开放)/.exec(
         i.content
       );
     const groups = Array.from(t || []).slice(1) || [];
@@ -243,15 +243,17 @@ export async function getHkrpgInfo(): Promise<HkrpgResponse> {
       const endTime = getTime(groups[2]);
       end_time = endTime.format("YYYY-MM-DD HH:mm:ss");
       end_time_humaize = getTimeHumaize(endTime);
-    }
-
-    if (groups[1] && groups[2]) {
+    } else if (groups[1] && groups[2]) {
       const startTime = getTime(groups[1]);
       const endTime = getTime(groups[2]);
       start_time = startTime.format("YYYY-MM-DD HH:mm:ss");
-      end_time = endTime.format("YYYY-MM-DD HH:mm:ss");
       start_time_humaize = getTimeHumaize(startTime);
-      end_time_humaize = getTimeHumaize(endTime);
+      if (endTime.isValid()) {
+        end_time = endTime.format("YYYY-MM-DD HH:mm:ss");
+        end_time_humaize = getTimeHumaize(endTime);
+      } else {
+        end_time_humaize = groups[2];
+      }
     }
 
     const result: HkrpgGachaInfo = {
