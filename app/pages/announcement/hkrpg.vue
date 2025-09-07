@@ -18,8 +18,14 @@
         <HkrpgContentModal :item="item">
           <img :src="item.image" :alt="item.title" />
           <p>{{ item.title }}</p>
-          <p>开始时间: {{ item.start_time }} ({{ item.start_time_humaize }})</p>
-          <p>结束时间: {{ item.end_time }} ({{ item.end_time_humaize }})</p>
+          <p>
+            开始时间:
+            {{ appendAnnotation(item.start_time, item.start_time_humaize) }}
+          </p>
+          <p>
+            结束时间:
+            {{ appendAnnotation(item.end_time, item.end_time_humaize) }}
+          </p>
         </HkrpgContentModal>
       </div>
     </div>
