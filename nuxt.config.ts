@@ -10,7 +10,7 @@ export default defineNuxtConfig({
     viewTransition: true,
     renderJsonPayloads: false,
   },
-  compatibilityDate: "2025-03-01",
+  compatibilityDate: "latest",
   eslint: {
     checker: {
       configType: "flat",
