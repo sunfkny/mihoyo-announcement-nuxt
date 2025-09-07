@@ -22,11 +22,6 @@ const progressValue = computed(() => {
           data.progress.end_time_humaize
         }})</span>
       </div>
-      <div v-else class="my-4">
-        <Progress v-model="progressValue" class="h-2" />
-        <span>获取版本信息失败</span>
-      </div>
-
       <div v-for="item in data?.gacha_info" :key="item.ann_id">
         <NapContentModal :item="item">
           <img v-for="(i, index) in item.images" :key="index" :src="i" :alt="i">

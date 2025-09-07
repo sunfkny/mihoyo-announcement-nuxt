@@ -24,11 +24,6 @@ const progressValue = computed(() => {
           }})
         </span>
       </div>
-      <div v-else class="my-4">
-        <Progress v-model="progressValue" class="h-2" />
-        <span>获取版本信息失败</span>
-      </div>
-
       <div v-for="item in data?.gacha_info" :key="item.ann_id">
         <HkrpgContentModal :item="item">
           <img :src="item.image" :alt="item.title">

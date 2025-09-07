@@ -24,7 +24,6 @@ const progressValue = computed(() => {
           }})
         </span>
       </div>
-
       <div v-for="item in data?.gacha_info" :key="item.ann_id">
         <Hk4eContentModal :item="item">
           <img :src="item.image" :alt="item.title">
