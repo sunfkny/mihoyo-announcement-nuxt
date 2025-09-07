@@ -5,18 +5,18 @@ interface HkrpgGachaInfo {
   title: string;
   image: string;
   content: string;
-  start_time?: string | null;
-  end_time?: string | null;
-  start_time_humaize?: string | null;
-  end_time_humaize?: string | null;
+  start_time: string | null;
+  end_time: string | null;
+  start_time_humaize: string | null;
+  end_time_humaize: string | null;
 }
 
 interface HkrpgProgress {
-  start_time?: string | null;
-  end_time?: string | null;
-  start_time_humaize?: string | null;
-  end_time_humaize?: string | null;
-  percent?: number | null;
+  start_time: string | null;
+  end_time: string | null;
+  start_time_humaize: string | null;
+  end_time_humaize: string | null;
+  percent: number | null;
 }
 
 interface HkrpgResponse {
@@ -144,7 +144,7 @@ function getVersionInfoFromAnnList(
     start_time: string;
     end_time: string;
   }
-  | undefined {
+  | null {
   for (const lst of annList.data.list) {
     for (const i of lst.list) {
       if (i.title.includes("游戏优化及已知问题说明")) {
@@ -157,6 +157,7 @@ function getVersionInfoFromAnnList(
       }
     }
   }
+  return null;
 }
 
 async function getAnnContent(): Promise<AnnContentResponse> {
@@ -214,7 +215,13 @@ export async function getHkrpgInfo(): Promise<HkrpgResponse> {
   ]);
 
   const versionInfo = getVersionInfoFromAnnList(annList);
-  const progress: HkrpgProgress = {};
+  const progress: HkrpgProgress = {
+    start_time: null,
+    end_time: null,
+    start_time_humaize: null,
+    end_time_humaize: null,
+    percent: null,
+  };
 
   if (versionInfo) {
     const startTime = getTime(versionInfo.start_time);

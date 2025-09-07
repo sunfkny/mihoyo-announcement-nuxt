@@ -5,15 +5,15 @@ interface Bh3GachaInfo {
   title: string;
   image: string;
   content: string;
-  info?: string | null;
+  info: string | null;
 }
 
 interface Bh3Progress {
-  start_time?: string | null;
-  end_time?: string | null;
-  start_time_humaize?: string | null;
-  end_time_humaize?: string | null;
-  percent?: number | null;
+  start_time: string | null;
+  end_time: string | null;
+  start_time_humaize: string | null;
+  end_time_humaize: string | null;
+  percent: number | null;
 }
 
 interface Bh3Response {
@@ -91,18 +91,17 @@ interface AnnListResponse {
 
 async function getAnnList(): Promise<AnnListResponse> {
   const response = await fetch(
-    `https://ann-api.mihoyo.com/common/bh3_cn/announcement/api/getAnnList?${
-      new URLSearchParams({
-        game: "bh3",
-        game_biz: "bh3_cn",
-        lang: "zh-cn",
-        bundle_id: "bh3_cn",
-        channel_id: "14",
-        level: "88",
-        platform: "pc",
-        region: "bb01",
-        uid: "100000000",
-      }).toString()}`,
+    `https://ann-api.mihoyo.com/common/bh3_cn/announcement/api/getAnnList?${new URLSearchParams({
+      game: "bh3",
+      game_biz: "bh3_cn",
+      lang: "zh-cn",
+      bundle_id: "bh3_cn",
+      channel_id: "14",
+      level: "88",
+      platform: "pc",
+      region: "bb01",
+      uid: "100000000",
+    }).toString()}`,
   );
   if (response.status !== 200) {
     throw new Error(`Fail to get ann list ${response.status}`);
@@ -124,7 +123,7 @@ function getVersionInfoFromAnnList(
     start_time: string;
     end_time: string;
   }
-  | undefined {
+  | null {
   for (const lst of annList.data.list) {
     for (const i of lst.list) {
       if (
@@ -136,22 +135,22 @@ function getVersionInfoFromAnnList(
       }
     }
   }
+  return null;
 }
 
 async function getAnnContent(): Promise<AnnContentResponse> {
   const response = await fetch(
-    `https://ann-api.mihoyo.com/common/bh3_cn/announcement/api/getAnnContent?${
-      new URLSearchParams({
-        game: "bh3",
-        game_biz: "bh3_cn",
-        lang: "zh-cn",
-        bundle_id: "bh3_cn",
-        channel_id: "14",
-        level: "88",
-        platform: "pc",
-        region: "bb01",
-        uid: "100000000",
-      }).toString()}`,
+    `https://ann-api.mihoyo.com/common/bh3_cn/announcement/api/getAnnContent?${new URLSearchParams({
+      game: "bh3",
+      game_biz: "bh3_cn",
+      lang: "zh-cn",
+      bundle_id: "bh3_cn",
+      channel_id: "14",
+      level: "88",
+      platform: "pc",
+      region: "bb01",
+      uid: "100000000",
+    }).toString()}`,
   );
   if (response.status !== 200) {
     throw new Error(`Fail to get ann content ${response.status}`);
@@ -197,7 +196,13 @@ export async function getBh3Info(): Promise<Bh3Response> {
   ]);
 
   const versionInfo = getVersionInfoFromAnnList(annList);
-  const progress: Bh3Progress = {};
+  const progress: Bh3Progress = {
+    start_time: null,
+    end_time: null,
+    start_time_humaize: null,
+    end_time_humaize: null,
+    percent: null,
+  };
 
   if (versionInfo) {
     const startTime = getTime(versionInfo.start_time);

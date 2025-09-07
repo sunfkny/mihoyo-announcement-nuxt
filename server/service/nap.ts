@@ -6,18 +6,18 @@ type NapGachaInfo = {
   image: string;
   images: string[];
   content: string;
-  start_time?: string | null;
-  end_time?: string | null;
-  start_time_humaize?: string | null;
-  end_time_humaize?: string | null;
+  start_time: string | null;
+  end_time: string | null;
+  start_time_humaize: string | null;
+  end_time_humaize: string | null;
 };
 
 type NapProgress = {
-  start_time?: string | null;
-  end_time?: string | null;
-  start_time_humaize?: string | null;
-  end_time_humaize?: string | null;
-  percent?: number | null;
+  start_time: string | null;
+  end_time: string | null;
+  start_time_humaize: string | null;
+  end_time_humaize: string | null;
+  percent: number | null;
 };
 
 type NapResponse = {
@@ -201,7 +201,7 @@ function getVersionInfoFromAnnList(
     start_time: string;
     end_time: string;
   }
-  | undefined {
+  | null {
   for (const lst of annList.data.list) {
     for (const i of lst.list) {
       if (
@@ -212,6 +212,7 @@ function getVersionInfoFromAnnList(
       }
     }
   }
+  return null;
 }
 
 async function getAnnContent(): Promise<AnnContentResponse> {
@@ -268,7 +269,13 @@ export async function getNapInfo(): Promise<NapResponse> {
   ]);
 
   const versionInfo = getVersionInfoFromAnnList(annList);
-  const progress: NapProgress = {};
+  const progress: NapProgress = {
+    start_time: null,
+    end_time: null,
+    start_time_humaize: null,
+    end_time_humaize: null,
+    percent: null,
+  };
 
   if (versionInfo) {
     const startTime = getTime(versionInfo.start_time);
