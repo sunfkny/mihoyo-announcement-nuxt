@@ -235,7 +235,7 @@ export async function getHk4eInfo(): Promise<Hk4eResponse> {
     const normalizedContent = document.body.innerHTML;
 
     const t
-      = /(?:((?:\d+\.\d|「月之.*?」)版本更新后)|(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)).*?(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)/.exec(
+      = /(?:((?:\d+\.\d|「[^」]*」)版本更新后)|(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)).*?(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)/.exec(
         normalizedContent,
       );
     const groups = Array.from(t || []).slice(1) || [];
