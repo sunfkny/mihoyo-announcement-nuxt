@@ -1,3 +1,5 @@
+import type { Document, Element } from "happy-dom";
+import { Node, Window } from "happy-dom";
 import { getTime, getTimeHumaize } from "~/utils/time";
 
 interface Bh3GachaInfo {
@@ -189,6 +191,35 @@ function getGachaInfoFromAnnContent(
     });
 }
 
+function isElement(node: Node): node is Element {
+  return node.nodeType === Node.ELEMENT_NODE;
+}
+function extractSectionContent(document: Document, headingText: string, headingTag: `h${1 | 2 | 3 | 4 | 5 | 6}`) {
+  const headings = [...document.querySelectorAll(headingTag)];
+  const startIndex = headings.findIndex(
+    h => h.textContent.trim() === headingText,
+  );
+  if (startIndex === -1)
+    return null;
+
+  const startNode = headings[startIndex];
+  const endNode = headings[startIndex + 1] ?? null;
+
+  const fragments = [];
+  let node = startNode.nextSibling;
+  while (node && node !== endNode) {
+    if (isElement(node)) {
+      fragments.push(node.outerHTML);
+    }
+    else if (node.nodeType === Node.TEXT_NODE) {
+      fragments.push(node.textContent);
+    }
+    node = node.nextSibling;
+  }
+
+  return fragments.join("").trim() || null;
+}
+
 export async function getBh3Info(): Promise<Bh3Response> {
   const [annList, annContent] = await Promise.all([
     getAnnList(),
@@ -218,14 +249,16 @@ export async function getBh3Info(): Promise<Bh3Response> {
 
   const gacha_info: Bh3GachaInfo[] = getGachaInfoFromAnnContent(annContent).map(
     (i) => {
+      const window = new Window({ url: "https://webstatic.mihoyo.com/bh3/announcement/index.html" });
+      const document = window.document;
+      document.body.innerHTML = i.content;
+      document.querySelectorAll("h2").forEach((p) => {
+        p.innerHTML = p.textContent.trim();
+      });
+
       const info
-        = /<h2[^>]+>.*?补给信息.*?<\/h2>(.*?)<h2[^>]+>.*?补给规则.*?<\/h2>/s.exec(
-          i.content,
-        )?.[1]
-        ?? /<h2[^>]+>.*?开放时间.*?<\/h2>(.*?)<h2[^>]+>.*?具体内容.*?<\/h2>/s.exec(
-          i.content,
-        )?.[1]
-        ?? null;
+        = extractSectionContent(document, "补给信息", "h2")
+          ?? extractSectionContent(document, "开放时间", "h2");
 
       return {
         ann_id: i.ann_id,
