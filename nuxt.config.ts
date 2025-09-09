@@ -12,18 +12,8 @@ export default defineNuxtConfig({
   },
   compatibilityDate: "latest",
   eslint: {
-    checker: {
-      configType: "flat",
-    },
     config: {
       standalone: false,
-    },
-  },
-  icon: {
-    provider: "none",
-    clientBundle: {
-      scan: true,
-      icons: ["lucide:x"], // Modal close icon
     },
   },
   shadcn: {
