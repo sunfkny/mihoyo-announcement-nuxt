@@ -1,4 +1,5 @@
-import { getTime, getTimeHumaize } from "~/utils/time";
+import { Window } from "happy-dom";
+import { getTime, getTimeHumaize, parseTimeHumaize } from "~/utils/time";
 
 type NapGachaInfo = {
   ann_id: number;
@@ -169,17 +170,16 @@ type AnnListResponse = {
 
 async function getAnnList(): Promise<AnnListResponse> {
   const response = await fetch(
-    `https://announcement-api.mihoyo.com/common/nap_cn/announcement/api/getAnnList?${
-      new URLSearchParams({
-        game: "nap",
-        game_biz: "nap_cn",
-        lang: "zh-cn",
-        bundle_id: "nap_cn",
-        platform: "pc",
-        region: "prod_gf_cn",
-        level: "60",
-        channel_id: "1",
-      }).toString()}`,
+    `https://announcement-api.mihoyo.com/common/nap_cn/announcement/api/getAnnList?${new URLSearchParams({
+      game: "nap",
+      game_biz: "nap_cn",
+      lang: "zh-cn",
+      bundle_id: "nap_cn",
+      platform: "pc",
+      region: "prod_gf_cn",
+      level: "60",
+      channel_id: "1",
+    }).toString()}`,
   );
   if (response.status !== 200) {
     throw new Error(`Fail to get ann list ${response.status}`);
@@ -217,17 +217,16 @@ function getVersionInfoFromAnnList(
 
 async function getAnnContent(): Promise<AnnContentResponse> {
   const response = await fetch(
-    `https://announcement-static.mihoyo.com/common/nap_cn/announcement/api/getAnnContent?${
-      new URLSearchParams({
-        game: "nap",
-        game_biz: "nap_cn",
-        lang: "zh-cn",
-        bundle_id: "nap_cn",
-        platform: "pc",
-        region: "prod_gf_cn",
-        level: "60",
-        channel_id: "1",
-      }).toString()}`,
+    `https://announcement-static.mihoyo.com/common/nap_cn/announcement/api/getAnnContent?${new URLSearchParams({
+      game: "nap",
+      game_biz: "nap_cn",
+      lang: "zh-cn",
+      bundle_id: "nap_cn",
+      platform: "pc",
+      region: "prod_gf_cn",
+      level: "60",
+      channel_id: "1",
+    }).toString()}`,
   );
   if (response.status !== 200) {
     throw new Error(`Fail to get ann content ${response.status}`);
@@ -294,25 +293,25 @@ export async function getNapInfo(): Promise<NapResponse> {
     let end_time = null;
     let start_time_humaize = null;
     let end_time_humaize = null;
-    const t
-      = /(?:(\d+\.\d版本更新后)|(\d{4}\/\d{2}\/\d{2} +\d{2}:\d{2}(?::\d{2})?)).*?(\d{4}\/\d{2}\/\d{2} +\d{2}:\d{2}(?::\d{2})?)/.exec(
-        i.content,
-      );
-    const groups = Array.from(t || []).slice(1) || [];
-    if (groups[0] && groups[2]) {
-      start_time_humaize = groups[0];
-      const endTime = getTime(groups[2]);
-      end_time = endTime.format("YYYY-MM-DD HH:mm:ss");
-      end_time_humaize = getTimeHumaize(endTime);
-    }
 
-    if (groups[1] && groups[2]) {
-      const startTime = getTime(groups[1]);
-      const endTime = getTime(groups[2]);
-      start_time = startTime.format("YYYY-MM-DD HH:mm:ss");
-      end_time = endTime.format("YYYY-MM-DD HH:mm:ss");
-      start_time_humaize = getTimeHumaize(startTime);
-      end_time_humaize = getTimeHumaize(endTime);
+    const window = new Window({ url: "https://sdk.mihoyo.com/nap/announcement/index.html" });
+    const document = window.document;
+    document.body.innerHTML = i.content;
+    document.querySelectorAll("span").forEach((p) => {
+      p.innerHTML = p.textContent.trim();
+    });
+    document.querySelectorAll("p").forEach((p) => {
+      p.innerHTML = p.textContent.trim();
+    });
+    const normalizedContent = document.querySelector("table td[rowspan]")?.textContent;
+    if (normalizedContent && normalizedContent.includes("~")) {
+      const [start_part, end_part] = normalizedContent.split("~");
+      const parsedStart = parseTimeHumaize(start_part);
+      start_time = parsedStart.time;
+      start_time_humaize = parsedStart.time_humaize;
+      const parsedEnd = parseTimeHumaize(end_part);
+      end_time = parsedEnd.time;
+      end_time_humaize = parsedEnd.time_humaize;
     }
     const images = Array.from(
       i.content.matchAll(/<img[^>]+src="([^"]+)"[^>]*>/g),

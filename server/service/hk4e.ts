@@ -1,5 +1,5 @@
 import { Window } from "happy-dom";
-import { getTime, getTimeHumaize } from "~/utils/time";
+import { getTime, getTimeHumaize, parseTimeHumaize } from "~/utils/time";
 
 interface Hk4eGachaInfo {
   ann_id: number;
@@ -229,30 +229,21 @@ export async function getHk4eInfo(): Promise<Hk4eResponse> {
     const window = new Window({ url: "https://webstatic.mihoyo.com/hk4e/announcement/index.html" });
     const document = window.document;
     document.body.innerHTML = i.content;
+    document.querySelectorAll("span").forEach((p) => {
+      p.innerHTML = p.textContent.trim();
+    });
     document.querySelectorAll("p").forEach((p) => {
       p.innerHTML = p.textContent.trim();
     });
-    const normalizedContent = document.body.innerHTML;
-
-    const t
-      = /(?:((?:\d+\.\d|「[^」]*」)版本更新后)|(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)).*?(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)/.exec(
-        normalizedContent,
-      );
-    const groups = Array.from(t || []).slice(1) || [];
-    if (groups[0] && groups[2]) {
-      start_time_humaize = groups[0];
-      const endTime = getTime(groups[2]);
-      end_time = endTime.format("YYYY-MM-DD HH:mm:ss");
-      end_time_humaize = getTimeHumaize(endTime);
-    }
-
-    if (groups[1] && groups[2]) {
-      const startTime = getTime(groups[1]);
-      const endTime = getTime(groups[2]);
-      start_time = startTime.format("YYYY-MM-DD HH:mm:ss");
-      end_time = endTime.format("YYYY-MM-DD HH:mm:ss");
-      start_time_humaize = getTimeHumaize(startTime);
-      end_time_humaize = getTimeHumaize(endTime);
+    const normalizedContent = document.querySelector("table td[rowspan]")?.textContent;
+    if (normalizedContent && normalizedContent.includes("~")) {
+      const [start_part, end_part] = normalizedContent.split("~");
+      const parsedStart = parseTimeHumaize(start_part);
+      start_time = parsedStart.time;
+      start_time_humaize = parsedStart.time_humaize;
+      const parsedEnd = parseTimeHumaize(end_part);
+      end_time = parsedEnd.time;
+      end_time_humaize = parsedEnd.time_humaize;
     }
 
     const result: Hk4eGachaInfo = {

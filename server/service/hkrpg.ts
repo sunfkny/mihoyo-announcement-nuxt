@@ -1,4 +1,5 @@
-import { getTime, getTimeHumaize } from "~/utils/time";
+import { Window } from "happy-dom";
+import { getTime, getTimeHumaize, parseTimeHumaize } from "~/utils/time";
 
 interface HkrpgGachaInfo {
   ann_id: number;
@@ -111,18 +112,17 @@ interface AnnListResponse {
 
 async function getAnnList(): Promise<AnnListResponse> {
   const response = await fetch(
-    `https://hkrpg-ann-api.mihoyo.com/common/hkrpg_cn/announcement/api/getAnnList?${
-      new URLSearchParams({
-        game: "hkrpg",
-        game_biz: "hkrpg_cn",
-        lang: "zh-cn",
-        bundle_id: "hkrpg_cn",
-        channel_id: "1",
-        platform: "pc",
-        region: "prod_gf_cn",
-        level: "70",
-        uid: "100000000",
-      }).toString()}`,
+    `https://hkrpg-ann-api.mihoyo.com/common/hkrpg_cn/announcement/api/getAnnList?${new URLSearchParams({
+      game: "hkrpg",
+      game_biz: "hkrpg_cn",
+      lang: "zh-cn",
+      bundle_id: "hkrpg_cn",
+      channel_id: "1",
+      platform: "pc",
+      region: "prod_gf_cn",
+      level: "70",
+      uid: "100000000",
+    }).toString()}`,
   );
   if (response.status !== 200) {
     throw new Error(`Fail to get ann list ${response.status}`);
@@ -162,18 +162,17 @@ function getVersionInfoFromAnnList(
 
 async function getAnnContent(): Promise<AnnContentResponse> {
   const response = await fetch(
-    `https://hkrpg-ann-api.mihoyo.com/common/hkrpg_cn/announcement/api/getAnnContent?${
-      new URLSearchParams({
-        game: "hkrpg",
-        game_biz: "hkrpg_cn",
-        lang: "zh-cn",
-        bundle_id: "hkrpg_cn",
-        channel_id: "1",
-        platform: "pc",
-        region: "prod_gf_cn",
-        level: "70",
-        uid: "100000000",
-      }).toString()}`,
+    `https://hkrpg-ann-api.mihoyo.com/common/hkrpg_cn/announcement/api/getAnnContent?${new URLSearchParams({
+      game: "hkrpg",
+      game_biz: "hkrpg_cn",
+      lang: "zh-cn",
+      bundle_id: "hkrpg_cn",
+      channel_id: "1",
+      platform: "pc",
+      region: "prod_gf_cn",
+      level: "70",
+      uid: "100000000",
+    }).toString()}`,
   );
   if (response.status !== 200) {
     throw new Error(`Fail to get ann content ${response.status}`);
@@ -240,29 +239,49 @@ export async function getHkrpgInfo(): Promise<HkrpgResponse> {
     let end_time = null;
     let start_time_humaize = null;
     let end_time_humaize = null;
-    const t
-      = /(?:(\d+\.\d版本更新后)|(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?))[^<]*?(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?|长期开放)/.exec(
-        i.content,
-      );
-    const groups = Array.from(t || []).slice(1) || [];
-    if (groups[0] && groups[2]) {
-      start_time_humaize = groups[0];
-      const endTime = getTime(groups[2]);
-      end_time = endTime.format("YYYY-MM-DD HH:mm:ss");
-      end_time_humaize = getTimeHumaize(endTime);
+
+    if (i.title.includes("联动跃迁") && i.content.includes("长期开放")) {
+      const match
+        = /(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)/.exec(
+          i.content,
+        );
+      if (match) {
+        const start = parseTimeHumaize(match[1]);
+        start_time = start.time;
+        start_time_humaize = start.time_humaize;
+        end_time_humaize = "长期开放";
+        const result: HkrpgGachaInfo = {
+          ann_id: i.ann_id,
+          title: i.title,
+          image: i.image,
+          content: i.content,
+          start_time,
+          end_time,
+          start_time_humaize,
+          end_time_humaize,
+        };
+        return result;
+      }
     }
-    else if (groups[1] && groups[2]) {
-      const startTime = getTime(groups[1]);
-      const endTime = getTime(groups[2]);
-      start_time = startTime.format("YYYY-MM-DD HH:mm:ss");
-      start_time_humaize = getTimeHumaize(startTime);
-      if (endTime.isValid()) {
-        end_time = endTime.format("YYYY-MM-DD HH:mm:ss");
-        end_time_humaize = getTimeHumaize(endTime);
-      }
-      else {
-        end_time_humaize = groups[2];
-      }
+
+    const window = new Window({ url: "https://webstatic.mihoyo.com/hkrpg/announcement/index.html" });
+    const document = window.document;
+    document.body.innerHTML = i.content;
+    document.querySelectorAll("span").forEach((p) => {
+      p.innerHTML = p.textContent.trim();
+    });
+    document.querySelectorAll("p").forEach((p) => {
+      p.innerHTML = p.textContent.trim();
+    });
+    const normalizedContent = document.querySelector("table td[rowspan]")?.textContent;
+    if (normalizedContent && normalizedContent.includes("-")) {
+      const [start_part, end_part] = normalizedContent.split("-");
+      const parsedStart = parseTimeHumaize(start_part);
+      start_time = parsedStart.time;
+      start_time_humaize = parsedStart.time_humaize;
+      const parsedEnd = parseTimeHumaize(end_part);
+      end_time = parsedEnd.time;
+      end_time_humaize = parsedEnd.time_humaize;
     }
 
     const result: HkrpgGachaInfo = {
