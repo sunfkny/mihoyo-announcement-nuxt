@@ -1,3 +1,4 @@
+import { Window } from "happy-dom";
 import { getTime, getTimeHumaize } from "~/utils/time";
 
 interface Hk4eGachaInfo {
@@ -94,19 +95,18 @@ interface AnnListResponse {
 
 async function getAnnList(): Promise<AnnListResponse> {
   const response = await fetch(
-    `https://hk4e-ann-api.mihoyo.com/common/hk4e_cn/announcement/api/getAnnList?${
-      new URLSearchParams({
-        game: "hk4e",
-        game_biz: "hk4e_cn",
-        lang: "zh-cn",
-        from_cloud_web: "1",
-        bundle_id: "hk4e_cn",
-        channel_id: "1",
-        level: "60",
-        platform: "pc",
-        region: "cn_gf01",
-        uid: "100000000",
-      }).toString()}`,
+    `https://hk4e-ann-api.mihoyo.com/common/hk4e_cn/announcement/api/getAnnList?${new URLSearchParams({
+      game: "hk4e",
+      game_biz: "hk4e_cn",
+      lang: "zh-cn",
+      from_cloud_web: "1",
+      bundle_id: "hk4e_cn",
+      channel_id: "1",
+      level: "60",
+      platform: "pc",
+      region: "cn_gf01",
+      uid: "100000000",
+    }).toString()}`,
   );
   if (response.status !== 200) {
     throw new Error(`Fail to get ann list ${response.status}`);
@@ -148,18 +148,17 @@ function getVersionInfoFromAnnList(
 
 async function getAnnContent(): Promise<AnnContentResponse> {
   const response = await fetch(
-    `https://hk4e-ann-static.mihoyo.com/common/hk4e_cn/announcement/api/getAnnContent?${
-      new URLSearchParams({
-        game: "hk4e",
-        game_biz: "hk4e_cn",
-        lang: "zh-cn",
-        bundle_id: "hk4e_cn",
-        channel_id: "1",
-        level: "60",
-        platform: "pc",
-        region: "cn_gf01",
-        uid: "100000000",
-      }).toString()}`,
+    `https://hk4e-ann-static.mihoyo.com/common/hk4e_cn/announcement/api/getAnnContent?${new URLSearchParams({
+      game: "hk4e",
+      game_biz: "hk4e_cn",
+      lang: "zh-cn",
+      bundle_id: "hk4e_cn",
+      channel_id: "1",
+      level: "60",
+      platform: "pc",
+      region: "cn_gf01",
+      uid: "100000000",
+    }).toString()}`,
   );
   if (response.status !== 200) {
     throw new Error(`Fail to get ann content ${response.status}`);
@@ -226,9 +225,18 @@ export async function getHk4eInfo(): Promise<Hk4eResponse> {
     let end_time = null;
     let start_time_humaize = null;
     let end_time_humaize = null;
+
+    const window = new Window({ url: "https://webstatic.mihoyo.com/hk4e/announcement/index.html" });
+    const document = window.document;
+    document.body.innerHTML = i.content;
+    document.querySelectorAll("p").forEach((p) => {
+      p.innerHTML = p.textContent.trim();
+    });
+    const normalizedContent = document.body.innerHTML;
+
     const t
-      = /(?:(\d+\.\d版本更新后)|(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)).*?(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)/.exec(
-        i.content,
+      = /(?:((?:\d+\.\d|「月之.*?」)版本更新后)|(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)).*?(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}(?::\d{2})?)/.exec(
+        normalizedContent,
       );
     const groups = Array.from(t || []).slice(1) || [];
     if (groups[0] && groups[2]) {
