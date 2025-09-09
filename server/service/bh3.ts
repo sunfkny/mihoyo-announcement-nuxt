@@ -1,5 +1,4 @@
-import type { Document, Element } from "happy-dom";
-import { Node, Window } from "happy-dom";
+import moment from "moment";
 import { getTime, getTimeHumaize } from "~/utils/time";
 
 interface Bh3GachaInfo {
@@ -7,7 +6,10 @@ interface Bh3GachaInfo {
   title: string;
   image: string;
   content: string;
-  info: string | null;
+  start_time: string | null;
+  end_time: string | null;
+  start_time_humaize: string | null;
+  end_time_humaize: string | null;
 }
 
 interface Bh3Progress {
@@ -191,35 +193,6 @@ function getGachaInfoFromAnnContent(
     });
 }
 
-function isElement(node: Node): node is Element {
-  return node.nodeType === Node.ELEMENT_NODE;
-}
-function extractSectionContent(document: Document, headingText: string, headingTag: `h${1 | 2 | 3 | 4 | 5 | 6}`) {
-  const headings = [...document.querySelectorAll(headingTag)];
-  const startIndex = headings.findIndex(
-    h => h.textContent.trim() === headingText,
-  );
-  if (startIndex === -1)
-    return null;
-
-  const startNode = headings[startIndex];
-  const endNode = headings[startIndex + 1] ?? null;
-
-  const fragments = [];
-  let node = startNode.nextSibling;
-  while (node && node !== endNode) {
-    if (isElement(node)) {
-      fragments.push(node.outerHTML);
-    }
-    else if (node.nodeType === Node.TEXT_NODE) {
-      fragments.push(node.textContent);
-    }
-    node = node.nextSibling;
-  }
-
-  return fragments.join("").trim() || null;
-}
-
 export async function getBh3Info(): Promise<Bh3Response> {
   const [annList, annContent] = await Promise.all([
     getAnnList(),
@@ -249,23 +222,32 @@ export async function getBh3Info(): Promise<Bh3Response> {
 
   const gacha_info: Bh3GachaInfo[] = getGachaInfoFromAnnContent(annContent).map(
     (i) => {
-      const window = new Window({ url: "https://webstatic.mihoyo.com/bh3/announcement/index.html" });
-      const document = window.document;
-      document.body.innerHTML = i.content;
-      document.querySelectorAll("h2").forEach((p) => {
-        p.innerHTML = p.textContent.trim();
-      });
+      let start_time = null;
+      let end_time = null;
+      let start_time_humaize = null;
+      let end_time_humaize = null;
 
-      const info
-        = extractSectionContent(document, "补给信息", "h2")
-          ?? extractSectionContent(document, "开放时间", "h2");
+      const datetimePattern = /(\d+月\d+日\d+:\d+)~(\d+月\d+日\d+:\d+)/;
+      const match = datetimePattern.exec(i.content);
+      if (match) {
+        const [_, start_str, end_str] = match;
+        const parsedStart = moment(start_str, "M月D日H:m");
+        start_time = parsedStart.format("YYYY-MM-DD HH:mm:ss");
+        start_time_humaize = getTimeHumaize(parsedStart);
+        const endTime = moment(end_str, "M月D日H:m");
+        end_time = endTime.format("YYYY-MM-DD HH:mm:ss");
+        end_time_humaize = getTimeHumaize(endTime);
+      }
 
       return {
         ann_id: i.ann_id,
         title: i.title,
         image: i.image,
         content: i.content,
-        info,
+        start_time,
+        end_time,
+        start_time_humaize,
+        end_time_humaize,
       };
     },
   );

@@ -28,7 +28,14 @@ const progressValue = computed(() => {
         <Bh3ContentModal :item="item">
           <img class="rounded" :src="item.image" :alt="item.title">
           <p>{{ item.title }}</p>
-          <div v-if="item.info" class="[&_img]:bg-[#003366] [&_img]:rounded" v-html="item.info" />
+          <p>
+            开始时间:
+            {{ appendAnnotation(item.start_time, item.start_time_humaize) }}
+          </p>
+          <p>
+            结束时间:
+            {{ appendAnnotation(item.end_time, item.end_time_humaize) }}
+          </p>
         </Bh3ContentModal>
       </div>
     </div>
