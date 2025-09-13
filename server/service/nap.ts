@@ -297,6 +297,7 @@ export async function getNapInfo(): Promise<NapResponse> {
     const window = new Window({ url: "https://sdk.mihoyo.com/nap/announcement/index.html" });
     const document = window.document;
     document.body.innerHTML = i.content;
+    const images = [...window.document.querySelectorAll("img")].map(i => i.src);
     document.querySelectorAll("span").forEach((p) => {
       p.innerHTML = p.textContent.trim();
     });
@@ -313,9 +314,6 @@ export async function getNapInfo(): Promise<NapResponse> {
       end_time = parsedEnd.time;
       end_time_humaize = parsedEnd.time_humaize;
     }
-    const images = Array.from(
-      i.content.matchAll(/<img[^>]+src="([^"]+)"[^>]*>/g),
-    ).map(m => m[1]);
 
     const result: NapGachaInfo = {
       ann_id: i.ann_id,
