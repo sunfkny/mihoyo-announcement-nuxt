@@ -1,10 +1,14 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import tailwindcss from "@tailwindcss/vite";
+
 export default defineNuxtConfig({
-  modules: ["@nuxt/ui", "@nuxt/eslint", "shadcn-nuxt"],
+  modules: ["@nuxt/eslint", "shadcn-nuxt"],
   devtools: { enabled: true },
   css: ["~/assets/css/main.css"],
-  ui: {
-    fonts: false,
+  vite: {
+    plugins: [
+      tailwindcss(),
+    ],
   },
   experimental: {
     viewTransition: true,
