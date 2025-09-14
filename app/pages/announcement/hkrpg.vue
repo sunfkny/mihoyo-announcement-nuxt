@@ -24,7 +24,11 @@ const progressValue = computed(() => {
       </div>
       <div v-for="item in data?.gacha_info" :key="item.ann_id">
         <HkrpgContentModal :item="item">
-          <img :src="item.image" :alt="item.title">
+          <img
+            class="aspect-[1120/340]"
+            :src="ossProcessWebp(item.image)"
+            :alt="item.title"
+          >
           <p>{{ item.title }}</p>
           <p>
             开始时间:

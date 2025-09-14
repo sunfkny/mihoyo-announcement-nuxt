@@ -22,7 +22,12 @@ const progressValue = computed(() => {
       </div>
       <div v-for="item in data?.gacha_info" :key="item.ann_id">
         <NapContentModal :item="item">
-          <img v-for="(i, index) in item.images" :key="index" :src="i" :alt="i">
+          <img
+            v-for="(i, index) in item.images"
+            :key="index" class="aspect-[1590/222]"
+            :src="ossProcessWebp(i)"
+            :alt="i"
+          >
           <p>{{ item.title }}</p>
           <p>
             开始时间:

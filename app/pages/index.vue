@@ -1,5 +1,5 @@
 <template>
-  <div class="h-dvh flex items-center justify-center">
+  <main class="h-dvh flex items-center justify-center">
     <NavBar />
-  </div>
+  </main>
 </template>
