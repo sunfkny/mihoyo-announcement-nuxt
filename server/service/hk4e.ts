@@ -15,7 +15,6 @@ interface Hk4eGachaInfo {
 interface Hk4eProgress {
   start_time: string | null;
   end_time: string | null;
-  start_time_humaize: string | null;
   end_time_humaize: string | null;
   percent: number | null;
 }
@@ -203,7 +202,6 @@ export async function getHk4eInfo(): Promise<Hk4eResponse> {
   const progress: Hk4eProgress = {
     start_time: null,
     end_time: null,
-    start_time_humaize: null,
     end_time_humaize: null,
     percent: null,
   };

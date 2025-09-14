@@ -16,7 +16,6 @@ type NapGachaInfo = {
 type NapProgress = {
   start_time: string | null;
   end_time: string | null;
-  start_time_humaize: string | null;
   end_time_humaize: string | null;
   percent: number | null;
 };
@@ -271,7 +270,6 @@ export async function getNapInfo(): Promise<NapResponse> {
   const progress: NapProgress = {
     start_time: null,
     end_time: null,
-    start_time_humaize: null,
     end_time_humaize: null,
     percent: null,
   };

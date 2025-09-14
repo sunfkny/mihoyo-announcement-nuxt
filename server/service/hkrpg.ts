@@ -15,7 +15,6 @@ interface HkrpgGachaInfo {
 interface HkrpgProgress {
   start_time: string | null;
   end_time: string | null;
-  start_time_humaize: string | null;
   end_time_humaize: string | null;
   percent: number | null;
 }
@@ -217,7 +216,6 @@ export async function getHkrpgInfo(): Promise<HkrpgResponse> {
   const progress: HkrpgProgress = {
     start_time: null,
     end_time: null,
-    start_time_humaize: null,
     end_time_humaize: null,
     percent: null,
   };
