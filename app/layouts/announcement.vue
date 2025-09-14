@@ -4,8 +4,7 @@ import { ArrowLeft } from "lucide-vue-next";
 
 const route = useRoute();
 
-const gameKey = route.path.replaceAll(/^(\/announcement\/)/g, "");
-const game = getGame(gameKey);
+const game = route.meta.game ? getGame(route.meta.game) : null;
 </script>
 
 <template>
@@ -20,13 +19,13 @@ const game = getGame(gameKey);
       <NuxtLink to="/" class="size-[32px] p-0 flex justify-center items-center" variant="outline" color="neutral">
         <ArrowLeft class="size-[24px]" />
       </NuxtLink>
-      <div class="flex gap-2 justify-center items-center">
+      <div v-if="game" class="flex gap-2 justify-center items-center">
         <img
-          :src="game?.icon" :alt="game?.name" :title="game?.name" :width="32" :height="32" class="games-icon" :style="{
-            'view-transition-name': `games-icon-${gameKey}`,
+          :src="gameIconProcess(game.icon)" :alt="game.name" :title="game.name" :width="32" :height="32" class="rounded-icon" :style="{
+            'view-transition-name': `games-icon-${game.key}`,
           }"
         >
-        {{ game?.name }}
+        {{ game.name }}
       </div>
       <div class="size-[32px]" />
     </div>

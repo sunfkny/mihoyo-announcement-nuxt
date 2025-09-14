@@ -43,3 +43,10 @@ export function ossProcess(src: string, process: Process[]) {
 export function ossProcessWebp(src: string) {
   return ossProcess(src, [{ action: "format", params: "webp" }]);
 }
+
+export function gameIconProcess(src: string) {
+  return ossProcess(src, [
+    { action: "resize", params: { w: 256, h: 256 } },
+    { action: "format", params: "webp" },
+  ]);
+}

@@ -41,7 +41,7 @@ export function getGameName(game: Game): string {
 }
 export function getGame(game: Game | string) {
   if (isGame(game)) {
-    return gamesMap[game];
+    return { ...gamesMap[game], key: game };
   }
   return null;
 }

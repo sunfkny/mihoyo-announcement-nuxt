@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: "announcement",
+  game: "bh3",
 });
 const { data, status, error } = await useLazyFetch("/api/announcement/bh3");
 const progressValue = computed(() => {

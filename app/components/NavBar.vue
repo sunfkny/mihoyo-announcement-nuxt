@@ -45,15 +45,12 @@ withDefaults(
       >
         <div class="p-1 transition-all duration-300">
           <img
-            :src="ossProcess(game.icon, [
-              { action: 'resize', params: { w: 256, h: 256 } },
-              { action: 'format', params: 'webp' },
-            ])"
+            :src="gameIconProcess(game.icon)"
             :alt="game.name"
             :title="game.name"
             :width="vertical ? 128 : 64"
             :height="vertical ? 128 : 64"
-            :class="cn('games-icon rounded-icon w-[64px] transition-all duration-300', { 'sm:w-[128px]': !vertical })"
+            :class="cn('rounded-icon w-[64px] transition-all duration-300', { 'sm:w-[128px]': !vertical })"
             :style="{
               'view-transition-name': `games-icon-${game.key}`,
             }"
