@@ -225,13 +225,13 @@ export async function getBh3Info(): Promise<Bh3Response> {
       let start_time_humaize = null;
       let end_time_humaize = null;
 
-      const datetimePattern = /(\d+月\d+日\d+:\d+)~(\d+月\d+日\d+:\d+)/;
+      const datetimePattern = /(\d+月\d+日\d+:\d+|\d+\.\d+版本更新后)~(\d+月\d+日\d+:\d+)/;
       const match = datetimePattern.exec(i.content);
       if (match) {
         const [_, start_str, end_str] = match;
-        const parsedStart = moment(start_str, "M月D日H:m");
-        start_time = parsedStart.format("YYYY-MM-DD HH:mm:ss");
-        start_time_humaize = getTimeHumaize(parsedStart);
+        const parsedStart = start_str.includes("版本更新后") ? null : moment(start_str, "M月D日H:m");
+        start_time = parsedStart ? parsedStart.format("YYYY-MM-DD HH:mm:ss") : null;
+        start_time_humaize = parsedStart ? getTimeHumaize(parsedStart) : start_str;
         const endTime = moment(end_str, "M月D日H:m");
         end_time = endTime.format("YYYY-MM-DD HH:mm:ss");
         end_time_humaize = getTimeHumaize(endTime);
