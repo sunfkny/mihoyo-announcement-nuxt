@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { parseTimeHumaize } from "~~/shared/datetime";
-
 definePageMeta({
   layout: "announcement",
   game: "hk4e",
@@ -21,7 +19,7 @@ const progressValue = computed(() => {
         <Progress v-model="progressValue" class="h-2" />
         <span>
           {{ data.progress.start_time }} ~ {{
-            appendAnnotation(data.progress.end_time, parseTimeHumaize(data.progress.end_time).time_humaize)
+            appendAnnotation(data.progress.end_time, data.progress.end_time_humaize)
           }}
         </span>
       </div>

@@ -53,6 +53,7 @@ interface Bh3GachaInfo {
 interface Bh3Progress {
   start_time: string | null;
   end_time: string | null;
+  end_time_humaize: string | null;
   percent: number | null;
 }
 
@@ -117,14 +118,18 @@ export async function getBh3Info(): Promise<Bh3Response> {
   const progress: Bh3Progress = {
     start_time: null,
     end_time: null,
+    end_time_humaize: null,
     percent: null,
   };
 
   if (versionInfo) {
     const startTime = parseLocalDate(versionInfo.start_time);
+    const parsedEndTime = parseTimeHumaize(versionInfo.end_time);
     const endTime = parseLocalDate(versionInfo.end_time);
     progress.start_time = formatChineseISOLocaleString(startTime);
-    progress.end_time = formatChineseISOLocaleString(endTime);
+    progress.end_time = parsedEndTime.time;
+    progress.end_time_humaize = parsedEndTime.time_humaize;
+
     const currentTime = new Date();
     if (startTime < currentTime && currentTime < endTime) {
       progress.percent = (currentTime.getTime() - startTime.getTime()) / (endTime.getTime() - startTime.getTime());
