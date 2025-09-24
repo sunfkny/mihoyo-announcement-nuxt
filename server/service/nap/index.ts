@@ -19,7 +19,6 @@ const query = {
 
 const fetch = ofetch.create({
   query,
-  timeout: 1000,
   baseURL: getMihoYoBaseUrl("announcement-api"),
   responseType: "json",
 });

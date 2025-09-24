@@ -21,7 +21,6 @@ const query = {
 
 const fetch = ofetch.create({
   query,
-  timeout: 1000,
   baseURL: getMihoYoBaseUrl("hk4e-ann-api"),
   responseType: "json",
 });
