@@ -1,8 +1,8 @@
-import type { BaseResponse } from "../constant";
+import type { BaseResponse } from "~~/shared/constants/url";
 import { Window } from "happy-dom";
 import { ofetch } from "ofetch";
-import { checkResponse, getMihoYoBaseUrl } from "../constant";
-import { getTime, getTimeHumaize, parseTimeHumaize } from "../time";
+import { checkResponse, getMihoYoBaseUrl } from "~~/shared/constants/url";
+import { formatChineseISOLocaleString, parseLocalDate, parseTimeHumaize } from "~~/shared/datetime";
 import { AnnContentSchema } from "./schema/getAnnContent";
 import { AnnListSchema } from "./schema/getAnnList";
 
@@ -49,13 +49,11 @@ interface Hk4eGachaInfo {
   start_time: string | null;
   end_time: string | null;
   start_time_humaize: string | null;
-  end_time_humaize: string | null;
 }
 
 interface Hk4eProgress {
   start_time: string | null;
   end_time: string | null;
-  end_time_humaize: string | null;
   percent: number | null;
 }
 
@@ -119,19 +117,17 @@ export async function getHk4eInfo(): Promise<Hk4eResponse> {
   const progress: Hk4eProgress = {
     start_time: null,
     end_time: null,
-    end_time_humaize: null,
     percent: null,
   };
 
   if (versionInfo) {
-    const startTime = getTime(versionInfo.start_time);
-    const endTime = getTime(versionInfo.end_time);
-    progress.start_time = startTime.format("YYYY-MM-DD HH:mm:ss");
-    progress.end_time = endTime.format("YYYY-MM-DD HH:mm:ss");
-    const currentTime = getTime();
-    if (currentTime.isBetween(startTime, endTime)) {
-      progress.percent = currentTime.diff(startTime) / endTime.diff(startTime);
-      progress.end_time_humaize = getTimeHumaize(endTime);
+    const startTime = parseLocalDate(versionInfo.start_time);
+    const endTime = parseLocalDate(versionInfo.end_time);
+    progress.start_time = formatChineseISOLocaleString(startTime);
+    progress.end_time = formatChineseISOLocaleString(endTime);
+    const currentTime = new Date();
+    if (startTime < currentTime && currentTime < endTime) {
+      progress.percent = (currentTime.getTime() - startTime.getTime()) / (endTime.getTime() - startTime.getTime());
     }
   }
 
@@ -139,7 +135,6 @@ export async function getHk4eInfo(): Promise<Hk4eResponse> {
     let start_time = null;
     let end_time = null;
     let start_time_humaize = null;
-    let end_time_humaize = null;
 
     const window = new Window({ url: "https://webstatic.mihoyo.com/hk4e/announcement/index.html" });
     const document = window.document;
@@ -158,7 +153,6 @@ export async function getHk4eInfo(): Promise<Hk4eResponse> {
       start_time_humaize = parsedStart.time_humaize;
       const parsedEnd = parseTimeHumaize(end_part);
       end_time = parsedEnd.time;
-      end_time_humaize = parsedEnd.time_humaize;
     }
 
     const result: Hk4eGachaInfo = {
@@ -169,7 +163,6 @@ export async function getHk4eInfo(): Promise<Hk4eResponse> {
       start_time,
       end_time,
       start_time_humaize,
-      end_time_humaize,
     };
     return result;
   });

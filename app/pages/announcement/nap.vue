@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { parseTimeHumaize } from "~~/shared/datetime";
+
 definePageMeta({
   layout: "announcement",
   game: "nap",
@@ -17,9 +19,11 @@ const progressValue = computed(() => {
     <div v-if="status === 'success'">
       <div v-if="data?.progress.percent" class="my-4">
         <Progress v-model="progressValue" class="h-2" />
-        <span>{{ data.progress.start_time }} ~ {{ data.progress.end_time }} ({{
-          data.progress.end_time_humaize
-        }})</span>
+        <span>
+          {{ data.progress.start_time }} ~ {{
+            appendAnnotation(data.progress.end_time, parseTimeHumaize(data.progress.end_time).time_humaize)
+          }}
+        </span>
       </div>
       <div v-for="item in data?.gacha_info" :key="item.ann_id">
         <NapContentModal :item="item">
@@ -36,7 +40,7 @@ const progressValue = computed(() => {
           </p>
           <p>
             结束时间:
-            {{ appendAnnotation(item.end_time, item.end_time_humaize) }}
+            {{ appendAnnotation(item.end_time, parseTimeHumaize(item.end_time).time_humaize) }}
           </p>
         </NapContentModal>
       </div>

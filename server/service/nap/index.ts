@@ -1,8 +1,8 @@
-import type { BaseResponse } from "../constant";
+import type { BaseResponse } from "~~/shared/constants/url";
 import { Window } from "happy-dom";
 import { ofetch } from "ofetch";
-import { checkResponse, getMihoYoBaseUrl } from "../constant";
-import { getTime, getTimeHumaize, parseTimeHumaize } from "../time";
+import { checkResponse, getMihoYoBaseUrl } from "~~/shared/constants/url";
+import { formatChineseISOLocaleString, parseLocalDate, parseTimeHumaize } from "~~/shared/datetime";
 import { AnnContentSchema } from "./schema/getAnnContent";
 import { AnnListSchema } from "./schema/getAnnList";
 
@@ -54,7 +54,6 @@ type NapGachaInfo = {
 type NapProgress = {
   start_time: string | null;
   end_time: string | null;
-  end_time_humaize: string | null;
   percent: number | null;
 };
 
@@ -114,19 +113,17 @@ export async function getNapInfo(): Promise<NapResponse> {
   const progress: NapProgress = {
     start_time: null,
     end_time: null,
-    end_time_humaize: null,
     percent: null,
   };
 
   if (versionInfo) {
-    const startTime = getTime(versionInfo.start_time);
-    const endTime = getTime(versionInfo.end_time);
-    progress.start_time = startTime.format("YYYY-MM-DD HH:mm:ss");
-    progress.end_time = endTime.format("YYYY-MM-DD HH:mm:ss");
-    const currentTime = getTime();
-    if (currentTime.isBetween(startTime, endTime)) {
-      progress.percent = currentTime.diff(startTime) / endTime.diff(startTime);
-      progress.end_time_humaize = getTimeHumaize(endTime);
+    const startTime = parseLocalDate(versionInfo.start_time);
+    const endTime = parseLocalDate(versionInfo.end_time);
+    progress.start_time = formatChineseISOLocaleString(startTime);
+    progress.end_time = formatChineseISOLocaleString(endTime);
+    const currentTime = new Date();
+    if (startTime < currentTime && currentTime < endTime) {
+      progress.percent = (currentTime.getTime() - startTime.getTime()) / (endTime.getTime() - startTime.getTime());
     }
   }
 

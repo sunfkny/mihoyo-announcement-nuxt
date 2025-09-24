@@ -1,8 +1,7 @@
-import type { BaseResponse } from "../constant";
-import moment from "moment";
+import type { BaseResponse } from "~~/shared/constants/url";
 import { ofetch } from "ofetch";
-import { checkResponse, getMihoYoBaseUrl } from "../constant";
-import { getTime, getTimeHumaize } from "../time";
+import { checkResponse, getMihoYoBaseUrl } from "~~/shared/constants/url";
+import { formatChineseISOLocaleString, parseLocalDate } from "~~/shared/datetime";
 import { AnnContentSchema } from "./schema/getAnnContent";
 import { AnnListSchema } from "./schema/getAnnList";
 
@@ -48,13 +47,11 @@ interface Bh3GachaInfo {
   start_time: string | null;
   end_time: string | null;
   start_time_humaize: string | null;
-  end_time_humaize: string | null;
 }
 
 interface Bh3Progress {
   start_time: string | null;
   end_time: string | null;
-  end_time_humaize: string | null;
   percent: number | null;
 }
 
@@ -119,19 +116,17 @@ export async function getBh3Info(): Promise<Bh3Response> {
   const progress: Bh3Progress = {
     start_time: null,
     end_time: null,
-    end_time_humaize: null,
     percent: null,
   };
 
   if (versionInfo) {
-    const startTime = getTime(versionInfo.start_time);
-    const endTime = getTime(versionInfo.end_time);
-    progress.start_time = startTime.format("YYYY-MM-DD HH:mm:ss");
-    progress.end_time = endTime.format("YYYY-MM-DD HH:mm:ss");
-    const currentTime = getTime();
-    if (currentTime.isBetween(startTime, endTime)) {
-      progress.percent = currentTime.diff(startTime) / endTime.diff(startTime);
-      progress.end_time_humaize = getTimeHumaize(endTime);
+    const startTime = parseLocalDate(versionInfo.start_time);
+    const endTime = parseLocalDate(versionInfo.end_time);
+    progress.start_time = formatChineseISOLocaleString(startTime);
+    progress.end_time = formatChineseISOLocaleString(endTime);
+    const currentTime = new Date();
+    if (startTime < currentTime && currentTime < endTime) {
+      progress.percent = (currentTime.getTime() - startTime.getTime()) / (endTime.getTime() - startTime.getTime());
     }
   }
 
@@ -140,19 +135,16 @@ export async function getBh3Info(): Promise<Bh3Response> {
       let start_time = null;
       let end_time = null;
       let start_time_humaize = null;
-      let end_time_humaize = null;
 
       const datetimePattern = /(?<start_str>\d+月\d+日\d+:\d+|\d+\.\d+版本更新后)~(?<end_str>\d+月\d+日\d+:\d+)/;
       const match = datetimePattern.exec(i.content);
       const groups = match?.groups as { start_str: string; end_str: string } | undefined;
       if (groups) {
         const { start_str, end_str } = groups;
-        const parsedStart = start_str.includes("版本更新后") ? null : moment(start_str, "M月D日H:m");
-        start_time = parsedStart ? parsedStart.format("YYYY-MM-DD HH:mm:ss") : null;
-        start_time_humaize = parsedStart ? getTimeHumaize(parsedStart) : start_str;
-        const endTime = moment(end_str, "M月D日H:m");
-        end_time = endTime.format("YYYY-MM-DD HH:mm:ss");
-        end_time_humaize = getTimeHumaize(endTime);
+        const parsedStart = start_str.includes("版本更新后") ? null : parseLocalDate(start_str);
+        start_time = parsedStart ? formatChineseISOLocaleString(parsedStart) : null;
+        start_time_humaize = parsedStart ? null : start_str;
+        end_time = formatChineseISOLocaleString(parseLocalDate(end_str));
       }
 
       return {
@@ -163,7 +155,6 @@ export async function getBh3Info(): Promise<Bh3Response> {
         start_time,
         end_time,
         start_time_humaize,
-        end_time_humaize,
       };
     },
   );
