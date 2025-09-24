@@ -1,0 +1,75 @@
+import { z } from "zod";
+
+export const AnnListSchema = z.object({
+  retcode: z.number(),
+  message: z.string(),
+  data: z.object({
+    list: z.array(
+      z.object({
+        list: z.array(
+          z.object({
+            ann_id: z.number(),
+            title: z.string(),
+            subtitle: z.string(),
+            banner: z.string(),
+            content: z.string(),
+            type_label: z.string(),
+            tag_label: z.string(),
+            tag_icon: z.string(),
+            login_alert: z.number(),
+            lang: z.string(),
+            start_time: z.string(),
+            end_time: z.string(),
+            type: z.number(),
+            remind: z.number(),
+            alert: z.number(),
+            tag_start_time: z.string(),
+            tag_end_time: z.string(),
+            remind_ver: z.number(),
+            has_content: z.boolean(),
+            extra_remind: z.number(),
+            tag_icon_hover: z.string(),
+            logout_remind: z.number(),
+            logout_remind_ver: z.number(),
+            country: z.string(),
+            need_remind_text: z.number(),
+            remind_text: z.string(),
+            weak_remind: z.number(),
+            remind_consumption_type: z.number(),
+          }),
+        ),
+        type_id: z.number(),
+        type_label: z.string(),
+      }),
+    ),
+    total: z.number(),
+    type_list: z.array(
+      z.object({ id: z.number(), name: z.string(), mi18n_name: z.string() }),
+    ),
+    alert: z.boolean(),
+    alert_id: z.number(),
+    timezone: z.number(),
+    t: z.string(),
+    pic_list: z.array(
+      z.object({
+        type_list: z.array(z.unknown()),
+        type_id: z.number(),
+        type_label: z.string(),
+      }),
+    ),
+    pic_total: z.number(),
+    pic_type_list: z.array(
+      z.object({ id: z.number(), name: z.string(), mi18n_name: z.string() }),
+    ),
+    pic_alert: z.boolean(),
+    pic_alert_id: z.number(),
+    static_sign: z.string(),
+    banner: z.string(),
+    calendar_type: z.object({
+      mi18n_name: z.string(),
+      enabled: z.boolean(),
+      remind: z.boolean(),
+    }),
+    use_webp: z.string(),
+  }),
+});

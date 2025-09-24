@@ -1,5 +1,45 @@
+import type { BaseResponse } from "../constant";
 import { Window } from "happy-dom";
-import { getTime, getTimeHumaize, parseTimeHumaize } from "~/utils/time";
+import { ofetch } from "ofetch";
+import { checkResponse, getMihoYoBaseUrl } from "../constant";
+import { getTime, getTimeHumaize, parseTimeHumaize } from "../time";
+import { AnnContentSchema } from "./schema/getAnnContent";
+import { AnnListSchema } from "./schema/getAnnList";
+
+const query = {
+  game: "hkrpg",
+  game_biz: "hkrpg_cn",
+  lang: "zh-cn",
+  bundle_id: "hkrpg_cn",
+  channel_id: "1",
+  platform: "pc",
+  region: "prod_gf_cn",
+  level: "70",
+  uid: "100000000",
+};
+
+const fetch = ofetch.create({
+  query,
+  timeout: 1000,
+  baseURL: getMihoYoBaseUrl("hkrpg-ann-api"),
+  responseType: "json",
+});
+
+export async function getAnnList() {
+  const resp = await fetch<BaseResponse>(
+    `/common/${query.game_biz}/announcement/api/getAnnList`,
+  );
+  checkResponse(resp);
+  return AnnListSchema.loose().parse(resp);
+}
+
+export async function getAnnContent() {
+  const resp = await fetch<BaseResponse>(
+    `/common/${query.game_biz}/announcement/api/getAnnContent`,
+  );
+  checkResponse(resp);
+  return AnnContentSchema.loose().parse(resp);
+}
 
 interface HkrpgGachaInfo {
   ann_id: number;
@@ -24,118 +64,6 @@ interface HkrpgResponse {
   gacha_info: HkrpgGachaInfo[];
 }
 
-interface AnnContentResponse {
-  retcode: number;
-  message: string;
-  data: {
-    list: {
-      ann_id: number;
-      title: string;
-      subtitle: string;
-      banner: string;
-      content: string;
-      lang: string;
-    }[];
-    pic_list: {
-      ann_id: number;
-      content_type: number;
-      title: string;
-      subtitle: string;
-      banner: string;
-      content: string;
-      lang: string;
-      img: string;
-      href_type: number;
-      href: string;
-      pic_list: {
-        title: string;
-        img: string;
-        href_type: number;
-        href: string;
-      }[];
-    }[];
-    total: number;
-    pic_total: number;
-  };
-}
-
-interface AnnListResponse {
-  retcode: number;
-  message: string;
-  data: {
-    list: {
-      list: {
-        ann_id: number;
-        title: string;
-        subtitle: string;
-        banner: string;
-        content: string;
-        type_label: string;
-        tag_label: string;
-        tag_icon: string;
-        login_alert: number;
-        lang: string;
-        start_time: string;
-        end_time: string;
-        type: number;
-        remind: number;
-        alert: number;
-        tag_start_time: string;
-        tag_end_time: string;
-        remind_ver: number;
-        has_content: boolean;
-        extra_remind: number;
-        tag_icon_hover: string;
-      }[];
-      type_id: number;
-      type_label: string;
-    }[];
-    total: number;
-    type_list: {
-      id: number;
-      name: string;
-      mi18n_name: string;
-    }[];
-    alert: boolean;
-    alert_id: number;
-    timezone: number;
-    t: string;
-    pic_list: unknown[];
-    pic_total: number;
-    pic_type_list: unknown[];
-    pic_alert: boolean;
-    pic_alert_id: number;
-    static_sign: string;
-  };
-}
-
-async function getAnnList(): Promise<AnnListResponse> {
-  const response = await fetch(
-    `https://hkrpg-ann-api.mihoyo.com/common/hkrpg_cn/announcement/api/getAnnList?${new URLSearchParams({
-      game: "hkrpg",
-      game_biz: "hkrpg_cn",
-      lang: "zh-cn",
-      bundle_id: "hkrpg_cn",
-      channel_id: "1",
-      platform: "pc",
-      region: "prod_gf_cn",
-      level: "70",
-      uid: "100000000",
-    }).toString()}`,
-  );
-  if (response.status !== 200) {
-    throw new Error(`Fail to get ann list ${response.status}`);
-  }
-  if (
-    response.headers.get("Content-Type")?.includes("application/json") === false
-  ) {
-    throw new Error(
-      `Fail to get ann list ${response.headers.get("Content-Type")}`,
-    );
-  }
-  return await response.json();
-}
-
 function getVersionInfoFromAnnList(
   annList: Awaited<ReturnType<typeof getAnnList>>,
 ):
@@ -157,33 +85,6 @@ function getVersionInfoFromAnnList(
     }
   }
   return null;
-}
-
-async function getAnnContent(): Promise<AnnContentResponse> {
-  const response = await fetch(
-    `https://hkrpg-ann-api.mihoyo.com/common/hkrpg_cn/announcement/api/getAnnContent?${new URLSearchParams({
-      game: "hkrpg",
-      game_biz: "hkrpg_cn",
-      lang: "zh-cn",
-      bundle_id: "hkrpg_cn",
-      channel_id: "1",
-      platform: "pc",
-      region: "prod_gf_cn",
-      level: "70",
-      uid: "100000000",
-    }).toString()}`,
-  );
-  if (response.status !== 200) {
-    throw new Error(`Fail to get ann content ${response.status}`);
-  }
-  if (
-    response.headers.get("Content-Type")?.includes("application/json") === false
-  ) {
-    throw new Error(
-      `Fail to get ann list ${response.headers.get("Content-Type")}`,
-    );
-  }
-  return await response.json();
 }
 
 function getGachaInfoFromAnnContent(
