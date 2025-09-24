@@ -40,7 +40,7 @@ const progressValue = computed(() => {
           </p>
           <p>
             结束时间:
-            {{ appendAnnotation(item.end_time, parseTimeHumaize(item.end_time).time_humaize) }}
+            {{ appendAnnotation(item.end_time, item.end_time_humaize) }}
           </p>
         </NapContentModal>
       </div>

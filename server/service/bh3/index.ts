@@ -1,7 +1,7 @@
 import type { BaseResponse } from "~~/shared/constants/url";
 import { ofetch } from "ofetch";
 import { checkResponse, getMihoYoBaseUrl } from "~~/shared/constants/url";
-import { formatChineseISOLocaleString, parseLocalDate } from "~~/shared/datetime";
+import { formatChineseISOLocaleString, parseLocalDate, parseTimeHumaize } from "~~/shared/datetime";
 import { AnnContentSchema } from "./schema/getAnnContent";
 import { AnnListSchema } from "./schema/getAnnList";
 
@@ -47,6 +47,7 @@ interface Bh3GachaInfo {
   start_time: string | null;
   end_time: string | null;
   start_time_humaize: string | null;
+  end_time_humaize: string | null;
 }
 
 interface Bh3Progress {
@@ -135,16 +136,19 @@ export async function getBh3Info(): Promise<Bh3Response> {
       let start_time = null;
       let end_time = null;
       let start_time_humaize = null;
+      let end_time_humaize = null;
 
       const datetimePattern = /(?<start_str>\d+月\d+日\d+:\d+|\d+\.\d+版本更新后)~(?<end_str>\d+月\d+日\d+:\d+)/;
       const match = datetimePattern.exec(i.content);
       const groups = match?.groups as { start_str: string; end_str: string } | undefined;
       if (groups) {
         const { start_str, end_str } = groups;
-        const parsedStart = start_str.includes("版本更新后") ? null : parseLocalDate(start_str);
-        start_time = parsedStart ? formatChineseISOLocaleString(parsedStart) : null;
-        start_time_humaize = parsedStart ? null : start_str;
-        end_time = formatChineseISOLocaleString(parseLocalDate(end_str));
+        const parsedStart = parseTimeHumaize(start_str);
+        start_time = parsedStart.time;
+        start_time_humaize = parsedStart.time_humaize;
+        const parsedEnd = parseTimeHumaize(end_str);
+        end_time = parsedEnd.time;
+        end_time_humaize = parsedEnd.time_humaize;
       }
 
       return {
@@ -155,6 +159,7 @@ export async function getBh3Info(): Promise<Bh3Response> {
         start_time,
         end_time,
         start_time_humaize,
+        end_time_humaize,
       };
     },
   );

@@ -49,6 +49,7 @@ interface Hk4eGachaInfo {
   start_time: string | null;
   end_time: string | null;
   start_time_humaize: string | null;
+  end_time_humaize: string | null;
 }
 
 interface Hk4eProgress {
@@ -135,6 +136,7 @@ export async function getHk4eInfo(): Promise<Hk4eResponse> {
     let start_time = null;
     let end_time = null;
     let start_time_humaize = null;
+    let end_time_humaize = null;
 
     const window = new Window({ url: "https://webstatic.mihoyo.com/hk4e/announcement/index.html" });
     const document = window.document;
@@ -153,6 +155,7 @@ export async function getHk4eInfo(): Promise<Hk4eResponse> {
       start_time_humaize = parsedStart.time_humaize;
       const parsedEnd = parseTimeHumaize(end_part);
       end_time = parsedEnd.time;
+      end_time_humaize = parsedEnd.time_humaize;
     }
 
     const result: Hk4eGachaInfo = {
@@ -163,6 +166,7 @@ export async function getHk4eInfo(): Promise<Hk4eResponse> {
       start_time,
       end_time,
       start_time_humaize,
+      end_time_humaize,
     };
     return result;
   });
