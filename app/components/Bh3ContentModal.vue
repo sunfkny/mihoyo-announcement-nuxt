@@ -3,6 +3,7 @@ defineProps<{
   item: {
     title: string;
     content: string;
+    image: string;
   };
 }>();
 
@@ -40,9 +41,14 @@ const { open, click } = useClickOpenIgnoreSelection();
     </template>
     <template #body>
       <div
-        class="content useWebFont scrollHack max-h-[calc(100vh-14rem)] min-h-4 pr-2 overflow-y-scroll"
-        v-html="item.content"
-      />
+        class="content useWebFont scrollHack max-h-[calc(100vh-14rem)] min-h-4 pr-4 overflow-y-scroll"
+      >
+        <img
+          :src="item.image"
+          class="w-full mb-4"
+        >
+        <div v-html="item.content" />
+      </div>
     </template>
   </UModal>
 </template>
