@@ -22,22 +22,21 @@ const { open, click } = useClickOpenIgnoreSelection();
     <slot />
   </div>
   <UModal
-    v-model:open="open" :ui="{
+    v-model:open="open"
+    :title="item.title"
+    class="divide-neutral-300 dark:divide-neutral-300"
+    :ui="{
       content: 'bg-[#D9DEEA] border-none shadow text-gray-800 max-w-screen sm:max-w-[1024px]',
+      header: 'justify-between',
+      title: 'text-gray-800 font-bold text-xl',
     }"
   >
-    <template #header>
-      <div class="w-full flex justify-between">
-        <h2 class="font-bold text-xl">
-          {{ item.title }}
-        </h2>
-        <UButton
-          class="text-black"
-          icon="lucide:x"
-          variant="ghost"
-          @click="open = false"
-        />
-      </div>
+    <template #close>
+      <UButton
+        class="text-black"
+        icon="lucide:x"
+        variant="ghost"
+      />
     </template>
     <template #body>
       <div

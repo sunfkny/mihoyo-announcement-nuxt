@@ -22,22 +22,21 @@ const { open, click } = useClickOpenIgnoreSelection();
     <slot />
   </div>
   <UModal
-    v-model:open="open" :ui="{
+    v-model:open="open"
+    :title="item.title"
+    class="dark:divide-neutral-200"
+    :ui="{
       content: 'bg-[#F9F6F2] border-none shadow text-gray-800 max-w-screen sm:max-w-[768px]',
+      header: 'justify-between',
+      title: 'text-gray-800 font-bold text-xl',
     }"
   >
-    <template #header>
-      <div class="w-full flex justify-between">
-        <h2 class="font-bold text-xl">
-          {{ item.title }}
-        </h2>
-        <UButton
-          class="text-black"
-          icon="lucide:x"
-          variant="ghost"
-          @click="open = false"
-        />
-      </div>
+    <template #close>
+      <UButton
+        class="text-black"
+        icon="lucide:x"
+        variant="ghost"
+      />
     </template>
     <template #body>
       <div
@@ -59,7 +58,7 @@ const { open, click } = useClickOpenIgnoreSelection();
 }
 
 .scrollHack::-webkit-scrollbar {
-  width: 4.8px;
+  width: 5px;
 }
 
 .scrollHack::-webkit-scrollbar-thumb {
@@ -71,12 +70,10 @@ const { open, click } = useClickOpenIgnoreSelection();
 }
 
 .scrollHack::-webkit-scrollbar-track {
-  padding: 0 4.8px;
+  padding: 0 5px;
   background-color: rgba(63, 71, 87, 0.2);
-  border: 0.8px solid #f1eeea;
-  border-radius: 0.008rem;
-  margin-top: 0.2rem;
-  margin-bottom: 0.2rem;
+  border: 1px solid #f1eeea;
+  border-radius: 1px;
 }
 
 .content ::v-deep(p) {
