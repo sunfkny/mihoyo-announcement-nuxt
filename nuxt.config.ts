@@ -1,4 +1,3 @@
-import tailwindcss from "@tailwindcss/vite";
 import { games } from "./shared/constants/game";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
@@ -20,7 +19,6 @@ export default defineNuxtConfig({
   css: ["~/assets/css/main.css"],
   vite: {
     plugins: [
-      tailwindcss(),
       // Hide tailwindcss warnings
       // https://github.com/tailwindlabs/tailwindcss/discussions/16119#discussioncomment-12758373
       {

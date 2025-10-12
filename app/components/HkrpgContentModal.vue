@@ -33,7 +33,7 @@ const { open, click } = useClickOpenIgnoreSelection();
         </h2>
         <UButton
           class="text-black"
-          icon="i-lucide-x"
+          icon="lucide:x"
           variant="ghost"
           @click="open = false"
         />

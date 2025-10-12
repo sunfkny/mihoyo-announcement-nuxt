@@ -30,7 +30,7 @@ withDefaults(
           <div
             class="rounded-icon size-[64px] bg-gray-100 dark:bg-gray-700 flex justify-center items-center"
           >
-            <UIcon name="i-lucide-house" class="size-[40px]" />
+            <UIcon name="lucide:house" class="size-[40px]" />
           </div>
         </div>
       </NuxtLink>

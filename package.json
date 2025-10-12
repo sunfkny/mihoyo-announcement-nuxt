@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@nuxt/ui": "^4.0.1",
-    "@tailwindcss/vite": "^4.1.13",
     "@vueuse/core": "^13.9.0",
     "clsx": "^2.1.1",
     "happy-dom": "^18.0.1",
@@ -29,6 +28,7 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^5.4.1",
+    "@iconify-json/lucide": "^1.2.69",
     "@nuxt/eslint": "^1.9.0",
     "eslint": "^9.36.0",
     "typescript": "^5.9.2",
