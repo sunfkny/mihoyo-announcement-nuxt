@@ -31,6 +31,10 @@ const gamesMap: Record<Game, { name: string; icon: string }> = {
   //   name: "崩坏：因缘精灵",
   //   icon: "https://fastcdn.mihoyo.com/static-resource-v2/2025/08/28/399940d2d9d9042dfc56413b5637c877_7681873854441484144.png",
   // },
+  // hyg: {
+  //   name: "星布谷地",
+  //   icon: "https://fastcdn.mihoyo.com/static-resource-v2/2025/09/24/9f47f592c7ecd2ffa221de5a270fdd93_273872489826496169.png",
+  // },
 };
 export const games = gameKeys.map((key) => {
   const game = gamesMap[key];
