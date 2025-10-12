@@ -1,13 +1,21 @@
-export function useClickToggleIgnoreSelection() {
+export function useClickOpenIgnoreSelection() {
   const open = ref(false);
   const click = () => {
-    if (!document.getSelection()?.isCollapsed === true) {
+    const selection = document.getSelection();
+    if (selection === null) {
       return;
     }
-    open.value = !open.value;
+    if (!selection.isCollapsed) {
+      return;
+    }
+    open.value = true;
+  };
+  const close = () => {
+    open.value = false;
   };
   return {
     open,
     click,
+    close,
   };
 }

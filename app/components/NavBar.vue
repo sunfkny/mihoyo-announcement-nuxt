@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { games } from "#shared/constants/game";
-import { House } from "lucide-vue-next";
 
 withDefaults(
   defineProps<{
@@ -31,7 +30,7 @@ withDefaults(
           <div
             class="rounded-icon size-[64px] bg-gray-100 dark:bg-gray-700 flex justify-center items-center"
           >
-            <House class="size-[40px]" />
+            <UIcon name="i-lucide-house" class="size-[40px]" />
           </div>
         </div>
       </NuxtLink>
@@ -60,9 +59,3 @@ withDefaults(
     </div>
   </div>
 </template>
-
-<style scoped>
-.router-link-active {
-  border-color: #3778e5;
-}
-</style>

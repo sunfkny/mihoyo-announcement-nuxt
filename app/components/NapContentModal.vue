@@ -15,28 +15,38 @@ useFontFace(
   },
 );
 
-const { open, click } = useClickToggleIgnoreSelection();
+const { open, click } = useClickOpenIgnoreSelection();
 </script>
 
 <template>
   <div @click="click()">
     <slot />
   </div>
-  <Dialog v-model:open="open">
-    <DialogContent
-      class="bg-[#050505] border-2 border-[#929292] shadow text-white max-w-screen sm:max-w-[768px]"
-    >
-      <DialogHeader>
-        <DialogTitle>{{ item.title }}</DialogTitle>
-      </DialogHeader>
-      <div>
-        <div
-          class="content nap-zh-cn-light scroll-hack max-h-[calc(100vh-14rem)] min-h-4 pr-2 overflow-y-auto"
-          v-html="resetFontSize(item.content)"
+  <UModal
+    v-model:open="open" :ui="{
+      content: 'bg-[#050505] border-2 border-[#929292] shadow text-white max-w-screen sm:max-w-[768px]',
+    }"
+  >
+    <template #header>
+      <div class="w-full flex justify-between">
+        <h2 class="font-bold text-xl">
+          {{ item.title }}
+        </h2>
+        <UButton
+          class="text-white"
+          icon="i-lucide-x"
+          variant="ghost"
+          @click="open = false"
         />
       </div>
-    </DialogContent>
-  </Dialog>
+    </template>
+    <template #body>
+      <div
+        class="content nap-zh-cn-light scroll-hack max-h-[calc(100vh-14rem)] min-h-4 pr-2 overflow-y-auto"
+        v-html="resetFontSize(item.content)"
+      />
+    </template>
+  </UModal>
 </template>
 
 <style scoped>

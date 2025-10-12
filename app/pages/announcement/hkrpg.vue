@@ -16,7 +16,7 @@ const progressValue = computed(() => {
   <div>
     <div v-if="status === 'success'">
       <div v-if="data?.progress.percent" class="my-4">
-        <Progress v-model="progressValue" class="h-2" />
+        <UProgress v-model="progressValue" class="h-2" />
         <span>
           {{ data.progress.start_time }} ~ {{
             appendAnnotation(data.progress.end_time, data.progress.end_time_humaize)

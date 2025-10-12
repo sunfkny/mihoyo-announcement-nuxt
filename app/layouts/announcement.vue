@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { getGame } from "#shared/constants/game";
-import { ArrowLeft } from "lucide-vue-next";
 
 const route = useRoute();
 
@@ -17,7 +16,7 @@ const game = route.meta.game ? getGame(route.meta.game) : null;
       class="sticky top-0 z-10 flex sm:hidden p-4 justify-between gap-2 items-center bg-white/50 dark:bg-gray-800/50 bg-opacity-30 backdrop-blur shadow"
     >
       <NuxtLink to="/" aria-label="首页" class="size-[32px] p-0 flex justify-center items-center" variant="outline" color="neutral">
-        <ArrowLeft class="size-[24px]" />
+        <UIcon name="i-lucide-arrow-left" class="size-[24px]" />
       </NuxtLink>
       <div v-if="game" class="flex gap-2 justify-center items-center">
         <img

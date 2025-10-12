@@ -5,11 +5,9 @@
   "editor.quickSuggestions": {
     "strings": true
   },
+  "tailwindCSS.classAttributes": ["class", "ui"],
   "tailwindCSS.experimental.classRegex": [
-    "tw`(.*?)`",
-    "tw\\('(.*?)'\\)",
-    "tw\\(\\s*('(.*?)'|\"(.*?)\")\\s*\\)",
-    "\\/\\*\\s?tw:\\s?\\*\\/\\s?`(.*)`" // https://github.com/tailwindlabs/tailwindcss/discussions/7554#discussioncomment-3368655
+    ["ui:\\s*{([^)]*)\\s*}", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
   ],
   "editor.tokenColorCustomizations": {
     "textMateRules": [

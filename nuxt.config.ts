@@ -1,7 +1,7 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 import tailwindcss from "@tailwindcss/vite";
 import { games } from "./shared/constants/game";
 
+// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   app: {
     head: {
@@ -15,17 +15,46 @@ export default defineNuxtConfig({
       ],
     },
   },
-  modules: ["@nuxt/eslint", "shadcn-nuxt"],
+  modules: ["@nuxt/eslint", "@nuxt/ui"],
   devtools: { enabled: true },
   css: ["~/assets/css/main.css"],
   vite: {
     plugins: [
       tailwindcss(),
+      // Hide tailwindcss warnings
+      // https://github.com/tailwindlabs/tailwindcss/discussions/16119#discussioncomment-12758373
+      {
+        apply: "build",
+        name: "vite-plugin-ignore-sourcemap-warnings",
+        configResolved(config) {
+          const originalOnWarn = config.build.rollupOptions.onwarn;
+          config.build.rollupOptions.onwarn = (warning, warn) => {
+            if (
+              warning.code === "SOURCEMAP_BROKEN"
+              && warning.plugin === "@tailwindcss/vite:generate:build"
+            ) {
+              return;
+            }
+            if (originalOnWarn) {
+              originalOnWarn(
+                warning,
+                warn,
+              );
+            } else {
+              warn(
+                warning,
+              );
+            }
+          };
+        },
+      },
     ],
   },
   experimental: {
     viewTransition: true,
     renderJsonPayloads: false,
+    externalVue: true,
+    buildCache: true,
   },
   compatibilityDate: "latest",
   eslint: {
@@ -33,7 +62,13 @@ export default defineNuxtConfig({
       standalone: false,
     },
   },
-  shadcn: {
-    prefix: "",
+  ui: {
+    fonts: false,
+  },
+  icon: {
+    serverBundle: false,
+    clientBundle: {
+      scan: true,
+    },
   },
 });
