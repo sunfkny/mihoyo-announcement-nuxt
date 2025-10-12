@@ -13,6 +13,7 @@ export default withNuxt(
     rules: {
       "vue/no-v-html": "off",
       "ts/consistent-type-definitions": "off",
+      "style/brace-style": ["error", "1tbs", { allowSingleLine: true }],
     },
   }),
 );

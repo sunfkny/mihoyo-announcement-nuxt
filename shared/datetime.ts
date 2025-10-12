@@ -109,8 +109,7 @@ export function parseTimeHumaize(time_string: string | null): {
   try {
     const parsedTime = parseLocalDate(time_string);
     return { time: formatChineseISOLocaleString(parsedTime), time_humaize: getTimeHumaize(parsedTime) };
-  }
-  catch {
+  } catch {
     return { time: null, time_humaize: time_string };
   }
 }
