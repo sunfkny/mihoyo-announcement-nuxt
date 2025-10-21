@@ -93,7 +93,7 @@ function getGachaInfoFromAnnContent(
   image: string;
 }[] {
   return annContent.data.pic_list
-    .filter(i => i.subtitle.includes("调频") || i.subtitle.includes("频段"))
+    .filter(i => !i.subtitle.includes("调频回馈") && (i.subtitle.includes("调频") || i.subtitle.includes("频段")))
     .map((i) => {
       return {
         content: i.content,
