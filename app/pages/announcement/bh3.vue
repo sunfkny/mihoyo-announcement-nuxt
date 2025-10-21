@@ -25,11 +25,13 @@ const progressValue = computed(() => {
       </div>
       <div v-for="item in data?.gacha_info" :key="item.ann_id">
         <Bh3ContentModal :item="item">
-          <img
-            class="rounded aspect-[774/160]"
-            :src="ossProcessWebp(item.image)"
-            :alt="item.title"
-          >
+          <div class="aspect-[774/160]">
+            <img
+              class="rounded"
+              :src="ossProcessWebp(item.image)"
+              :alt="item.title"
+            >
+          </div>
           <p>{{ item.title }}</p>
           <p>
             开始时间:
