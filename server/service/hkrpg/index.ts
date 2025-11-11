@@ -173,15 +173,26 @@ export async function getHkrpgInfo(): Promise<HkrpgResponse> {
     document.querySelectorAll("p").forEach((p) => {
       p.innerHTML = p.textContent.trim();
     });
-    const normalizedContent = document.querySelector("table td[rowspan]")?.textContent;
-    if (normalizedContent && normalizedContent.includes("-")) {
-      const [start_part, end_part] = normalizedContent.split("-");
-      const parsedStart = parseTimeHumaize(start_part);
-      start_time = parsedStart.time;
-      start_time_humaize = parsedStart.time_humaize;
-      const parsedEnd = parseTimeHumaize(end_part);
-      end_time = parsedEnd.time;
-      end_time_humaize = parsedEnd.time_humaize;
+    // multiple banner with different time
+    const normalizedContents = new Set(Array.from(document.querySelectorAll("table td[rowspan]")).map(i => i.textContent));
+    for (const normalizedContent of normalizedContents) {
+      if (normalizedContent && normalizedContent.includes("-")) {
+        const [start_part, end_part] = normalizedContent.split("-");
+        const parsedStart = parseTimeHumaize(start_part);
+        const parsedEnd = parseTimeHumaize(end_part);
+        if (parsedEnd.time) {
+          const dt = new Date(parsedEnd.time);
+          const now = new Date();
+          if (dt < now) {
+            // skip if banner is expired
+            continue;
+          }
+        }
+        start_time = parsedStart.time;
+        start_time_humaize = parsedStart.time_humaize;
+        end_time = parsedEnd.time;
+        end_time_humaize = parsedEnd.time_humaize;
+      }
     }
 
     const result: HkrpgGachaInfo = {
