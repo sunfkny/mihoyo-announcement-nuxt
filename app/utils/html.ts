@@ -8,7 +8,7 @@ export function resolveTime(s: string) {
 }
 
 export function resetFontSize(s: string) {
-  return s.replaceAll(/font-size:0.\d+rem/g, "font-size:1rem");
+  return s.replaceAll(/font-size:\s+0.\d+rem/g, "font-size:1rem");
 }
 
 export function resolveTimeAndResetFontSize(s: string) {
