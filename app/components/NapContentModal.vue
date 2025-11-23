@@ -27,7 +27,7 @@ const { open, click } = useClickOpenIgnoreSelection();
     :title="item.title"
     class="divide-neutral-800"
     :ui="{
-      content: 'bg-[#050505] border-2 border-[#929292] shadow text-white max-w-screen sm:max-w-[768px]',
+      content: 'bg-[#050505] border-2 border-[#929292] shadow text-white max-w-screen sm:max-w-[1024px]',
       header: 'justify-between',
       title: 'text-white font-bold text-xl',
     }"
