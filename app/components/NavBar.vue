@@ -28,9 +28,9 @@ withDefaults(
           class="p-1 transition-all duration-300 flex justify-center items-center"
         >
           <div
-            class="rounded-icon size-[64px] bg-gray-100 dark:bg-gray-700 flex justify-center items-center"
+            class="rounded-icon size-16 bg-gray-100 dark:bg-gray-700 flex justify-center items-center"
           >
-            <UIcon name="lucide:house" class="size-[40px]" />
+            <UIcon name="lucide:house" class="size-10" />
           </div>
         </div>
       </NuxtLink>
@@ -49,7 +49,7 @@ withDefaults(
             :title="game.name"
             :width="vertical ? 128 : 64"
             :height="vertical ? 128 : 64"
-            :class="cn('rounded-icon w-[64px] transition-all duration-300', { 'sm:w-[128px]': !vertical })"
+            :class="cn('rounded-icon w-16 transition-all duration-300', { 'sm:w-32': !vertical })"
             :style="{
               'view-transition-name': `games-icon-${game.key}`,
             }"
