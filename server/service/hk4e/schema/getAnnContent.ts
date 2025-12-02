@@ -1,4 +1,4 @@
-import { z } from "zod";
+import * as z from "valibot";
 
 export const AnnContentSchema = z.object({
   retcode: z.number(),

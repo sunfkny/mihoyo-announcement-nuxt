@@ -1,6 +1,7 @@
 import type { BaseResponse } from "~~/shared/constants/url";
 import { Window } from "happy-dom";
 import { ofetch } from "ofetch";
+import * as v from "valibot";
 import { checkResponse, getMihoYoBaseUrl } from "~~/shared/constants/url";
 import { formatChineseISOLocaleString, parseLocalDate, parseTimeHumaize } from "~~/shared/datetime";
 import { AnnContentSchema } from "./schema/getAnnContent";
@@ -30,7 +31,7 @@ export async function getAnnList() {
     `/common/${query.game_biz}/announcement/api/getAnnList`,
   );
   checkResponse(resp);
-  return AnnListSchema.loose().parse(resp);
+  return v.parse(AnnListSchema, resp);
 }
 
 export async function getAnnContent() {
@@ -38,7 +39,7 @@ export async function getAnnContent() {
     `/common/${query.game_biz}/announcement/api/getAnnContent`,
   );
   checkResponse(resp);
-  return AnnContentSchema.loose().parse(resp);
+  return v.parse(AnnContentSchema, resp);
 }
 
 interface Hk4eGachaInfo {
