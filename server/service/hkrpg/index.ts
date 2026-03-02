@@ -64,28 +64,6 @@ interface HkrpgResponse {
   gacha_info: HkrpgGachaInfo[];
 }
 
-function getEarliestExplicitDatetime(content: string): string | null {
-  const matches = content.match(/\d{4}\/\d{2}\/\d{2}\s+\d{2}:\d{2}(?::\d{2})?/g);
-  if (!matches?.length) {
-    return null;
-  }
-
-  let earliest: Date | null = null;
-  let earliestRaw: string | null = null;
-  for (const match of matches) {
-    const parsed = parseTimeHumaize(match);
-    if (!parsed.time) {
-      continue;
-    }
-    const dt = new Date(parsed.time);
-    if (!earliest || dt < earliest) {
-      earliest = dt;
-      earliestRaw = match;
-    }
-  }
-  return earliestRaw;
-}
-
 function getVersionInfoFromAnnList(
   annList: Awaited<ReturnType<typeof getAnnList>>,
 ):
@@ -198,20 +176,16 @@ export async function getHkrpgInfo(): Promise<HkrpgResponse> {
     });
     // multiple banner with different time
     const normalizedContents = new Set(Array.from(document.querySelectorAll("table td[rowspan]")).map(i => i.textContent));
-    const fallbackVersionStart = getEarliestExplicitDatetime(i.content);
     const candidates = Array.from(normalizedContents)
       .filter((normalizedContent): normalizedContent is string => Boolean(normalizedContent && normalizedContent.includes("-")))
       .map((normalizedContent) => {
         const [start_part, end_part] = normalizedContent.split("-");
         const parsedStart = parseTimeHumaize(start_part);
         const parsedEnd = parseTimeHumaize(end_part);
-        const fallbackStart = !parsedStart.time && start_part.includes("版本更新后")
-          ? parseTimeHumaize(fallbackVersionStart)
-          : { time: null, time_humaize: null };
         return {
+          start_part: start_part.trim(),
           parsedStart,
           parsedEnd,
-          fallbackStart,
         };
       })
       .filter(({ parsedEnd }) => {
@@ -223,21 +197,27 @@ export async function getHkrpgInfo(): Promise<HkrpgResponse> {
         return dt >= now;
       });
 
-    const parsedStarts = candidates
-      .map(({ parsedStart, fallbackStart }) => parsedStart.time ? parsedStart : fallbackStart)
-      .filter(parsed => Boolean(parsed.time));
-    if (parsedStarts.length) {
-      const earliestStart = parsedStarts.reduce((acc, cur) => {
-        if (!acc.time) {
-          return cur;
-        }
-        if (!cur.time) {
-          return acc;
-        }
-        return new Date(cur.time) < new Date(acc.time) ? cur : acc;
-      });
-      start_time = earliestStart.time;
-      start_time_humaize = earliestStart.time_humaize;
+    const versionUpdateStart = candidates.find(({ start_part }) => start_part.includes("版本更新后"));
+    if (versionUpdateStart) {
+      start_time = null;
+      start_time_humaize = versionUpdateStart.start_part;
+    } else {
+      const parsedStarts = candidates
+        .map(({ parsedStart }) => parsedStart)
+        .filter(parsed => Boolean(parsed.time));
+      if (parsedStarts.length) {
+        const earliestStart = parsedStarts.reduce((acc, cur) => {
+          if (!acc.time) {
+            return cur;
+          }
+          if (!cur.time) {
+            return acc;
+          }
+          return new Date(cur.time) < new Date(acc.time) ? cur : acc;
+        });
+        start_time = earliestStart.time;
+        start_time_humaize = earliestStart.time_humaize;
+      }
     }
 
     const parsedEnds = candidates
