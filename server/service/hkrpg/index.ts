@@ -174,26 +174,29 @@ export async function getHkrpgInfo(): Promise<HkrpgResponse> {
     document.querySelectorAll("p").forEach((p) => {
       p.innerHTML = p.textContent.trim();
     });
-    // multiple banner with different time
-    const normalizedContents = new Set(Array.from(document.querySelectorAll("table td[rowspan]")).map(i => i.textContent));
-    for (const normalizedContent of normalizedContents) {
-      if (normalizedContent && normalizedContent.includes("-")) {
-        const [start_part, end_part] = normalizedContent.split("-");
-        const parsedStart = parseTimeHumaize(start_part);
-        const parsedEnd = parseTimeHumaize(end_part);
-        if (parsedEnd.time) {
-          const dt = new Date(parsedEnd.time);
-          const now = new Date();
-          if (dt < now) {
-            // skip if banner is expired
-            continue;
-          }
+    // use the first non-expired table time cell to avoid cross-matching unrelated phases
+    const firstTimeRange = Array.from(document.querySelectorAll("table td[rowspan]"))
+      .map(i => i.textContent?.trim() ?? "")
+      .filter(text => text.includes("-"))
+      .map((text) => {
+        const [start_part, end_part] = text.split("-");
+        return {
+          parsedStart: parseTimeHumaize(start_part),
+          parsedEnd: parseTimeHumaize(end_part),
+        };
+      })
+      .find(({ parsedEnd }) => {
+        if (!parsedEnd.time) {
+          return true;
         }
-        start_time = parsedStart.time;
-        start_time_humaize = parsedStart.time_humaize;
-        end_time = parsedEnd.time;
-        end_time_humaize = parsedEnd.time_humaize;
-      }
+        return new Date(parsedEnd.time) >= new Date();
+      });
+
+    if (firstTimeRange) {
+      start_time = firstTimeRange.parsedStart.time;
+      start_time_humaize = firstTimeRange.parsedStart.time_humaize;
+      end_time = firstTimeRange.parsedEnd.time;
+      end_time_humaize = firstTimeRange.parsedEnd.time_humaize;
     }
 
     const result: HkrpgGachaInfo = {
