@@ -153,15 +153,29 @@ export async function getHk4eInfo(): Promise<Hk4eResponse> {
     document.querySelectorAll("p").forEach((p) => {
       p.innerHTML = p.textContent.trim();
     });
-    const normalizedContent = document.querySelector("table td[rowspan]")?.textContent;
-    if (normalizedContent && normalizedContent.includes("~")) {
-      const [start_part, end_part] = normalizedContent.split("~");
-      const parsedStart = parseTimeHumaize(start_part);
-      start_time = parsedStart.time;
-      start_time_humaize = parsedStart.time_humaize;
-      const parsedEnd = parseTimeHumaize(end_part);
-      end_time = parsedEnd.time;
-      end_time_humaize = parsedEnd.time_humaize;
+    const firstTimeRange = Array.from(document.querySelectorAll("table td[rowspan]"))
+      .map(i => i.textContent?.trim() ?? "")
+      .filter(text => text.includes("~"))
+      .map((text) => {
+        const [start_part, end_part] = text.split("~");
+        return {
+          start_part: start_part.trim(),
+          parsedStart: parseTimeHumaize(start_part),
+          parsedEnd: parseTimeHumaize(end_part),
+        };
+      })
+      .find(({ parsedEnd }) => {
+        if (!parsedEnd.time) {
+          return true;
+        }
+        return new Date(parsedEnd.time) >= new Date();
+      });
+
+    if (firstTimeRange) {
+      start_time = firstTimeRange.parsedStart.time;
+      start_time_humaize = firstTimeRange.parsedStart.time_humaize;
+      end_time = firstTimeRange.parsedEnd.time;
+      end_time_humaize = firstTimeRange.parsedEnd.time_humaize;
     }
 
     const result: Hk4eGachaInfo = {
