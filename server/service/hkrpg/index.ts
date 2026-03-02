@@ -64,6 +64,26 @@ interface HkrpgResponse {
   gacha_info: HkrpgGachaInfo[];
 }
 
+function getGachaPhase(title: string): number | null {
+  const match = /其([一二三四五六七八九十])/.exec(title);
+  if (!match) {
+    return null;
+  }
+  const phaseMap: Record<string, number> = {
+    一: 1,
+    二: 2,
+    三: 3,
+    四: 4,
+    五: 5,
+    六: 6,
+    七: 7,
+    八: 8,
+    九: 9,
+    十: 10,
+  };
+  return phaseMap[match[1]] ?? null;
+}
+
 function getVersionInfoFromAnnList(
   annList: Awaited<ReturnType<typeof getAnnList>>,
 ):
@@ -197,27 +217,30 @@ export async function getHkrpgInfo(): Promise<HkrpgResponse> {
         return dt >= now;
       });
 
+    const phase = getGachaPhase(i.title);
     const versionUpdateStart = candidates.find(({ start_part }) => start_part.includes("版本更新后"));
-    if (versionUpdateStart) {
+    const parsedStarts = candidates
+      .map(({ parsedStart }) => parsedStart)
+      .filter(parsed => Boolean(parsed.time));
+
+    if (phase === 1 && versionUpdateStart) {
       start_time = null;
       start_time_humaize = versionUpdateStart.start_part;
-    } else {
-      const parsedStarts = candidates
-        .map(({ parsedStart }) => parsedStart)
-        .filter(parsed => Boolean(parsed.time));
-      if (parsedStarts.length) {
-        const earliestStart = parsedStarts.reduce((acc, cur) => {
-          if (!acc.time) {
-            return cur;
-          }
-          if (!cur.time) {
-            return acc;
-          }
-          return new Date(cur.time) < new Date(acc.time) ? cur : acc;
-        });
-        start_time = earliestStart.time;
-        start_time_humaize = earliestStart.time_humaize;
-      }
+    } else if (parsedStarts.length) {
+      const earliestStart = parsedStarts.reduce((acc, cur) => {
+        if (!acc.time) {
+          return cur;
+        }
+        if (!cur.time) {
+          return acc;
+        }
+        return new Date(cur.time) < new Date(acc.time) ? cur : acc;
+      });
+      start_time = earliestStart.time;
+      start_time_humaize = earliestStart.time_humaize;
+    } else if (versionUpdateStart) {
+      start_time = null;
+      start_time_humaize = versionUpdateStart.start_part;
     }
 
     const parsedEnds = candidates
