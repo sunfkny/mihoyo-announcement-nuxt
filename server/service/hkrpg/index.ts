@@ -64,6 +64,28 @@ interface HkrpgResponse {
   gacha_info: HkrpgGachaInfo[];
 }
 
+function getEarliestExplicitDatetime(content: string): string | null {
+  const matches = content.match(/\d{4}\/\d{2}\/\d{2}\s+\d{2}:\d{2}(?::\d{2})?/g);
+  if (!matches?.length) {
+    return null;
+  }
+
+  let earliest: Date | null = null;
+  let earliestRaw: string | null = null;
+  for (const match of matches) {
+    const parsed = parseTimeHumaize(match);
+    if (!parsed.time) {
+      continue;
+    }
+    const dt = new Date(parsed.time);
+    if (!earliest || dt < earliest) {
+      earliest = dt;
+      earliestRaw = match;
+    }
+  }
+  return earliestRaw;
+}
+
 function getVersionInfoFromAnnList(
   annList: Awaited<ReturnType<typeof getAnnList>>,
 ):
@@ -176,24 +198,63 @@ export async function getHkrpgInfo(): Promise<HkrpgResponse> {
     });
     // multiple banner with different time
     const normalizedContents = new Set(Array.from(document.querySelectorAll("table td[rowspan]")).map(i => i.textContent));
-    for (const normalizedContent of normalizedContents) {
-      if (normalizedContent && normalizedContent.includes("-")) {
+    const fallbackVersionStart = getEarliestExplicitDatetime(i.content);
+    const candidates = Array.from(normalizedContents)
+      .filter((normalizedContent): normalizedContent is string => Boolean(normalizedContent && normalizedContent.includes("-")))
+      .map((normalizedContent) => {
         const [start_part, end_part] = normalizedContent.split("-");
         const parsedStart = parseTimeHumaize(start_part);
         const parsedEnd = parseTimeHumaize(end_part);
-        if (parsedEnd.time) {
-          const dt = new Date(parsedEnd.time);
-          const now = new Date();
-          if (dt < now) {
-            // skip if banner is expired
-            continue;
-          }
+        const fallbackStart = !parsedStart.time && start_part.includes("版本更新后")
+          ? parseTimeHumaize(fallbackVersionStart)
+          : { time: null, time_humaize: null };
+        return {
+          parsedStart,
+          parsedEnd,
+          fallbackStart,
+        };
+      })
+      .filter(({ parsedEnd }) => {
+        if (!parsedEnd.time) {
+          return true;
         }
-        start_time = parsedStart.time;
-        start_time_humaize = parsedStart.time_humaize;
-        end_time = parsedEnd.time;
-        end_time_humaize = parsedEnd.time_humaize;
-      }
+        const dt = new Date(parsedEnd.time);
+        const now = new Date();
+        return dt >= now;
+      });
+
+    const parsedStarts = candidates
+      .map(({ parsedStart, fallbackStart }) => parsedStart.time ? parsedStart : fallbackStart)
+      .filter(parsed => Boolean(parsed.time));
+    if (parsedStarts.length) {
+      const earliestStart = parsedStarts.reduce((acc, cur) => {
+        if (!acc.time) {
+          return cur;
+        }
+        if (!cur.time) {
+          return acc;
+        }
+        return new Date(cur.time) < new Date(acc.time) ? cur : acc;
+      });
+      start_time = earliestStart.time;
+      start_time_humaize = earliestStart.time_humaize;
+    }
+
+    const parsedEnds = candidates
+      .map(({ parsedEnd }) => parsedEnd)
+      .filter(parsed => Boolean(parsed.time));
+    if (parsedEnds.length) {
+      const latestEnd = parsedEnds.reduce((acc, cur) => {
+        if (!acc.time) {
+          return cur;
+        }
+        if (!cur.time) {
+          return acc;
+        }
+        return new Date(cur.time) > new Date(acc.time) ? cur : acc;
+      });
+      end_time = latestEnd.time;
+      end_time_humaize = latestEnd.time_humaize;
     }
 
     const result: HkrpgGachaInfo = {
