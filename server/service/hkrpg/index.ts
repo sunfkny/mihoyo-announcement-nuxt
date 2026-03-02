@@ -64,26 +64,6 @@ interface HkrpgResponse {
   gacha_info: HkrpgGachaInfo[];
 }
 
-function getGachaPhase(title: string): number | null {
-  const match = /其([一二三四五六七八九十])/.exec(title);
-  if (!match) {
-    return null;
-  }
-  const phaseMap: Record<string, number> = {
-    一: 1,
-    二: 2,
-    三: 3,
-    四: 4,
-    五: 5,
-    六: 6,
-    七: 7,
-    八: 8,
-    九: 9,
-    十: 10,
-  };
-  return phaseMap[match[1]] ?? null;
-}
-
 function getVersionInfoFromAnnList(
   annList: Awaited<ReturnType<typeof getAnnList>>,
 ):
@@ -194,70 +174,35 @@ export async function getHkrpgInfo(): Promise<HkrpgResponse> {
     document.querySelectorAll("p").forEach((p) => {
       p.innerHTML = p.textContent.trim();
     });
-    // multiple banner with different time
-    const normalizedContents = new Set(Array.from(document.querySelectorAll("table td[rowspan]")).map(i => i.textContent));
-    const candidates = Array.from(normalizedContents)
-      .filter((normalizedContent): normalizedContent is string => Boolean(normalizedContent && normalizedContent.includes("-")))
-      .map((normalizedContent) => {
-        const [start_part, end_part] = normalizedContent.split("-");
-        const parsedStart = parseTimeHumaize(start_part);
-        const parsedEnd = parseTimeHumaize(end_part);
+    // use the first non-expired table time cell to avoid cross-matching unrelated phases
+    const firstTimeRange = Array.from(document.querySelectorAll("table td[rowspan]"))
+      .map(i => i.textContent?.trim() ?? "")
+      .filter(text => text.includes("-"))
+      .map((text) => {
+        const [start_part, end_part] = text.split("-");
         return {
           start_part: start_part.trim(),
-          parsedStart,
-          parsedEnd,
+          parsedStart: parseTimeHumaize(start_part),
+          parsedEnd: parseTimeHumaize(end_part),
         };
       })
-      .filter(({ parsedEnd }) => {
+      .find(({ parsedEnd }) => {
         if (!parsedEnd.time) {
           return true;
         }
-        const dt = new Date(parsedEnd.time);
-        const now = new Date();
-        return dt >= now;
+        return new Date(parsedEnd.time) >= new Date();
       });
 
-    const phase = getGachaPhase(i.title);
-    const versionUpdateStart = candidates.find(({ start_part }) => start_part.includes("版本更新后"));
-    const parsedStarts = candidates
-      .map(({ parsedStart }) => parsedStart)
-      .filter(parsed => Boolean(parsed.time));
-
-    if (phase === 1 && versionUpdateStart) {
-      start_time = null;
-      start_time_humaize = versionUpdateStart.start_part;
-    } else if (parsedStarts.length) {
-      const earliestStart = parsedStarts.reduce((acc, cur) => {
-        if (!acc.time) {
-          return cur;
-        }
-        if (!cur.time) {
-          return acc;
-        }
-        return new Date(cur.time) < new Date(acc.time) ? cur : acc;
-      });
-      start_time = earliestStart.time;
-      start_time_humaize = earliestStart.time_humaize;
-    } else if (versionUpdateStart) {
-      start_time = null;
-      start_time_humaize = versionUpdateStart.start_part;
-    }
-
-    const parsedEnds = candidates
-      .map(({ parsedEnd }) => parsedEnd)
-      .filter(parsed => Boolean(parsed.time));
-    if (parsedEnds.length) {
-      const latestEnd = parsedEnds.reduce((acc, cur) => {
-        if (!acc.time) {
-          return cur;
-        }
-        if (!cur.time) {
-          return acc;
-        }
-        return new Date(cur.time) > new Date(acc.time) ? cur : acc;
-      });
-      end_time = latestEnd.time;
-      end_time_humaize = latestEnd.time_humaize;
+    if (firstTimeRange) {
+      if (firstTimeRange.start_part.includes("版本更新后")) {
+        start_time = null;
+        start_time_humaize = firstTimeRange.start_part;
+      } else {
+        start_time = firstTimeRange.parsedStart.time;
+        start_time_humaize = firstTimeRange.parsedStart.time_humaize;
+      }
+      end_time = firstTimeRange.parsedEnd.time;
+      end_time_humaize = firstTimeRange.parsedEnd.time_humaize;
     }
 
     const result: HkrpgGachaInfo = {
