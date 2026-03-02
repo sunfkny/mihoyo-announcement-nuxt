@@ -181,7 +181,6 @@ export async function getHkrpgInfo(): Promise<HkrpgResponse> {
       .map((text) => {
         const [start_part, end_part] = text.split("-");
         return {
-          start_part: start_part.trim(),
           parsedStart: parseTimeHumaize(start_part),
           parsedEnd: parseTimeHumaize(end_part),
         };
@@ -194,13 +193,8 @@ export async function getHkrpgInfo(): Promise<HkrpgResponse> {
       });
 
     if (firstTimeRange) {
-      if (firstTimeRange.start_part.includes("版本更新后")) {
-        start_time = null;
-        start_time_humaize = firstTimeRange.start_part;
-      } else {
-        start_time = firstTimeRange.parsedStart.time;
-        start_time_humaize = firstTimeRange.parsedStart.time_humaize;
-      }
+      start_time = firstTimeRange.parsedStart.time;
+      start_time_humaize = firstTimeRange.parsedStart.time_humaize;
       end_time = firstTimeRange.parsedEnd.time;
       end_time_humaize = firstTimeRange.parsedEnd.time_humaize;
     }

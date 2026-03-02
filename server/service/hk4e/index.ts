@@ -159,7 +159,6 @@ export async function getHk4eInfo(): Promise<Hk4eResponse> {
       .map((text) => {
         const [start_part, end_part] = text.split("~");
         return {
-          start_part: start_part.trim(),
           parsedStart: parseTimeHumaize(start_part),
           parsedEnd: parseTimeHumaize(end_part),
         };

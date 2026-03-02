@@ -155,7 +155,6 @@ export async function getNapInfo(): Promise<NapResponse> {
       .map((text) => {
         const [start_part, end_part] = text.split("~");
         return {
-          start_part: start_part.trim(),
           parsedStart: parseTimeHumaize(start_part),
           parsedEnd: parseTimeHumaize(end_part),
         };
