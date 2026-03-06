@@ -14,6 +14,8 @@ export default withNuxt(
       "vue/no-v-html": "off",
       "ts/consistent-type-definitions": "off",
       "style/brace-style": ["error", "1tbs", { allowSingleLine: true }],
+      "e18e/prefer-static-regex": "off",
+      "e18e/prefer-spread-syntax": "off",
     },
   }),
 );

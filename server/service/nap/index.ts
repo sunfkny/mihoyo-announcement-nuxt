@@ -142,7 +142,7 @@ export async function getNapInfo(): Promise<NapResponse> {
     const window = new Window({ url: "https://sdk.mihoyo.com/nap/announcement/index.html" });
     const document = window.document;
     document.body.innerHTML = i.content;
-    const images = [...window.document.querySelectorAll("img")].map(i => i.src);
+    const images = Array.from(window.document.querySelectorAll("img")).map(i => i.src);
     document.querySelectorAll("span").forEach((p) => {
       p.innerHTML = p.textContent.trim();
     });
