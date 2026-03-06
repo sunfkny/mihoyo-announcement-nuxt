@@ -52,7 +52,6 @@ export default defineNuxtConfig({
     viewTransition: true,
     renderJsonPayloads: false,
     externalVue: true,
-    buildCache: true,
   },
   compatibilityDate: "latest",
   eslint: {
