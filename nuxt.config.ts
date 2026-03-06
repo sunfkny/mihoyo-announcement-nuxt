@@ -18,41 +18,18 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ["~/assets/css/main.css"],
   vite: {
-    plugins: [
-      // Hide tailwindcss warnings
-      // https://github.com/tailwindlabs/tailwindcss/discussions/16119#discussioncomment-12758373
-      {
-        apply: "build",
-        name: "vite-plugin-ignore-sourcemap-warnings",
-        configResolved(config) {
-          const originalOnWarn = config.build.rollupOptions.onwarn;
-          config.build.rollupOptions.onwarn = (warning, warn) => {
-            if (
-              warning.code === "SOURCEMAP_BROKEN"
-              && warning.plugin === "@tailwindcss/vite:generate:build"
-            ) {
-              return;
-            }
-            if (originalOnWarn) {
-              originalOnWarn(
-                warning,
-                warn,
-              );
-            } else {
-              warn(
-                warning,
-              );
-            }
-          };
-        },
-      },
-    ],
+    optimizeDeps: {
+      include: [
+        "@vueuse/core",
+        "clsx",
+        "tailwind-merge",
+      ],
+    },
   },
   experimental: {
     viewTransition: true,
     renderJsonPayloads: false,
     externalVue: true,
-    buildCache: true,
   },
   compatibilityDate: "latest",
   eslint: {

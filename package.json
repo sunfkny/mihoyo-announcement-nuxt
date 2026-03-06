@@ -2,7 +2,7 @@
   "name": "nuxt-app",
   "type": "module",
   "private": true,
-  "packageManager": "pnpm@10.16.0+sha512.8066e7b034217b700a9a4dbb3a005061d641ba130a89915213a10b3ca4919c19c037bec8066afdc559b89635fdb806b16ea673f2468fbb28aabfa13c53e3f769",
+  "packageManager": "pnpm@10.32.1",
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
@@ -13,11 +13,11 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@nuxt/ui": "^4.2.1",
-    "@vueuse/core": "^14.1.0",
+    "@nuxt/ui": "^4.5.1",
+    "@vueuse/core": "^14.2.1",
     "clsx": "^2.1.1",
-    "happy-dom": "^18.0.1",
-    "nuxt": "^4.2.2",
+    "happy-dom": "^20.8.4",
+    "nuxt": "^4.4.2",
     "ofetch": "^1.5.1",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.18",
@@ -27,17 +27,29 @@
     "vue-router": "latest"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^5.4.1",
-    "@iconify-json/lucide": "^1.2.80",
+    "@antfu/eslint-config": "^7.7.0",
+    "@iconify-json/lucide": "^1.2.96",
     "@nuxt/eslint": "^1.12.1",
-    "eslint": "^9.39.2",
+    "eslint": "^10.0.3",
     "typescript": "^5.9.3",
     "vue-tsc": "^3.1.8"
   },
   "pnpm": {
     "overrides": {
-      "@nuxt/vite-builder": "npm:@nuxt/vite-builder-nightly@latest",
-      "vite": "npm:rolldown-vite@latest"
-    }
+      "vite": "npm:vite@8.0.0"
+    },
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "vite": "*",
+        "eslint": "*",
+        "vue-router": "*"
+      }
+    },
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "esbuild",
+      "unrs-resolver",
+      "vue-demi"
+    ]
   }
 }
