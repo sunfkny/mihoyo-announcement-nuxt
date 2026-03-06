@@ -99,7 +99,7 @@ export function getTimeHumaize(time: Date | string | null) {
   return durationString;
 }
 
-export function parseTimeHumaize(time_string: string | null): {
+export function parseTimeHumaize(time_string: string | undefined | null): {
   time: string | null;
   time_humaize: string | null;
 } {
