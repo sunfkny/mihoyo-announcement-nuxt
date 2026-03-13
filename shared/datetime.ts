@@ -5,7 +5,7 @@ export function parseLocalDate(str: string, tz: number = 8) {
 
   const clean = str.trim()
     .replace(/\s+/g, " ")
-    .replace(/[/\-]/g, "-");
+    .replace(/[/-]/g, "-");
 
   const groups = parseIsoLocalDate(clean) ?? parseChineseLocalDate(clean);
   if (!groups) {
