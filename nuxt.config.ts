@@ -11,6 +11,15 @@ export default defineNuxtConfig({
       charset: "utf-8",
       meta: [
         { name: "description", content: games.map(i => `${i.name}卡池`).join(",") },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+      ],
+      link: [
+        { rel: "preconnect", href: "https://webstatic.mihoyo.com" },
+        { rel: "preconnect", href: "https://sdk.mihoyo.com" },
+        { rel: "preconnect", href: "https://fastcdn.mihoyo.com" },
+        { rel: "dns-prefetch", href: "https://webstatic.mihoyo.com" },
+        { rel: "dns-prefetch", href: "https://sdk.mihoyo.com" },
+        { rel: "dns-prefetch", href: "https://fastcdn.mihoyo.com" },
       ],
     },
   },
