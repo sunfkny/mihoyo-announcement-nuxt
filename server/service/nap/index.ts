@@ -1,4 +1,4 @@
-import type { BaseResponse } from "#shared/constants/url";
+import type { BaseResponse, MihoyoSubdomain } from "#shared/constants/url";
 import { checkResponse, getMihoYoBaseUrl } from "#shared/constants/url";
 import { formatChineseISOLocaleString, parseLocalDate, parseTimeHumaize } from "#shared/datetime";
 import { Window } from "happy-dom";
@@ -7,7 +7,8 @@ import * as v from "valibot";
 import { AnnContentSchema } from "./schema/getAnnContent";
 import { AnnListSchema } from "./schema/getAnnList";
 
-const query = {
+export const subdomain: MihoyoSubdomain = "announcement-api";
+export const query = {
   game: "nap",
   game_biz: "nap_cn",
   lang: "zh-cn",
@@ -20,7 +21,7 @@ const query = {
 
 const fetch = ofetch.create({
   query,
-  baseURL: getMihoYoBaseUrl("announcement-api"),
+  baseURL: getMihoYoBaseUrl(subdomain),
   responseType: "json",
 });
 

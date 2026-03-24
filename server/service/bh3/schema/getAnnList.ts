@@ -44,7 +44,11 @@ export const AnnListSchema = v.object({
     ),
     total: v.number(),
     type_list: v.array(
-      v.object({ id: v.number(), name: v.string(), mi18n_name: v.string() }),
+      v.object({
+        id: v.number(),
+        name: v.string(),
+        mi18n_name: v.string(),
+      }),
     ),
     alert: v.boolean(),
     alert_id: v.number(),

@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "#shared/*": [
+        "../shared/*"
+      ],
+      "#server/*": [
+        "../server/*"
+      ]
+    },
+    "types": ["node"],
+    "noEmit": true
+  }
+}

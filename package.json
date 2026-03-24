@@ -11,7 +11,8 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "format": "eslint --fix",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "generate:schema": "tsx scripts/generate-schema.ts"
   },
   "dependencies": {
     "@nuxt/ui": "^4.6.0",
@@ -31,7 +32,9 @@
     "@antfu/eslint-config": "^7.7.3",
     "@iconify-json/lucide": "^1.2.98",
     "@nuxt/eslint": "^1.12.1",
+    "@types/node": "^25.5.0",
     "eslint": "^10.1.0",
+    "tsx": "^4.21.0",
     "typescript": "^6.0.2",
     "vue-tsc": "^3.2.6"
   },

@@ -1,60 +1,37 @@
-import * as z from "valibot";
+import * as v from "valibot";
 
-export const AnnContentSchema = z.object({
-  retcode: z.number(),
-  message: z.string(),
-  data: z.object({
-    list: z.array(
-      z.object({
-        ann_id: z.number(),
-        title: z.string(),
-        subtitle: z.string(),
-        banner: z.string(),
-        content: z.string(),
-        lang: z.string(),
-        remind_text: z.string(),
+export const AnnContentSchema = v.object({
+  retcode: v.number(),
+  message: v.string(),
+  data: v.object({
+    list: v.array(
+      v.object({
+        ann_id: v.number(),
+        title: v.string(),
+        subtitle: v.string(),
+        banner: v.string(),
+        content: v.string(),
+        lang: v.string(),
+        remind_text: v.string(),
       }),
     ),
-    total: z.number(),
-    pic_list: z.array(
-      z.union([
-        z.object({
-          ann_id: z.number(),
-          content_type: z.number(),
-          title: z.string(),
-          subtitle: z.string(),
-          banner: z.string(),
-          content: z.string(),
-          lang: z.string(),
-          img: z.string(),
-          href_type: z.number(),
-          href: z.string(),
-          pic_list: z.array(z.unknown()),
-          remind_text: z.string(),
-        }),
-        z.object({
-          ann_id: z.number(),
-          content_type: z.number(),
-          title: z.string(),
-          subtitle: z.string(),
-          banner: z.string(),
-          content: z.string(),
-          lang: z.string(),
-          img: z.string(),
-          href_type: z.number(),
-          href: z.string(),
-          pic_list: z.array(
-            z.object({
-              title: z.string(),
-              img: z.string(),
-              href_type: z.number(),
-              href: z.string(),
-            }),
-          ),
-          remind_text: z.string(),
-        }),
-      ]),
+    total: v.number(),
+    pic_list: v.array(
+      v.object({
+        ann_id: v.number(),
+        content_type: v.number(),
+        title: v.string(),
+        subtitle: v.string(),
+        banner: v.string(),
+        content: v.string(),
+        lang: v.string(),
+        img: v.string(),
+        href_type: v.number(),
+        href: v.string(),
+        pic_list: v.array(v.unknown()),
+        remind_text: v.string(),
+      }),
     ),
-    pic_total: z.number(),
+    pic_total: v.number(),
   }),
 });

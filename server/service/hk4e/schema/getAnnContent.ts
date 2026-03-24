@@ -1,22 +1,22 @@
-import * as z from "valibot";
+import * as v from "valibot";
 
-export const AnnContentSchema = z.object({
-  retcode: z.number(),
-  message: z.string(),
-  data: z.object({
-    list: z.array(
-      z.object({
-        ann_id: z.number(),
-        title: z.string(),
-        subtitle: z.string(),
-        banner: z.string(),
-        content: z.string(),
-        lang: z.string(),
-        remind_text: z.string(),
+export const AnnContentSchema = v.object({
+  retcode: v.number(),
+  message: v.string(),
+  data: v.object({
+    list: v.array(
+      v.object({
+        ann_id: v.number(),
+        title: v.string(),
+        subtitle: v.string(),
+        banner: v.string(),
+        content: v.string(),
+        lang: v.string(),
+        remind_text: v.string(),
       }),
     ),
-    total: z.number(),
-    pic_list: z.array(z.unknown()),
-    pic_total: z.number(),
+    total: v.number(),
+    pic_list: v.array(v.unknown()),
+    pic_total: v.number(),
   }),
 });
