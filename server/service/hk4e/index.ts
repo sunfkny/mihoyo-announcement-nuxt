@@ -1,9 +1,9 @@
-import type { BaseResponse } from "~~/shared/constants/url";
+import type { BaseResponse } from "#shared/constants/url";
+import { checkResponse, getMihoYoBaseUrl } from "#shared/constants/url";
+import { formatChineseISOLocaleString, parseLocalDate, parseTimeHumaize } from "#shared/datetime";
 import { Window } from "happy-dom";
 import { ofetch } from "ofetch";
 import * as v from "valibot";
-import { checkResponse, getMihoYoBaseUrl } from "~~/shared/constants/url";
-import { formatChineseISOLocaleString, parseLocalDate, parseTimeHumaize } from "~~/shared/datetime";
 import { AnnContentSchema } from "./schema/getAnnContent";
 import { AnnListSchema } from "./schema/getAnnList";
 
