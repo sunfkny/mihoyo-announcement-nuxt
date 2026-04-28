@@ -1,0 +1,15 @@
+overrides:
+  "@typescript-eslint/typescript-estree": ">=8.58.0"
+  rolldown: <1.0.0-rc.16 || >1.0.0-rc.17
+  vite: ">=8.0.10"
+peerDependencyRules:
+  allowedVersions:
+    vite: "*"
+    eslint: "*"
+    vue-router: "*"
+    typescript: "*"
+allowBuilds:
+  "@parcel/watcher": true
+  esbuild: true
+  unrs-resolver: true
+  vue-demi: true
