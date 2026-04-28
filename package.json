@@ -12,6 +12,7 @@
     "postinstall": "nuxt prepare",
     "format": "eslint --fix",
     "lint": "eslint .",
+    "typecheck": "nuxt typecheck",
     "generate:schema": "tsx scripts/generate-schema.ts"
   },
   "dependencies": {
