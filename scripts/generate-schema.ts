@@ -2,12 +2,12 @@ import type { MihoyoSubdomain } from "#shared/constants/url";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import process from "node:process";
+import { ofetch } from "ofetch";
 import * as bh3Service from "#server/service/bh3";
 import * as hk4eService from "#server/service/hk4e";
 import * as hkrpgService from "#server/service/hkrpg";
 import * as napService from "#server/service/nap";
 import { getMihoYoBaseUrl } from "#shared/constants/url";
-import { ofetch } from "ofetch";
 
 type BaseResponse = {
   retcode: number;
