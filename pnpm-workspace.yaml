@@ -1,11 +1,13 @@
+minimumReleaseAge: 0
 shellEmulator: true
 trustPolicy: no-downgrade
+# https://github.com/pnpm/pnpm/issues/11887
 trustPolicyExclude:
+  - tinyexec@1.2.2
   - chokidar@4.0.3
   - semver@6.3.1
 overrides:
-  vite: ">=8.0.10"
-  vite>rolldown: $rolldown
+  vite: ">=8.0.14"
 allowBuilds:
   "@parcel/watcher": true
   esbuild: true
