@@ -1,9 +1,15 @@
 <script setup lang="ts">
-import { getGame } from "#shared/constants/game";
+import { getGame, isGame } from "#shared/constants/game";
 
 const route = useRoute();
 
-const game = route.meta.game ? getGame(route.meta.game) : null;
+const game = computed(() => {
+  const gameParam = route.params.game;
+  if (typeof gameParam === "string" && isGame(gameParam)) {
+    return getGame(gameParam);
+  }
+  return null;
+});
 </script>
 
 <template>
