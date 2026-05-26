@@ -82,7 +82,7 @@ function diffDate(date1: Date, date2: Date) {
   };
 }
 
-export function getTimeHumaize(time: Date | string | null) {
+export function getTimeHumanize(time: Date | string | null) {
   if (!time)
     return null;
   if (typeof time === "string") {
@@ -99,18 +99,18 @@ export function getTimeHumaize(time: Date | string | null) {
   return durationString;
 }
 
-export function parseTimeHumaize(time_string: string | undefined | null): {
+export function parseTimeHumanize(time_string: string | undefined | null): {
   time: string | null;
-  time_humaize: string | null;
+  time_humanize: string | null;
 } {
   if (!time_string) {
-    return { time: null, time_humaize: null };
+    return { time: null, time_humanize: null };
   }
   try {
     const parsedTime = parseLocalDate(time_string);
-    return { time: formatChineseISOLocaleString(parsedTime), time_humaize: getTimeHumaize(parsedTime) };
+    return { time: formatChineseISOLocaleString(parsedTime), time_humanize: getTimeHumanize(parsedTime) };
   } catch {
-    return { time: null, time_humaize: time_string };
+    return { time: null, time_humanize: time_string };
   }
 }
 

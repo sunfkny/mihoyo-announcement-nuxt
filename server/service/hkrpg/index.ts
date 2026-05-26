@@ -3,7 +3,7 @@ import { Window } from "happy-dom";
 import { ofetch } from "ofetch";
 import * as v from "valibot";
 import { checkResponse, getMihoYoBaseUrl } from "#shared/constants/url";
-import { formatChineseISOLocaleString, parseLocalDate, parseTimeHumaize } from "#shared/datetime";
+import { formatChineseISOLocaleString, parseLocalDate, parseTimeHumanize } from "#shared/datetime";
 import { AnnContentSchema } from "./schema/getAnnContent";
 import { AnnListSchema } from "./schema/getAnnList";
 
@@ -49,14 +49,14 @@ interface HkrpgGachaInfo {
   content: string;
   start_time: string | null;
   end_time: string | null;
-  start_time_humaize: string | null;
-  end_time_humaize: string | null;
+  start_time_humanize: string | null;
+  end_time_humanize: string | null;
 }
 
 interface HkrpgProgress {
   start_time: string | null;
   end_time: string | null;
-  end_time_humaize: string | null;
+  end_time_humanize: string | null;
   percent: number | null;
 }
 
@@ -118,17 +118,17 @@ export async function getHkrpgInfo(): Promise<HkrpgResponse> {
   const progress: HkrpgProgress = {
     start_time: null,
     end_time: null,
-    end_time_humaize: null,
+    end_time_humanize: null,
     percent: null,
   };
 
   if (versionInfo) {
     const startTime = parseLocalDate(versionInfo.start_time);
-    const parsedEndTime = parseTimeHumaize(versionInfo.end_time);
+    const parsedEndTime = parseTimeHumanize(versionInfo.end_time);
     const endTime = parseLocalDate(versionInfo.end_time);
     progress.start_time = formatChineseISOLocaleString(startTime);
     progress.end_time = parsedEndTime.time;
-    progress.end_time_humaize = parsedEndTime.time_humaize;
+    progress.end_time_humanize = parsedEndTime.time_humanize;
 
     const currentTime = new Date();
     if (startTime < currentTime && currentTime < endTime) {
@@ -139,8 +139,8 @@ export async function getHkrpgInfo(): Promise<HkrpgResponse> {
   const gacha_info = getGachaInfoFromAnnContent(annContent).map((i) => {
     let start_time = null;
     let end_time = null;
-    let start_time_humaize = null;
-    let end_time_humaize = null;
+    let start_time_humanize = null;
+    let end_time_humanize = null;
 
     if (i.title.includes("联动跃迁") && i.content.includes("长期开放")) {
       const match
@@ -148,10 +148,10 @@ export async function getHkrpgInfo(): Promise<HkrpgResponse> {
           i.content,
         );
       if (match) {
-        const start = parseTimeHumaize(match[1]);
+        const start = parseTimeHumanize(match[1]);
         start_time = start.time;
-        start_time_humaize = start.time_humaize;
-        end_time_humaize = "长期开放";
+        start_time_humanize = start.time_humanize;
+        end_time_humanize = "长期开放";
         const result: HkrpgGachaInfo = {
           ann_id: i.ann_id,
           title: i.title,
@@ -159,8 +159,8 @@ export async function getHkrpgInfo(): Promise<HkrpgResponse> {
           content: i.content,
           start_time,
           end_time,
-          start_time_humaize,
-          end_time_humaize,
+          start_time_humanize,
+          end_time_humanize,
         };
         return result;
       }
@@ -182,8 +182,8 @@ export async function getHkrpgInfo(): Promise<HkrpgResponse> {
       .map((text) => {
         const [start_part, end_part] = text.split("-");
         return {
-          parsedStart: parseTimeHumaize(start_part),
-          parsedEnd: parseTimeHumaize(end_part),
+          parsedStart: parseTimeHumanize(start_part),
+          parsedEnd: parseTimeHumanize(end_part),
         };
       })
       .find(({ parsedEnd }) => {
@@ -195,9 +195,9 @@ export async function getHkrpgInfo(): Promise<HkrpgResponse> {
 
     if (firstTimeRange) {
       start_time = firstTimeRange.parsedStart.time;
-      start_time_humaize = firstTimeRange.parsedStart.time_humaize;
+      start_time_humanize = firstTimeRange.parsedStart.time_humanize;
       end_time = firstTimeRange.parsedEnd.time;
-      end_time_humaize = firstTimeRange.parsedEnd.time_humaize;
+      end_time_humanize = firstTimeRange.parsedEnd.time_humanize;
     }
 
     const result: HkrpgGachaInfo = {
@@ -207,8 +207,8 @@ export async function getHkrpgInfo(): Promise<HkrpgResponse> {
       content: i.content,
       start_time,
       end_time,
-      start_time_humaize,
-      end_time_humaize,
+      start_time_humanize,
+      end_time_humanize,
     };
     return result;
   });

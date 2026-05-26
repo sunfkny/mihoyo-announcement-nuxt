@@ -3,7 +3,7 @@ import { Window } from "happy-dom";
 import { ofetch } from "ofetch";
 import * as v from "valibot";
 import { checkResponse, getMihoYoBaseUrl } from "#shared/constants/url";
-import { formatChineseISOLocaleString, parseLocalDate, parseTimeHumaize } from "#shared/datetime";
+import { formatChineseISOLocaleString, parseLocalDate, parseTimeHumanize } from "#shared/datetime";
 import { AnnContentSchema } from "./schema/getAnnContent";
 import { AnnListSchema } from "./schema/getAnnList";
 
@@ -50,14 +50,14 @@ interface Hk4eGachaInfo {
   content: string;
   start_time: string | null;
   end_time: string | null;
-  start_time_humaize: string | null;
-  end_time_humaize: string | null;
+  start_time_humanize: string | null;
+  end_time_humanize: string | null;
 }
 
 interface Hk4eProgress {
   start_time: string | null;
   end_time: string | null;
-  end_time_humaize: string | null;
+  end_time_humanize: string | null;
   percent: number | null;
 }
 
@@ -121,17 +121,17 @@ export async function getHk4eInfo(): Promise<Hk4eResponse> {
   const progress: Hk4eProgress = {
     start_time: null,
     end_time: null,
-    end_time_humaize: null,
+    end_time_humanize: null,
     percent: null,
   };
 
   if (versionInfo) {
     const startTime = parseLocalDate(versionInfo.start_time);
-    const parsedEndTime = parseTimeHumaize(versionInfo.end_time);
+    const parsedEndTime = parseTimeHumanize(versionInfo.end_time);
     const endTime = parseLocalDate(versionInfo.end_time);
     progress.start_time = formatChineseISOLocaleString(startTime);
     progress.end_time = parsedEndTime.time;
-    progress.end_time_humaize = parsedEndTime.time_humaize;
+    progress.end_time_humanize = parsedEndTime.time_humanize;
 
     const currentTime = new Date();
     if (startTime < currentTime && currentTime < endTime) {
@@ -142,8 +142,8 @@ export async function getHk4eInfo(): Promise<Hk4eResponse> {
   const gacha_info = getGachaInfoFromAnnContent(annContent).map((i) => {
     let start_time = null;
     let end_time = null;
-    let start_time_humaize = null;
-    let end_time_humaize = null;
+    let start_time_humanize = null;
+    let end_time_humanize = null;
 
     const window = new Window({ url: "https://webstatic.mihoyo.com/hk4e/announcement/index.html" });
     const document = window.document;
@@ -160,8 +160,8 @@ export async function getHk4eInfo(): Promise<Hk4eResponse> {
       .map((text) => {
         const [start_part, end_part] = text.split("~");
         return {
-          parsedStart: parseTimeHumaize(start_part),
-          parsedEnd: parseTimeHumaize(end_part),
+          parsedStart: parseTimeHumanize(start_part),
+          parsedEnd: parseTimeHumanize(end_part),
         };
       })
       .find(({ parsedEnd }) => {
@@ -173,9 +173,9 @@ export async function getHk4eInfo(): Promise<Hk4eResponse> {
 
     if (firstTimeRange) {
       start_time = firstTimeRange.parsedStart.time;
-      start_time_humaize = firstTimeRange.parsedStart.time_humaize;
+      start_time_humanize = firstTimeRange.parsedStart.time_humanize;
       end_time = firstTimeRange.parsedEnd.time;
-      end_time_humaize = firstTimeRange.parsedEnd.time_humaize;
+      end_time_humanize = firstTimeRange.parsedEnd.time_humanize;
     }
 
     const result: Hk4eGachaInfo = {
@@ -185,8 +185,8 @@ export async function getHk4eInfo(): Promise<Hk4eResponse> {
       content: i.content,
       start_time,
       end_time,
-      start_time_humaize,
-      end_time_humaize,
+      start_time_humanize,
+      end_time_humanize,
     };
     return result;
   });

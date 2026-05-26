@@ -19,7 +19,7 @@ const progressValue = computed(() => {
         <UProgress v-model="progressValue" class="h-2" />
         <span>
           {{ data.progress.start_time }} ~ {{
-            appendAnnotation(data.progress.end_time, data.progress.end_time_humaize)
+            appendAnnotation(data.progress.end_time, data.progress.end_time_humanize)
           }}
         </span>
       </div>
@@ -31,11 +31,11 @@ const progressValue = computed(() => {
           <p>{{ item.title }}</p>
           <p>
             开始时间:
-            {{ appendAnnotation(item.start_time, item.start_time_humaize) }}
+            {{ appendAnnotation(item.start_time, item.start_time_humanize) }}
           </p>
           <p>
             结束时间:
-            {{ appendAnnotation(item.end_time, item.end_time_humaize) }}
+            {{ appendAnnotation(item.end_time, item.end_time_humanize) }}
           </p>
         </NapContentModal>
       </div>
