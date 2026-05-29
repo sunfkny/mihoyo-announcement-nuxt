@@ -47,9 +47,7 @@ export default defineNuxtConfig({
     },
   },
   typescript: {
-    typeCheck: {
-      build: true,
-    },
+    typeCheck: true,
   },
   ui: {
     fonts: false,
