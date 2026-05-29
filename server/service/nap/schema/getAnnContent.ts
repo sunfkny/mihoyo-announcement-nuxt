@@ -28,14 +28,7 @@ export const AnnContentSchema = v.object({
         img: v.string(),
         href_type: v.number(),
         href: v.string(),
-        pic_list: v.array(
-          v.object({
-            title: v.string(),
-            img: v.string(),
-            href_type: v.number(),
-            href: v.string(),
-          }),
-        ),
+        pic_list: v.array(v.unknown()),
         remind_text: v.string(),
       }),
     ),

@@ -2,6 +2,8 @@ import type { MihoyoSubdomain } from "#shared/constants/url";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import process from "node:process";
+import { pathToFileURL } from "node:url";
+import { parseArgs } from "node:util";
 import { ofetch } from "ofetch";
 import * as bh3Service from "#server/service/bh3";
 import * as hk4eService from "#server/service/hk4e";
@@ -49,10 +51,60 @@ interface Endpoints {
   getAnnContent: string;
 }
 
-function generateValibotSchema(obj: unknown, indent: number = 0): string {
+function schemaToCode(schema: unknown, indent: number = 0): string {
+  const s = schema as Record<string, unknown>;
+  const spaces = "  ".repeat(indent);
+
+  if (!s || typeof s !== "object" || !("type" in s)) {
+    return `${spaces}v.unknown()`;
+  }
+
+  switch (s.type) {
+    case "string":
+      return `${spaces}v.string()`;
+    case "number":
+      return `${spaces}v.number()`;
+    case "boolean":
+      return `${spaces}v.boolean()`;
+    case "null":
+      return `${spaces}v.null()`;
+    case "unknown":
+      return `${spaces}v.unknown()`;
+    case "array": {
+      const item = schemaToCode(s.item, 0);
+      if (item.includes("\n")) {
+        return `${spaces}v.array(\n${schemaToCode(s.item, indent + 1)},\n${spaces})`;
+      }
+      return `${spaces}v.array(${item})`;
+    }
+    case "object": {
+      const entries = s.entries as Record<string, unknown>;
+      const keys = Object.keys(entries);
+      if (keys.length === 0) {
+        return `${spaces}v.object({})`;
+      }
+      const properties = keys.map((key) => {
+        const valueSchema = schemaToCode(entries[key], indent + 1);
+        return `${spaces}  ${key}: ${valueSchema.trim()},`;
+      });
+      return `${spaces}v.object({\n${properties.join("\n")}\n${spaces}})`;
+    }
+    default:
+      return `${spaces}v.unknown()`;
+  }
+}
+
+function generateValibotSchema(
+  obj: unknown,
+  indent: number = 0,
+  fallback?: unknown,
+): string {
   const spaces = "  ".repeat(indent);
 
   if (obj === null || obj === undefined) {
+    if (fallback) {
+      return schemaToCode(fallback, indent);
+    }
     return `${spaces}v.null()`;
   }
 
@@ -70,16 +122,29 @@ function generateValibotSchema(obj: unknown, indent: number = 0): string {
 
   if (Array.isArray(obj)) {
     if (obj.length === 0) {
+      if (fallback) {
+        const fb = fallback as Record<string, unknown>;
+        if (fb.type === "array" && fb.item) {
+          const itemCode = schemaToCode(fb.item, 0);
+          if (itemCode.includes("\n")) {
+            return `${spaces}v.array(\n${schemaToCode(fb.item, indent + 1)},\n${spaces})`;
+          }
+          return `${spaces}v.array(${itemCode})`;
+        }
+      }
       return `${spaces}v.array(v.unknown())`;
     }
 
     const firstItem = obj[0];
+    const fbItem = fallback
+      ? (fallback as Record<string, unknown>).item
+      : undefined;
     if (typeof firstItem === "object" && firstItem !== null) {
-      const schema = generateValibotSchema(firstItem, indent + 1);
+      const schema = generateValibotSchema(firstItem, indent + 1, fbItem);
       return `${spaces}v.array(\n${schema},\n${spaces})`;
     }
 
-    return `${spaces}v.array(${generateValibotSchema(firstItem, 0)})`;
+    return `${spaces}v.array(${generateValibotSchema(firstItem, 0, fbItem)})`;
   }
 
   if (typeof obj === "object") {
@@ -88,8 +153,16 @@ function generateValibotSchema(obj: unknown, indent: number = 0): string {
       return `${spaces}v.object({})`;
     }
 
+    const fbEntries = fallback
+      ? (fallback as Record<string, unknown>).entries as Record<string, unknown> | undefined
+      : undefined;
+
     const properties = entries.map(([key, value]) => {
-      const valueSchema = generateValibotSchema(value, indent + 1);
+      const valueSchema = generateValibotSchema(
+        value,
+        indent + 1,
+        fbEntries?.[key],
+      );
       return `${spaces}  ${key}: ${valueSchema.trim()},`;
     });
 
@@ -108,6 +181,7 @@ async function fetchAndGenerateSchema(
   endpoint: keyof Endpoints,
   exportName: string,
   outputPath: string,
+  fallback: boolean,
 ): Promise<void> {
   const fetch = ofetch.create({
     query: service.query,
@@ -129,7 +203,17 @@ async function fetchAndGenerateSchema(
       return;
     }
 
-    const schema = generateValibotSchema(resp);
+    let existingSchema: unknown;
+    if (fallback && fs.existsSync(outputPath)) {
+      try {
+        const mod = await import(pathToFileURL(outputPath).href);
+        existingSchema = Object.values(mod)[0];
+      } catch {
+        // ignore import errors
+      }
+    }
+
+    const schema = generateValibotSchema(resp, 0, existingSchema);
     const formattedSchema = formatSchemaCode(schema, exportName);
 
     const dir = path.dirname(outputPath);
@@ -145,6 +229,16 @@ async function fetchAndGenerateSchema(
 }
 
 async function main(): Promise<void> {
+  const { values } = parseArgs({
+    options: {
+      "no-fallback": {
+        type: "boolean",
+        default: false,
+      },
+    },
+  });
+  const useFallback = !values["no-fallback"];
+
   console.log("Starting schema generation...\n");
 
   for (const service of services) {
@@ -155,6 +249,7 @@ async function main(): Promise<void> {
       "getAnnList",
       "AnnListSchema",
       path.join(baseDir, "getAnnList.ts"),
+      useFallback,
     );
 
     await fetchAndGenerateSchema(
@@ -162,6 +257,7 @@ async function main(): Promise<void> {
       "getAnnContent",
       "AnnContentSchema",
       path.join(baseDir, "getAnnContent.ts"),
+      useFallback,
     );
 
     console.log("");

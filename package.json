@@ -14,7 +14,7 @@
     "lint": "eslint",
     "typecheck": "nuxt typecheck",
     "check": "concurrently --kill-others-on-fail \"pnpm run format\" \"pnpm run typecheck\"",
-    "generate:schema": "tsx scripts/generate-schema.ts"
+    "generate:schema": "tsx --tsconfig scripts/tsconfig.json scripts/generate-schema.ts"
   },
   "dependencies": {
     "@nuxt/ui": "^4.8.1",
