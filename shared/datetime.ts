@@ -83,8 +83,9 @@ function diffDate(date1: Date, date2: Date) {
 }
 
 export function getTimeHumanize(time: Date | string | null) {
-  if (!time)
+  if (!time) {
     return null;
+  }
   if (typeof time === "string") {
     time = getTime(time);
   }
