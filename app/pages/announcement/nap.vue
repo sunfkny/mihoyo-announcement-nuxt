@@ -42,11 +42,7 @@ const progressValue = computed(() => {
     </div>
     <div v-if="status === 'error'" class="my-4">
       <span>获取失败</span>
-      <pre>
-        <code>
-          {{ String(error) }}
-        </code>
-      </pre>
+      <pre><code>{{ String(error) }}</code></pre>
     </div>
     <div v-if="status === 'pending'" class="my-4">
       <LoadingAnnouncement />
