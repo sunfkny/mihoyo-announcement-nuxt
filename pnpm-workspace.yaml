@@ -9,3 +9,5 @@ allowBuilds:
   esbuild: true
   unrs-resolver: true
   vue-demi: true
+patchedDependencies:
+  vite-plugin-checker@0.14.1: patches/vite-plugin-checker@0.14.1.patch
