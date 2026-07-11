@@ -1,15 +1,15 @@
-import type { MihoyoSubdomain } from "#shared/constants/url";
+import type { MihoyoSubdomain } from "#/server/lib/mihoyo-api";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import process from "node:process";
 import { pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
 import { ofetch } from "ofetch";
-import * as bh3Service from "#server/service/bh3";
-import * as hk4eService from "#server/service/hk4e";
-import * as hkrpgService from "#server/service/hkrpg";
-import * as napService from "#server/service/nap";
-import { getMihoYoBaseUrl } from "#shared/constants/url";
+import { getMihoYoBaseUrl } from "#/server/lib/mihoyo-api";
+import * as bh3Service from "#/server/services/bh3";
+import * as hk4eService from "#/server/services/hk4e";
+import * as hkrpgService from "#/server/services/hkrpg";
+import * as napService from "#/server/services/nap";
 
 type BaseResponse = {
   retcode: number;
@@ -242,13 +242,13 @@ async function main(): Promise<void> {
   console.log("Starting schema generation...\n");
 
   for (const service of services) {
-    const baseDir = path.join(process.cwd(), "server", "service", service.name, "schema");
+    const baseDir = path.join(process.cwd(), "src", "server", "services", service.name, "schema");
 
     await fetchAndGenerateSchema(
       service,
       "getAnnList",
       "AnnListSchema",
-      path.join(baseDir, "getAnnList.ts"),
+      path.join(baseDir, "get-ann-list.ts"),
       useFallback,
     );
 
@@ -256,7 +256,7 @@ async function main(): Promise<void> {
       service,
       "getAnnContent",
       "AnnContentSchema",
-      path.join(baseDir, "getAnnContent.ts"),
+      path.join(baseDir, "get-ann-content.ts"),
       useFallback,
     );
 

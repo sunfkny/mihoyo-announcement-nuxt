@@ -1,8 +1,6 @@
-# Nuxt dev/build outputs
+# TanStack Start dev/build outputs
 .output
-.data
 .nuxt
-.nitro
 .cache
 dist
 

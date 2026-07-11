@@ -1,14 +1,13 @@
 {
+  "extends": "../tsconfig.json",
   "compilerOptions": {
     "paths": {
-      "#shared/*": [
-        "../shared/*"
-      ],
-      "#server/*": [
-        "../server/*"
+      "#/*": [
+        "../src/*"
       ]
     },
     "types": ["node"],
     "noEmit": true
-  }
+  },
+  "include": ["./**/*.ts"]
 }

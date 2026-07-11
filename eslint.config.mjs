@@ -1,23 +1,23 @@
 // @ts-check
 import antfu from "@antfu/eslint-config";
-import withNuxt from "./.nuxt/eslint.config.mjs";
 
-export default withNuxt(
-  antfu({
-    lessOpinionated: true,
-    stylistic: {
-      semi: true,
-      quotes: "double",
-    },
-    vue: true,
-    typescript: true,
-    rules: {
-      "vue/no-v-html": "off",
-      "ts/consistent-type-definitions": "off",
-      "style/brace-style": ["error", "1tbs"],
-      "e18e/prefer-static-regex": "off",
-      "e18e/prefer-spread-syntax": "off",
-      "no-console": "off",
-    },
-  }),
-);
+export default antfu({
+  lessOpinionated: true,
+  react: true,
+  stylistic: {
+    semi: true,
+    quotes: "double",
+  },
+  typescript: true,
+  ignores: ["src/routeTree.gen.ts"],
+  rules: {
+    "style/brace-style": ["error", "1tbs"],
+    "ts/consistent-type-definitions": "off",
+    "e18e/prefer-static-regex": "off",
+    "e18e/prefer-spread-syntax": "off",
+    "no-console": "off",
+    "react/no-danger": "off",
+    "react/dom-no-dangerously-set-innerhtml": "off",
+    "react-refresh/only-export-components": "off",
+  },
+});
