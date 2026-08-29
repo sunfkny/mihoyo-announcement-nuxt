@@ -9,19 +9,19 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AnnouncementRouteImport } from './routes/announcement'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AnnouncementRouteImport } from './routes/announcement'
 import { Route as AnnouncementGameRouteImport } from './routes/announcement.$game'
 import { Route as ApiAnnouncementGameRouteImport } from './routes/api.announcement.$game'
 
-const AnnouncementRoute = AnnouncementRouteImport.update({
-  id: '/announcement',
-  path: '/announcement',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnnouncementRoute = AnnouncementRouteImport.update({
+  id: '/announcement',
+  path: '/announcement',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AnnouncementGameRoute = AnnouncementGameRouteImport.update({
@@ -76,18 +76,18 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/announcement': {
-      id: '/announcement'
-      path: '/announcement'
-      fullPath: '/announcement'
-      preLoaderRoute: typeof AnnouncementRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/announcement': {
+      id: '/announcement'
+      path: '/announcement'
+      fullPath: '/announcement'
+      preLoaderRoute: typeof AnnouncementRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/announcement/$game': {

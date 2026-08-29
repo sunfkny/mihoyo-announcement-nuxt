@@ -15,7 +15,6 @@ export function NavBar({ vertical = false }: { vertical?: boolean }) {
           className="rounded-icon border-2 border-solid border-transparent hover:border-gray-300"
           activeOptions={{ exact: true }}
           activeProps={{ className: "game-link-active" }}
-          viewTransition
         >
           <div className="flex items-center justify-center p-1 transition-all duration-300">
             <div className="rounded-icon flex size-16 items-center justify-center bg-gray-100 dark:bg-gray-700">
@@ -34,7 +33,7 @@ export function NavBar({ vertical = false }: { vertical?: boolean }) {
           className="rounded-icon border-2 border-solid border-transparent hover:border-gray-300"
           activeOptions={{ exact: true }}
           activeProps={{ className: "game-link-active" }}
-          viewTransition
+          style={{ viewTransitionName: `games-icon-${game.key}` }}
         >
           <div className="p-1 transition-all duration-300">
             <img
@@ -45,7 +44,6 @@ export function NavBar({ vertical = false }: { vertical?: boolean }) {
               height={vertical ? 128 : 64}
               fetchPriority={!vertical && index === 0 ? "high" : "auto"}
               className={cn("rounded-icon w-16 transition-all duration-300", !vertical && "sm:w-32")}
-              style={{ viewTransitionName: `games-icon-${game.key}` }}
             />
           </div>
         </Link>

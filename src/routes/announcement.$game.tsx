@@ -1,6 +1,5 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { AnnouncementPage } from "#/components/announcement-page";
-import { LoadingAnnouncement } from "#/components/loading-announcement";
 import { announcementQueryOptions } from "#/utils/announcements.query";
 import { getGame, isGame } from "#/utils/games";
 
@@ -22,7 +21,7 @@ export const Route = createFileRoute("/announcement/$game")({
     if (!isGame(params.game)) {
       throw notFound();
     }
-    return context.queryClient.ensureQueryData(announcementQueryOptions(params.game));
+    return context.queryClient.query({ ...announcementQueryOptions(params.game), staleTime: "static" });
   },
   head: ({ params }) => {
     const game = getGame(params.game);
@@ -42,9 +41,6 @@ export const Route = createFileRoute("/announcement/$game")({
       ],
     };
   },
-  pendingMs: 0,
-  pendingMinMs: 250,
-  pendingComponent: LoadingAnnouncement,
   errorComponent: AnnouncementError,
   component: AnnouncementRoute,
 });

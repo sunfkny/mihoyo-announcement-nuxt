@@ -20,7 +20,6 @@ export function AnnouncementLayout({ children }: { children: ReactNode }) {
           to="/"
           aria-label="首页"
           className="flex size-8 items-center justify-center p-0"
-          viewTransition
         >
           <ArrowLeft className="size-6" />
         </Link>
